@@ -1,0 +1,11 @@
+/.idea
+/.gradle
+/build
+/out
+/classes
+/web
+*.ipr
+*.iws
+*.iml
+*.hprof
+/local.properties
