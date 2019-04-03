@@ -1,5 +1,9 @@
 apply plugin: com.soywiz.korlibs.KorlibsPlugin
 
+kotlin {
+    def jvmJava = targetFromPreset(presets.jvmWithJava, 'jvmJava')
+}
+
 korlibs {
     exposeVersion()
 }
