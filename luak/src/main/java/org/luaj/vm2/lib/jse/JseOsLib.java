@@ -68,7 +68,7 @@ import org.luaj.vm2.lib.OsLib;
  * @see LibFunction
  * @see OsLib
  * @see org.luaj.vm2.lib.jse.JsePlatform
- * @see org.luaj.vm2.lib.jme.JmePlatform
+ * //@see org.luaj.vm2.lib.jme.JmePlatform
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.9">Lua 5.2 OS Lib Reference</a>
  */
 public class JseOsLib extends OsLib {
