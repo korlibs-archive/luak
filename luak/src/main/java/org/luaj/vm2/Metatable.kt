@@ -38,7 +38,7 @@ internal interface Metatable {
     fun toLuaValue(): LuaValue
 
     /** Return an instance of Slot appropriate for the given key and value.  */
-    fun entry(key: LuaValue, value: LuaValue): Slot
+    fun entry(key: LuaValue, value: LuaValue): Slot?
 
     /** Returns the given value wrapped in a weak reference if appropriate.  */
     fun wrap(value: LuaValue): LuaValue
@@ -47,5 +47,5 @@ internal interface Metatable {
      * Returns the value at the given index in the array, or null if it is a weak reference that
      * has been dropped.
      */
-    fun arrayget(array: Array<LuaValue>, index: Int): LuaValue
+    fun arrayget(array: Array<LuaValue?>, index: Int): LuaValue?
 }

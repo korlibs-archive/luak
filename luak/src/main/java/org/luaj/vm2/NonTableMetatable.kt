@@ -24,7 +24,7 @@ internal class NonTableMetatable(private val value: LuaValue) : Metatable {
         return value
     }
 
-    override fun arrayget(array: Array<LuaValue>, index: Int): LuaValue {
+    override fun arrayget(array: Array<LuaValue?>, index: Int): LuaValue? {
         return array[index]
     }
 }

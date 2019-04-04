@@ -910,7 +910,7 @@ public class LuaTable extends LuaValue implements Metatable {
 	/**
 	 * Represents a slot in the hash table.
 	 */
-	interface Slot {
+	public interface Slot {
 
 		/** Return hash{pow2,mod}( first().key().hashCode(), sizeMask ) */
 		int keyindex(int hashMask);
@@ -964,7 +964,7 @@ public class LuaTable extends LuaValue implements Metatable {
 	 * Subclass of Slot guaranteed to have a strongly-referenced key and value,
 	 * to support weak tables.
 	 */
-	interface StrongSlot extends Slot {
+	public interface StrongSlot extends Slot {
 		/** Return first entry's key */
 		LuaValue key();
 
