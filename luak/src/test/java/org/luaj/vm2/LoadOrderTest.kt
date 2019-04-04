@@ -1,0 +1,74 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Luaj.org. All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.luaj.vm2
+
+import java.io.InputStream
+import java.io.Reader
+
+import junit.framework.TestCase
+
+import org.luaj.vm2.lib.jse.JsePlatform
+import org.luaj.vm2.server.Launcher
+import org.luaj.vm2.server.LuajClassLoader
+
+// Tests using class loading orders that have caused problems for some use cases.
+class LoadOrderTest : TestCase() {
+
+    fun testLoadGlobalsFirst() {
+        val g = JsePlatform.standardGlobals()
+        TestCase.assertNotNull(g)
+    }
+
+    fun testLoadStringFirst() {
+        val BAR = LuaString.valueOf("bar")
+        TestCase.assertNotNull(BAR)
+    }
+
+    class TestLauncherLoadStringFirst : Launcher {
+
+        override fun launch(script: String, arg: Array<Any>?): Array<Any>? {
+            return arrayOf(FOO)
+        }
+
+        override fun launch(script: InputStream, arg: Array<Any>?): Array<Any>? {
+            return null
+        }
+
+        override fun launch(script: Reader, arg: Array<Any>?): Array<Any>? {
+            return null
+        }
+
+        companion object {
+            // Static initializer that causes LuaString->LuaValue->LuaString
+            private val FOO = LuaString.valueOf("foo")
+        }
+    }
+
+    @Throws(Exception::class)
+    fun testClassLoadsStringFirst() {
+        val launcher = LuajClassLoader
+            .NewLauncher(TestLauncherLoadStringFirst::class.java)
+        val results = launcher.launch("foo", null)
+        TestCase.assertNotNull(results)
+    }
+
+}
