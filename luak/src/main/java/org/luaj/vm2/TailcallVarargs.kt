@@ -67,7 +67,7 @@ class TailcallVarargs : Varargs {
     override fun eval(): Varargs {
         while (result == null) {
             val r = func!!.onInvoke(args)
-            if (r.isTailcall) {
+            if (r.isTailcall()) {
                 val t = r as TailcallVarargs
                 func = t.func
                 args = t.args

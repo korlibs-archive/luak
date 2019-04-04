@@ -3561,14 +3561,15 @@ public class LuaValue extends Varargs {
 	 *  
 	 * @see LuaValue#NONE
 	 */
-	private static final class None extends LuaNil {
+	static final class None extends LuaNil {
 		static None _NONE = new None();
 		public LuaValue arg(int i) { return NIL; }
 		public int narg() { return 0; }
 		public LuaValue arg1() { return NIL; }
 		public String tojstring() { return "none"; }
 		public Varargs subargs(final int start) { return start > 0? this: argerror(1, "start must be > 0"); }
-		void copyto(LuaValue[] dest, int offset, int length) { for(;length>0; length--) dest[offset++] = NIL; }
+		@Override
+		public void copyto(LuaValue[] dest, int offset, int length) { for(;length>0; length--) dest[offset++] = NIL; }
 	}
 	
 	/**

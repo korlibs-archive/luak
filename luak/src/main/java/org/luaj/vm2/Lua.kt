@@ -32,12 +32,10 @@ package org.luaj.vm2
 open class Lua {
     companion object {
         /** version is supplied by ant build task  */
-        @JvmField
-        val _VERSION = "Luaj 0.0"
+        const val _VERSION = "Luaj 0.0"
 
         /** use return values from previous op  */
-        @JvmField
-        val LUA_MULTRET = -1
+        const val LUA_MULTRET = -1
 
         // from lopcodes.h
 
@@ -73,41 +71,41 @@ open class Lua {
         /*
 	** size and position of opcode arguments.
 	*/
-        @JvmField val SIZE_C = 9
-        @JvmField val SIZE_B = 9
-        @JvmField val SIZE_Bx = SIZE_C + SIZE_B
-        @JvmField val SIZE_A = 8
-        @JvmField val SIZE_Ax = SIZE_C + SIZE_B + SIZE_A
+        const val SIZE_C = 9
+        const val SIZE_B = 9
+        const val SIZE_Bx = SIZE_C + SIZE_B
+        const val SIZE_A = 8
+        const val SIZE_Ax = SIZE_C + SIZE_B + SIZE_A
 
-        @JvmField val SIZE_OP = 6
+        const val SIZE_OP = 6
 
-        @JvmField val POS_OP = 0
-        @JvmField val POS_A = POS_OP + SIZE_OP
-        @JvmField val POS_C = POS_A + SIZE_A
-        @JvmField val POS_B = POS_C + SIZE_C
-        @JvmField val POS_Bx = POS_C
-        @JvmField val POS_Ax = POS_A
+        const val POS_OP = 0
+        const val POS_A = POS_OP + SIZE_OP
+        const val POS_C = POS_A + SIZE_A
+        const val POS_B = POS_C + SIZE_C
+        const val POS_Bx = POS_C
+        const val POS_Ax = POS_A
 
 
-        @JvmField val MAX_OP = (1 shl SIZE_OP) - 1
-        @JvmField val MAXARG_A = (1 shl SIZE_A) - 1
-        @JvmField val MAXARG_B = (1 shl SIZE_B) - 1
-        @JvmField val MAXARG_C = (1 shl SIZE_C) - 1
-        @JvmField val MAXARG_Bx = (1 shl SIZE_Bx) - 1
-        @JvmField val MAXARG_sBx = MAXARG_Bx shr 1        /* `sBx' is signed */
-        @JvmField val MAXARG_Ax = (1 shl SIZE_Ax) - 1
+        const val MAX_OP = (1 shl SIZE_OP) - 1
+        const val MAXARG_A = (1 shl SIZE_A) - 1
+        const val MAXARG_B = (1 shl SIZE_B) - 1
+        const val MAXARG_C = (1 shl SIZE_C) - 1
+        const val MAXARG_Bx = (1 shl SIZE_Bx) - 1
+        const val MAXARG_sBx = MAXARG_Bx shr 1        /* `sBx' is signed */
+        const val MAXARG_Ax = (1 shl SIZE_Ax) - 1
 
-        @JvmField val MASK_OP = (1 shl SIZE_OP) - 1 shl POS_OP
-        @JvmField val MASK_A = (1 shl SIZE_A) - 1 shl POS_A
-        @JvmField val MASK_B = (1 shl SIZE_B) - 1 shl POS_B
-        @JvmField val MASK_C = (1 shl SIZE_C) - 1 shl POS_C
-        @JvmField val MASK_Bx = (1 shl SIZE_Bx) - 1 shl POS_Bx
+        const val MASK_OP = (1 shl SIZE_OP) - 1 shl POS_OP
+        const val MASK_A = (1 shl SIZE_A) - 1 shl POS_A
+        const val MASK_B = (1 shl SIZE_B) - 1 shl POS_B
+        const val MASK_C = (1 shl SIZE_C) - 1 shl POS_C
+        const val MASK_Bx = (1 shl SIZE_Bx) - 1 shl POS_Bx
 
-        @JvmField val MASK_NOT_OP = MASK_OP.inv()
-        @JvmField val MASK_NOT_A = MASK_A.inv()
-        @JvmField val MASK_NOT_B = MASK_B.inv()
-        @JvmField val MASK_NOT_C = MASK_C.inv()
-        @JvmField val MASK_NOT_Bx = MASK_Bx.inv()
+        const val MASK_NOT_OP = MASK_OP.inv()
+        const val MASK_NOT_A = MASK_A.inv()
+        const val MASK_NOT_B = MASK_B.inv()
+        const val MASK_NOT_C = MASK_C.inv()
+        const val MASK_NOT_Bx = MASK_Bx.inv()
 
         /*
 	** the following macros help to manipulate instructions
@@ -169,7 +167,7 @@ open class Lua {
         /**
          * invalid register that fits in 8 bits
          */
-        @JvmField val NO_REG = MAXARG_A
+        const val NO_REG = MAXARG_A
 
 
         /*
@@ -186,70 +184,69 @@ open class Lua {
         /*----------------------------------------------------------------------
 	name		args	description
 	------------------------------------------------------------------------*/
-        @JvmField val OP_MOVE = 0/*	A B	R(A) := R(B)					*/
-        @JvmField val OP_LOADK = 1/*	A Bx	R(A) := Kst(Bx)					*/
-        @JvmField val OP_LOADKX = 2/*	A 	R(A) := Kst(extra arg)					*/
-        @JvmField val OP_LOADBOOL = 3/*	A B C	R(A) := (Bool)B; if (C) pc++			*/
-        @JvmField val OP_LOADNIL = 4 /*	A B	R(A) := ... := R(A+B) := nil			*/
-        @JvmField val OP_GETUPVAL = 5 /*	A B	R(A) := UpValue[B]				*/
+        const val OP_MOVE = 0/*	A B	R(A) := R(B)					*/
+        const val OP_LOADK = 1/*	A Bx	R(A) := Kst(Bx)					*/
+        const val OP_LOADKX = 2/*	A 	R(A) := Kst(extra arg)					*/
+        const val OP_LOADBOOL = 3/*	A B C	R(A) := (Bool)B; if (C) pc++			*/
+        const val OP_LOADNIL = 4 /*	A B	R(A) := ... := R(A+B) := nil			*/
+        const val OP_GETUPVAL = 5 /*	A B	R(A) := UpValue[B]				*/
 
-        @JvmField val OP_GETTABUP = 6 /*	A B C	R(A) := UpValue[B][RK(C)]			*/
-        @JvmField val OP_GETTABLE = 7 /*	A B C	R(A) := R(B)[RK(C)]				*/
+        const val OP_GETTABUP = 6 /*	A B C	R(A) := UpValue[B][RK(C)]			*/
+        const val OP_GETTABLE = 7 /*	A B C	R(A) := R(B)[RK(C)]				*/
 
-        @JvmField val OP_SETTABUP = 8 /*	A B C	UpValue[A][RK(B)] := RK(C)			*/
-        @JvmField val OP_SETUPVAL = 9 /*	A B	UpValue[B] := R(A)				*/
-        @JvmField val OP_SETTABLE = 10 /*	A B C	R(A)[RK(B)] := RK(C)				*/
+        const val OP_SETTABUP = 8 /*	A B C	UpValue[A][RK(B)] := RK(C)			*/
+        const val OP_SETUPVAL = 9 /*	A B	UpValue[B] := R(A)				*/
+        const val OP_SETTABLE = 10 /*	A B C	R(A)[RK(B)] := RK(C)				*/
 
-        @JvmField val OP_NEWTABLE = 11 /*	A B C	R(A) := {} (size = B,C)				*/
+        const val OP_NEWTABLE = 11 /*	A B C	R(A) := {} (size = B,C)				*/
 
-        @JvmField val OP_SELF = 12 /*	A B C	R(A+1) := R(B); R(A) := R(B)[RK(C)]		*/
+        const val OP_SELF = 12 /*	A B C	R(A+1) := R(B); R(A) := R(B)[RK(C)]		*/
 
-        @JvmField val OP_ADD = 13 /*	A B C	R(A) := RK(B) + RK(C)				*/
-        @JvmField val OP_SUB = 14 /*	A B C	R(A) := RK(B) - RK(C)				*/
-        @JvmField val OP_MUL = 15 /*	A B C	R(A) := RK(B) * RK(C)				*/
-        @JvmField val OP_DIV = 16 /*	A B C	R(A) := RK(B) / RK(C)				*/
-        @JvmField val OP_MOD = 17 /*	A B C	R(A) := RK(B) % RK(C)				*/
-        @JvmField val OP_POW = 18 /*	A B C	R(A) := RK(B) ^ RK(C)				*/
-        @JvmField val OP_UNM = 19 /*	A B	R(A) := -R(B)					*/
-        @JvmField val OP_NOT = 20 /*	A B	R(A) := not R(B)				*/
-        @JvmField val OP_LEN = 21 /*	A B	R(A) := length of R(B)				*/
+        const val OP_ADD = 13 /*	A B C	R(A) := RK(B) + RK(C)				*/
+        const val OP_SUB = 14 /*	A B C	R(A) := RK(B) - RK(C)				*/
+        const val OP_MUL = 15 /*	A B C	R(A) := RK(B) * RK(C)				*/
+        const val OP_DIV = 16 /*	A B C	R(A) := RK(B) / RK(C)				*/
+        const val OP_MOD = 17 /*	A B C	R(A) := RK(B) % RK(C)				*/
+        const val OP_POW = 18 /*	A B C	R(A) := RK(B) ^ RK(C)				*/
+        const val OP_UNM = 19 /*	A B	R(A) := -R(B)					*/
+        const val OP_NOT = 20 /*	A B	R(A) := not R(B)				*/
+        const val OP_LEN = 21 /*	A B	R(A) := length of R(B)				*/
 
-        @JvmField val OP_CONCAT = 22 /*	A B C	R(A) := R(B).. ... ..R(C)			*/
+        const val OP_CONCAT = 22 /*	A B C	R(A) := R(B).. ... ..R(C)			*/
 
-        @JvmField val OP_JMP = 23 /*	sBx	pc+=sBx					*/
-        @JvmField val OP_EQ = 24 /*	A B C	if ((RK(B) == RK(C)) ~= A) then pc++		*/
-        @JvmField val OP_LT = 25 /*	A B C	if ((RK(B) <  RK(C)) ~= A) then pc++  		*/
-        @JvmField val OP_LE = 26 /*	A B C	if ((RK(B) <= RK(C)) ~= A) then pc++  		*/
+        const val OP_JMP = 23 /*	sBx	pc+=sBx					*/
+        const val OP_EQ = 24 /*	A B C	if ((RK(B) == RK(C)) ~= A) then pc++		*/
+        const val OP_LT = 25 /*	A B C	if ((RK(B) <  RK(C)) ~= A) then pc++  		*/
+        const val OP_LE = 26 /*	A B C	if ((RK(B) <= RK(C)) ~= A) then pc++  		*/
 
-        @JvmField val OP_TEST = 27 /*	A C	if not (R(A) <=> C) then pc++			*/
-        @JvmField val OP_TESTSET = 28 /*	A B C	if (R(B) <=> C) then R(A) := R(B) else pc++	*/
+        const val OP_TEST = 27 /*	A C	if not (R(A) <=> C) then pc++			*/
+        const val OP_TESTSET = 28 /*	A B C	if (R(B) <=> C) then R(A) := R(B) else pc++	*/
 
-        @JvmField val OP_CALL = 29 /*	A B C	R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1)) */
-        @JvmField val OP_TAILCALL = 30 /*	A B C	return R(A)(R(A+1), ... ,R(A+B-1))		*/
-        @JvmField val OP_RETURN = 31 /*	A B	return R(A), ... ,R(A+B-2)	(see note)	*/
+        const val OP_CALL = 29 /*	A B C	R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1)) */
+        const val OP_TAILCALL = 30 /*	A B C	return R(A)(R(A+1), ... ,R(A+B-1))		*/
+        const val OP_RETURN = 31 /*	A B	return R(A), ... ,R(A+B-2)	(see note)	*/
 
-        @JvmField val OP_FORLOOP = 32 /*	A sBx	R(A)+=R(A+2);
-				if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }*/
-        @JvmField val OP_FORPREP = 33 /*	A sBx	R(A)-=R(A+2); pc+=sBx				*/
+        const val OP_FORLOOP = 32 /*	A sBx	R(A)+=R(A+2); if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }*/
+        const val OP_FORPREP = 33 /*	A sBx	R(A)-=R(A+2); pc+=sBx				*/
 
-        @JvmField val OP_TFORCALL = 34 /* A C	R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2));	*/
-        @JvmField val OP_TFORLOOP = 35 /* A sBx   if R(A+1) ~= nil then { R(A)=R(A+1); pc += sBx } */
-        @JvmField val OP_SETLIST = 36 /*	A B C	R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B	*/
+        const val OP_TFORCALL = 34 /* A C	R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2));	*/
+        const val OP_TFORLOOP = 35 /* A sBx   if R(A+1) ~= nil then { R(A)=R(A+1); pc += sBx } */
+        const val OP_SETLIST = 36 /*	A B C	R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B	*/
 
-        @JvmField val OP_CLOSURE = 37 /*	A Bx	R(A) := closure(KPROTO[Bx], R(A), ... ,R(A+n))	*/
+        const val OP_CLOSURE = 37 /*	A Bx	R(A) := closure(KPROTO[Bx], R(A), ... ,R(A+n))	*/
 
-        @JvmField val OP_VARARG = 38 /*	A B	R(A), R(A+1), ..., R(A+B-1) = vararg		*/
+        const val OP_VARARG = 38 /*	A B	R(A), R(A+1), ..., R(A+B-1) = vararg		*/
 
-        @JvmField val OP_EXTRAARG = 39 /* Ax	extra (larger) argument for previous opcode	*/
+        const val OP_EXTRAARG = 39 /* Ax	extra (larger) argument for previous opcode	*/
 
-        @JvmField val NUM_OPCODES = OP_EXTRAARG + 1
+        const val NUM_OPCODES = OP_EXTRAARG + 1
 
         /* pseudo-opcodes used in parsing only.  */
-        @JvmField val OP_GT = 63 // >
-        @JvmField val OP_GE = 62 // >=
-        @JvmField val OP_NEQ = 61 // ~=
-        @JvmField val OP_AND = 60 // and
-        @JvmField val OP_OR = 59 // or
+        const val OP_GT = 63 // >
+        const val OP_GE = 62 // >=
+        const val OP_NEQ = 61 // ~=
+        const val OP_AND = 60 // and
+        const val OP_OR = 59 // or
 
         /*===========================================================================
 	  Notes:
@@ -281,12 +278,12 @@ open class Lua {
 	** bit 7: operator is a test
 	*/
 
-        @JvmField val OpArgN = 0  /* argument is not used */
-        @JvmField val OpArgU = 1  /* argument is used */
-        @JvmField val OpArgR = 2  /* argument is a register or a jump offset */
-        @JvmField val OpArgK = 3  /* argument is a constant or register/constant */
+        const val OpArgN = 0  /* argument is not used */
+        const val OpArgU = 1  /* argument is used */
+        const val OpArgR = 2  /* argument is a register or a jump offset */
+        const val OpArgK = 3  /* argument is a constant or register/constant */
 
-        @JvmField val luaP_opmodes = intArrayOf(
+        val luaP_opmodes = intArrayOf(
             /*   T        A           B             C          mode		   opcode	*/
             0 shl 7 or (1 shl 6) or (OpArgR shl 4) or (OpArgN shl 2) or iABC, /* OP_MOVE */
             0 shl 7 or (1 shl 6) or (OpArgK shl 4) or (OpArgN shl 2) or iABx, /* OP_LOADK */

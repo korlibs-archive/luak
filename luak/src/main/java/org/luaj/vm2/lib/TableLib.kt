@@ -153,7 +153,7 @@ class TableLib : TwoArgFunction() {
     // "unpack", // (list [,i [,j]]) -> result1, ...
     internal class unpack : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
-            val t = args.checktable(1)
+            val t = args.checktable(1)!!
             when (args.narg()) {
                 1 -> return t.unpack()
                 2 -> return t.unpack(args.checkint(2))
