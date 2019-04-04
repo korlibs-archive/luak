@@ -25,12 +25,12 @@ class SampleMainChunk : VarArgFunction() {
         this.rw_ENV = v
     }
 
-    override fun invoke(args: Varargs): Varargs? {
+    override fun invoke(args: Varargs): Varargs {
         rw_ENV[0].get(`$print`).call(`$foo`)
 
         rw_ENV[0].set(`$print`, InnerFunction(rw_openup3, rw_openup1, ro_openup5))
 
-        return null
+        return LuaValue.NIL
     }
 
     internal class InnerFunction(
