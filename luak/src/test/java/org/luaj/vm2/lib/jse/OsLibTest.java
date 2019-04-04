@@ -2,7 +2,6 @@ package org.luaj.vm2.lib.jse;
 
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OsLib;
-import org.luaj.vm2.lib.jme.JmePlatform;
 
 import junit.framework.TestCase;
 
@@ -14,7 +13,7 @@ public class OsLibTest extends TestCase {
 	
 	public void setUp() {
 		jse_lib = JsePlatform.standardGlobals().get("os");;
-		jme_lib = JmePlatform.standardGlobals().get("os");;
+		//jme_lib = JmePlatform.standardGlobals().get("os");;
 		time = new java.util.Date(2001-1900, 7, 23, 14, 55, 02).getTime() / 1000.0;
 	}
 

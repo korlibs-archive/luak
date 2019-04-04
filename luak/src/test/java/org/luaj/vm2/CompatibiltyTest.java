@@ -23,7 +23,7 @@ package org.luaj.vm2;
 
 import junit.framework.TestSuite;
 
-import org.luaj.vm2.luajc.LuaJC;
+//import org.luaj.vm2.luajc.LuaJC;
 
 /**
  * Compatibility tests for the Luaj VM
@@ -107,7 +107,7 @@ public class CompatibiltyTest extends TestSuite {
 		protected void setUp() throws Exception {
 			super.setUp();
 			System.setProperty("JME", "false");
-			LuaJC.install(globals);
+			//LuaJC.install(globals);
 		}
 		// not supported on this platform - don't test
 		public void testDebugLib()      {}	

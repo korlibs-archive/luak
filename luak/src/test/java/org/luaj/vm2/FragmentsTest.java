@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.luaj.vm2.lib.jse.JsePlatform;
-import org.luaj.vm2.luajc.LuaJC;
+//import org.luaj.vm2.luajc.LuaJC;
 
 /** 
  * Test compilation of various fragments that have
@@ -69,7 +69,7 @@ public class FragmentsTest extends TestSuite {
 				LuaValue chunk ;
 				switch ( TEST_TYPE ) {
 				case TEST_TYPE_LUAJC:
-					LuaJC.install(globals);
+					//LuaJC.install(globals);
 					chunk = globals.load(reader, name);
 					break;
 				default:

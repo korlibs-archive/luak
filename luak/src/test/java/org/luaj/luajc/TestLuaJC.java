@@ -32,7 +32,6 @@ import org.luaj.vm2.Print;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.jse.JsePlatform;
-import org.luaj.vm2.luajc.LuaJC;
 
 public class TestLuaJC {
 	// This file will be loaded using the finder as a resource, provided it is in the 
@@ -57,7 +56,7 @@ public class TestLuaJC {
 
 			// load into a luajc java-bytecode based chunk by installing the LuaJC compiler first
 			if ( ! (args.length>0 && args[0].equals("nocompile")) ) {
-				LuaJC.install(globals);
+				//LuaJC.install(globals);
 				f = globals.loadfile(filename).arg1();
 			}
 	
@@ -76,6 +75,9 @@ public class TestLuaJC {
 	}
 
 	private static void saveClasses() throws Exception {
+        throw new RuntimeException("No JME");
+
+        /*
         // create the chunk
 		String destdir = ".";
 		
@@ -96,6 +98,7 @@ public class TestLuaJC {
         	fos.write( bytes );
         	fos.close();
         }
+         */
 		
 	}
 	

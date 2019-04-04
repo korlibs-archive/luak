@@ -1,3 +1,4 @@
+/*
 apply plugin: com.soywiz.korlibs.KorlibsPlugin
 
 kotlin {
@@ -11,4 +12,25 @@ korlibs {
 
 dependencies {
     jvmJavaMainApi "junit:junit:4.12"
+    //jvmJavaTestImplementation jvmJavaMainApi
+}
+*/
+
+apply plugin: "kotlin"
+
+repositories {
+    mavenLocal()
+    maven { url "https://dl.bintray.com/soywiz/soywiz" }
+    jcenter()
+    //google()
+}
+
+dependencies {
+    testImplementation "junit:junit:4.12"
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
 }

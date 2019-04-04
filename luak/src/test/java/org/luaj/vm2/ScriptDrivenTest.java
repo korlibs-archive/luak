@@ -36,7 +36,6 @@ import junit.framework.TestCase;
 
 import org.luaj.vm2.lib.ResourceFinder;
 import org.luaj.vm2.lib.jse.JseProcess;
-import org.luaj.vm2.luajc.LuaJC;
 
 abstract
 public class ScriptDrivenTest extends TestCase implements ResourceFinder {
@@ -67,8 +66,8 @@ public class ScriptDrivenTest extends TestCase implements ResourceFinder {
 			globals = org.luaj.vm2.lib.jse.JsePlatform.debugGlobals();
 			break;
 		case JME:
-			globals = org.luaj.vm2.lib.jme.JmePlatform.debugGlobals();
-			break;
+			//globals = org.luaj.vm2.lib.jme.JmePlatform.debugGlobals();
+            throw new RuntimeException("No JME");
 		}
 	}
 	
@@ -188,7 +187,6 @@ public class ScriptDrivenTest extends TestCase implements ResourceFinder {
 					LuaValue c = (LuaValue) Class.forName(name).newInstance();
 					return c;
 				} else {
-					LuaJC.install(globals);
 					return globals.load(script, name, "bt", globals);
 				}
 			default:
