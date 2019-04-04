@@ -94,7 +94,7 @@ class Prototype {
     /* information about local variables */
     @JvmField var locvars: Array<LocVars> = arrayOf()
     /* upvalue information */
-    @JvmField var upvalues: Array<Upvaldesc>
+    @JvmField var upvalues: Array<Upvaldesc> = NOUPVALUES
     @JvmField var source: LuaString = LuaString.valueOf("")
     @JvmField var linedefined: Int = 0
     @JvmField var lastlinedefined: Int = 0
