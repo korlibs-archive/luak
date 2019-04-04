@@ -1071,7 +1071,7 @@ abstract public class LuaValue : Varargs() {
      * @param expected String naming the type that was expected
      * @throws LuaError in all cases
      */
-    protected fun argerror(expected: String): LuaValue {
+    protected fun argerror(expected: String): Nothing {
         throw LuaError("bad argument: " + expected + " expected, got " + typename())
     }
 
@@ -1080,7 +1080,7 @@ abstract public class LuaValue : Varargs() {
      * @param expected String naming the type that was expected
      * @throws LuaError in all cases
      */
-    protected fun typerror(expected: String): LuaValue {
+    protected fun typerror(expected: String): Nothing {
         throw LuaError(expected + " expected, got " + typename())
     }
 
@@ -1088,7 +1088,7 @@ abstract public class LuaValue : Varargs() {
      * Throw a [LuaError] indicating an operation is not implemented
      * @throws LuaError in all cases
      */
-    protected fun unimplemented(`fun`: String): LuaValue {
+    protected fun unimplemented(`fun`: String): Nothing {
         throw LuaError("'" + `fun` + "' not implemented for " + typename())
     }
 
@@ -1097,7 +1097,7 @@ abstract public class LuaValue : Varargs() {
      * typically involved in managing weak references
      * @throws LuaError in all cases
      */
-    protected fun illegal(op: String, typename: String): LuaValue {
+    protected fun illegal(op: String, typename: String): Nothing {
         throw LuaError("illegal operation '$op' for $typename")
     }
 
@@ -1106,7 +1106,7 @@ abstract public class LuaValue : Varargs() {
      * typically due to an invalid operand type
      * @throws LuaError in all cases
      */
-    protected fun lenerror(): LuaValue {
+    protected fun lenerror(): Nothing {
         throw LuaError("attempt to get length of " + typename())
     }
 
@@ -1115,7 +1115,7 @@ abstract public class LuaValue : Varargs() {
      * typically due to an invalid operand type
      * @throws LuaError in all cases
      */
-    protected fun aritherror(): LuaValue {
+    protected fun aritherror(): Nothing {
         throw LuaError("attempt to perform arithmetic on " + typename())
     }
 
@@ -1125,7 +1125,7 @@ abstract public class LuaValue : Varargs() {
      * @param fun String description of the function that was attempted
      * @throws LuaError in all cases
      */
-    protected fun aritherror(`fun`: String): LuaValue {
+    protected fun aritherror(`fun`: String): Nothing {
         throw LuaError("attempt to perform arithmetic '" + `fun` + "' on " + typename())
     }
 
@@ -1135,7 +1135,7 @@ abstract public class LuaValue : Varargs() {
      * @param rhs String description of what was on the right-hand-side of the comparison that resulted in the error.
      * @throws LuaError in all cases
      */
-    protected fun compareerror(rhs: String): LuaValue {
+    protected fun compareerror(rhs: String): Nothing {
         throw LuaError("attempt to compare " + typename() + " with " + rhs)
     }
 
@@ -1145,7 +1145,7 @@ abstract public class LuaValue : Varargs() {
      * @param rhs Right-hand-side of the comparison that resulted in the error.
      * @throws LuaError in all cases
      */
-    protected fun compareerror(rhs: LuaValue): LuaValue {
+    protected fun compareerror(rhs: LuaValue): Nothing {
         throw LuaError("attempt to compare " + typename() + " with " + rhs.typename())
     }
 
@@ -3590,7 +3590,7 @@ abstract public class LuaValue : Varargs() {
      * @return [LuaValue] referred to, or null if it was weak and is no longer referenced.
      * @see WeakTable
      */
-    open fun strongvalue(): LuaValue {
+    open fun strongvalue(): LuaValue? {
         return this
     }
 
