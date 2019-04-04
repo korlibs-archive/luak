@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,27 +18,24 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- ******************************************************************************/
-package org.luaj.vm2;
+ */
+package org.luaj.vm2
 
 /**
- * {@link Error} sublcass that indicates a lua thread that is no
+ * [Error] sublcass that indicates a lua thread that is no
  * longer referenced has been detected.
- * <p>
+ *
+ *
  * The java thread in which this is thrown should correspond to a
- * {@link LuaThread} being used as a coroutine that could not possibly be
+ * [LuaThread] being used as a coroutine that could not possibly be
  * resumed again because there are no more references to the LuaThread with
  * which it is associated. Rather than locking up resources forever, this error
- * is thrown, and should fall through all the way to the thread's {@link Thread#run()} method.
- * <p>
+ * is thrown, and should fall through all the way to the thread's [Thread.run] method.
+ *
+ *
  * Java code mixed with the luaj vm should not catch this error because it may
  * occur when the coroutine is not running, so any processing done during error
  * handling could break the thread-safety of the application because other lua
  * processing could be going on in a different thread.
  */
-public class OrphanedThread extends Error {
-
-	public OrphanedThread() {
-		super("orphaned thread");
-	}
-}
+class OrphanedThread : Error("orphaned thread")
