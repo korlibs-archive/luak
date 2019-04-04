@@ -749,7 +749,7 @@ public class LexState extends Constants {
 		return ((k) == VNONRELOC || (k) == VLOCAL);
 	}
 
-	static class expdesc {
+	static public class expdesc {
 		int k; // expkind, from enumerated list, above
 		static class U { // originally a union
 			short ind_idx; // index (R/K)
@@ -805,7 +805,7 @@ public class LexState extends Constants {
 
 
 	/* description of pending goto statements and label statements */
-	static class Labeldesc {
+	static public class Labeldesc {
 		LuaString name;  /* label identifier */
 		int pc;  /* position in code */
 		int line;  /* line where it appeared */
@@ -1157,7 +1157,7 @@ public class LexState extends Constants {
 	*/
 
 
-	static class ConsControl {
+	static public class ConsControl {
 		expdesc v = new expdesc(); /* last list item read */
 		expdesc t; /* table descriptor */
 		int nh; /* total number of `record' elements */

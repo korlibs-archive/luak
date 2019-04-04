@@ -108,7 +108,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
         return LuaClosure(compile(stream, chunkname), globals)
     }
 
-    internal class CompileState {
+    class CompileState {
         @JvmField
         var nCcalls = 0
         private val strings = Hashtable<LuaString, LuaString>()
@@ -123,12 +123,12 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
             lexstate.setinput(this, z.read(), z, LuaValue.valueOf(name) as LuaString)
             /* main func. is always vararg */
             funcstate.f = Prototype()
-            funcstate.f.source = LuaValue.valueOf(name) as LuaString
+            funcstate.f!!.source = LuaValue.valueOf(name) as LuaString
             lexstate.mainfunc(funcstate)
             Constants._assert(funcstate.prev == null)
             /* all scopes should be correctly finished */
             Constants._assert(lexstate.dyd == null || lexstate.dyd.n_actvar == 0 && lexstate.dyd.n_gt == 0 && lexstate.dyd.n_label == 0)
-            return funcstate.f
+            return funcstate.f!!
         }
 
         // look up and keep at most one copy of each string

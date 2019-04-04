@@ -21,7 +21,7 @@
  */
 package org.luaj.vm2.compiler
 
-internal class InstructionPtr(
+class InstructionPtr(
     @JvmField val code: IntArray,
     @JvmField val idx: Int
 ) {
