@@ -274,7 +274,6 @@ open class Globals : LuaTable() {
         } catch (e: Exception) {
             return LuaValue.error("load $chunkname: $e")
         }
-
     }
 
     /** Load lua source or lua binary from an input stream into a Prototype.
