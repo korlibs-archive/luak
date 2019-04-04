@@ -72,7 +72,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
             try {
                 val g = ctx.globals
                 val f = g.load(script, "script").checkfunction()
-                return LuajCompiledScript(f, g)
+                return LuajCompiledScript(f!!, g)
             } catch (lee: LuaError) {
                 throw ScriptException(lee.message)
             } finally {

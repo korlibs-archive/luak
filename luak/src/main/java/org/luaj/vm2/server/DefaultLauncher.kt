@@ -66,9 +66,7 @@ class DefaultLauncher : Launcher {
     }
 
     private fun launchChunk(chunk: LuaValue, arg: Array<Any>): Array<Any> {
-        val args = arrayOfNulls<LuaValue>(arg.size)
-        for (i in args.indices)
-            args[i] = CoerceJavaToLua.coerce(arg[i])
+        val args = Array<LuaValue>(arg.size) { CoerceJavaToLua.coerce(arg[it]) }
         val results = chunk.invoke(LuaValue.varargsOf(args))
 
         val n = results.narg()

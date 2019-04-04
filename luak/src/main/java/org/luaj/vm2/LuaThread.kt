@@ -210,7 +210,7 @@ class LuaThread : LuaValue {
                 this.status = STATUS_RUNNING
                 (this as java.lang.Object).wait()
                 return if (this.error != null)
-                    LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(this.error))
+                    LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(this.error!!))
                 else
                     LuaValue.varargsOf(LuaValue.TRUE, this.result)
             } catch (ie: InterruptedException) {

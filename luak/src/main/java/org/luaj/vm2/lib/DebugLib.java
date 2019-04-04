@@ -710,7 +710,7 @@ public class DebugLib extends TwoArgFunction {
 			if ( c.p.upvalues != null && up <= c.p.upvalues.length )
 				return c.p.upvalues[up-1].name;
 			else
-				return LuaString.valueOf( "."+up );
+				return LuaString.valueOf2( "."+up );
 		}
 		return null;
 	}

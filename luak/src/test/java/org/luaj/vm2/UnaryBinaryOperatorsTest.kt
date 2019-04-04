@@ -176,8 +176,8 @@ class UnaryBinaryOperatorsTest : TestCase() {
         TestCase.assertFalse(sa == sc)
 
         // check object equality for different types
-        TestCase.assertFalse(da == sa)
-        TestCase.assertFalse(sa == da)
+        TestCase.assertNotSame(da, sa)
+        TestCase.assertNotSame(sa, da)
     }
 
     fun testEqInt() {

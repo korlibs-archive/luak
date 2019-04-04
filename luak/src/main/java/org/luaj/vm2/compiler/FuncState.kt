@@ -94,7 +94,7 @@ class FuncState constructor() : Constants() {
         var i: Int
         i = bl!!.firstlabel.toInt()
         while (i < ll_n) {
-            if (label.eq_b(ll!![i].name)) {
+            if (label.eq_b(ll!![i].name!!)) {
                 val msg = ls!!.L.pushfstring(
                     "label '" + label + " already defined on line " + ll[i].line
                 )

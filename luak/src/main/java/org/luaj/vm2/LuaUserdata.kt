@@ -146,7 +146,7 @@ open class LuaUserdata : LuaValue {
             this,
             m_metatable!!,
             `val`,
-            `val`.getmetatable()
+            `val`.getmetatable()!!
         ) else false
     }
 }

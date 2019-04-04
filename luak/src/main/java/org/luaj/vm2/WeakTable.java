@@ -43,11 +43,11 @@ public class WeakTable implements Metatable {
 	public static LuaTable make(boolean weakkeys, boolean weakvalues) {
 		LuaString mode;
 		if ( weakkeys && weakvalues ) {
-			mode = LuaString.valueOf("kv");
+			mode = LuaString.valueOf2("kv");
 		} else if ( weakkeys ) {
-			mode = LuaString.valueOf("k");
+			mode = LuaString.valueOf2("k");
 		} else if ( weakvalues ) {
-			mode = LuaString.valueOf("v");
+			mode = LuaString.valueOf2("v");
 		} else {
 			return LuaTable.tableOf();
 		}

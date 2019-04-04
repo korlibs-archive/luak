@@ -57,11 +57,11 @@ abstract class WeakTableTest : TableTest() {
             var stringValue: LuaString? = LuaString.valueOf("this is a test")
             var tableValue2: LuaTable? = LuaTable()
 
-            t.set("table", tableValue)
-            t.set("userdata", LuaValue.userdataOf(obj, null))
-            t.set("string", stringValue)
+            t.set("table", tableValue!!)
+            t.set("userdata", LuaValue.userdataOf(obj!!, null))
+            t.set("string", stringValue!!)
             t.set("string2", LuaValue.valueOf("another string"))
-            t.set(1, tableValue2)
+            t.set(1, tableValue2!!)
             TestCase.assertTrue("table must have at least 4 elements", t.hashLength >= 4)
             TestCase.assertTrue("array part must have 1 element", t.arrayLength >= 1)
 
@@ -128,7 +128,7 @@ abstract class WeakTableTest : TableTest() {
             TestCase.assertEquals(key, origkey.get())
             TestCase.assertEquals(`val`, origval.get())
             TestCase.assertEquals(`val`, t.get(key))
-            TestCase.assertEquals(`val`, t.get(origkey.get()))
+            TestCase.assertEquals(`val`, t.get(origkey.get()!!))
             TestCase.assertEquals(origval.get(), t.get(key))
 
             // value should not be reachable after gc
@@ -151,7 +151,7 @@ abstract class WeakTableTest : TableTest() {
 
             // set up the table
             t.set(key, `val`)
-            t.set(key2!!, val2)
+            t.set(key2!!, val2!!)
             t.set(key3, val3)
 
             // forget one of the keys
@@ -191,7 +191,7 @@ abstract class WeakTableTest : TableTest() {
 
             // set up the table
             t.set(key, `val`)
-            t.set(key2, val2)
+            t.set(key2, val2!!)
             t.set(key3!!, val3)
             TestCase.assertEquals(`val`, t.get(key))
             TestCase.assertEquals(val2, t.get(key2))

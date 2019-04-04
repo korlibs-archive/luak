@@ -103,7 +103,7 @@ internal constructor(
         return v
     }
 
-    override fun optinteger(defval: LuaInteger): LuaInteger? {
+    override fun optinteger(defval: LuaInteger?): LuaInteger? {
         return this
     }
 
@@ -119,7 +119,7 @@ internal constructor(
         return LuaString.valueOf(Integer.toString(v))
     }
 
-    override fun optstring(defval: LuaString): LuaString? {
+    override fun optstring(defval: LuaString?): LuaString? {
         return LuaString.valueOf(Integer.toString(v))
     }
 
@@ -127,7 +127,7 @@ internal constructor(
         return LuaString.valueOf(Integer.toString(v))
     }
 
-    override fun optjstring(defval: String): String? {
+    override fun optjstring(defval: String?): String? {
         return Integer.toString(v)
     }
 

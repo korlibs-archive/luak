@@ -97,7 +97,7 @@ public class CoerceJavaToLua {
 
 	private static final class StringCoercion implements Coercion {
 		public LuaValue coerce( Object javaValue ) {
-			return LuaString.valueOf( javaValue.toString() );
+			return LuaString.valueOf2( javaValue.toString() );
 		}
 	}
 

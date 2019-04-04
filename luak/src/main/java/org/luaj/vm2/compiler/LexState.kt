@@ -360,7 +360,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
             }/* to avoid warnings */
         }
         if (seminfo != null)
-            seminfo.ts = L.newTString(LuaString.valueOf(buff, 2 + sep, nbuff - 2 * (2 + sep)))
+            seminfo.ts = L.newTString(LuaString.valueOf(buff!!, 2 + sep, nbuff - 2 * (2 + sep)))
     }
 
     internal fun hexvalue(c: Int): Int {
@@ -443,7 +443,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
             }
         }
         save_and_next() /* skip delimiter */
-        seminfo.ts = L.newTString(LuaString.valueOf(buff, 1, nbuff - 2))
+        seminfo.ts = L.newTString(LuaString.valueOf(buff!!, 1, nbuff - 2))
     }
 
     internal fun llex(seminfo: SemInfo): Int {
@@ -861,7 +861,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
         val fs = this.fs
         val gl = this.dyd.gt
         val gt = gl!![g]!!
-        Constants._assert(gt.name!!.eq_b(label.name))
+        Constants._assert(gt.name!!.eq_b(label.name!!))
         if (gt.nactvar < label.nactvar) {
             val vname = fs!!.getlocvar(gt.nactvar.toInt()).varname
             val msg = L.pushfstring(
@@ -889,7 +889,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
         i = bl!!.firstlabel.toInt()
         while (i < dyd.n_label) {
             val lb = dyd.label!![i]
-            if (lb.name!!.eq_b(gt.name)) {  /* correct label? */
+            if (lb.name!!.eq_b(gt.name!!)) {  /* correct label? */
                 if (gt.nactvar > lb.nactvar && (bl.upval || dyd.n_label > bl.firstlabel))
                     fs!!.patchclose(gt.pc, lb.nactvar.toInt())
                 closegoto(g, lb)  /* close it */
@@ -914,7 +914,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
         val gl = dyd.gt
         var i = fs!!.bl!!.firstgoto.toInt()
         while (i < dyd.n_gt) {
-            if (gl!![i]!!.name!!.eq_b(lb.name))
+            if (gl!![i]!!.name!!.eq_b(lb.name!!))
                 closegoto(i, lb)
             else
                 i++

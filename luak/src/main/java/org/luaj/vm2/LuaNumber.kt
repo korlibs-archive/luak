@@ -51,7 +51,7 @@ abstract class LuaNumber : LuaValue() {
         return this
     }
 
-    override fun optnumber(defval: LuaNumber): LuaNumber? {
+    override fun optnumber(defval: LuaNumber?): LuaNumber? {
         return this
     }
 
