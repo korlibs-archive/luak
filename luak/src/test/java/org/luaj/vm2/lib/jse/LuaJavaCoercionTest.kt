@@ -237,7 +237,7 @@ class LuaJavaCoercionTest : TestCase() {
             chunk.invoke(LuaValue.NONE)
             TestCase.fail("call should not have succeeded")
         } catch (lee: LuaError) {
-            val c = lee.luaCause
+            val c = lee.getLuaCause()!!
             TestCase.assertEquals(SomeException::class.java, c::class.java)
         }
 
