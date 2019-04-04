@@ -220,8 +220,9 @@ class LuaThread : LuaValue {
                 this.result = LuaValue.NONE
                 this.error = null
                 globals.running = previous_thread
-                if (previous_thread != null)
-                    globals.running.state.status = STATUS_RUNNING
+                if (previous_thread != null) {
+                    previous_thread.state.status = STATUS_RUNNING
+                }
             }
         }
 

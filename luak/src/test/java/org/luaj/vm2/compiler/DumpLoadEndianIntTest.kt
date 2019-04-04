@@ -22,12 +22,11 @@ import org.luaj.vm2.lib.jse.JsePlatform
 
 class DumpLoadEndianIntTest : TestCase() {
 
-    private var globals: Globals? = null
+    private var globals: Globals = JsePlatform.standardGlobals()
 
     @Throws(Exception::class)
     override fun setUp() {
         super.setUp()
-        globals = JsePlatform.standardGlobals()
         DumpState.ALLOW_INTEGER_CASTING = false
     }
 
@@ -130,7 +129,7 @@ class DumpLoadEndianIntTest : TestCase() {
 
             // load again using compiler
             val `is` = ByteArrayInputStream(dumped)
-            f = globals!!.load(`is`, "dumped", "b", globals).checkfunction()
+            f = globals!!.load(`is`, "dumped", "b", globals!!).checkfunction()
             r = f!!.call()
             actual = r.tojstring()
             TestCase.assertEquals(expectedPostDump, actual)
