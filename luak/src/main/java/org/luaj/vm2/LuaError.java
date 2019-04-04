@@ -42,12 +42,18 @@ public class LuaError extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	
 	protected int level;
-	
+
 	protected String fileline;
-	
+
 	protected String traceback;
 
+	protected Throwable cause;
+
 	private LuaValue object;
+
+	public Throwable getLuaCause() {
+	    return this.cause;
+    }
 	
 	/** Get the string message if it was supplied, or a string 
 	 * representation of the message object if that was supplied.
@@ -80,7 +86,8 @@ public class LuaError extends RuntimeException {
 	 * @param cause the Throwable that caused the error, if known.  
 	 */
 	public LuaError(Throwable cause) {
-		super( "vm error: "+cause, cause );
+		super( "vm error: "+cause );
+		this.cause = cause;
 		this.level = 1;
 	}
 
@@ -114,5 +121,14 @@ public class LuaError extends RuntimeException {
 		this.object = message_object;
 		this.level = 1;
 	}	
+
+
+	/**
+	 * Get the cause, if any.
+	 */
+	public Throwable getCause() {
+		return cause;
+	}
+
 
 }
