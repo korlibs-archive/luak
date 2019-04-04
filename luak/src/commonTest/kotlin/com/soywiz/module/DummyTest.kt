@@ -1,7 +1,9 @@
-import kotlin.test.Test
+/*
+import kotlin.test.*
 
 class DummyTest {
     @Test
     fun test() {
     }
 }
+*/

@@ -33,7 +33,6 @@ import javax.script.SimpleScriptContext;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.lib.jse.JsePlatform;
-import org.luaj.vm2.luajc.LuaJC;
 
 /** 
  * Context for LuaScriptEngine execution which maintains its own Globals, 
@@ -82,8 +81,9 @@ public class LuajContext extends SimpleScriptContext implements ScriptContext {
 		globals = createDebugGlobals?
     		JsePlatform.debugGlobals():
     		JsePlatform.standardGlobals();
-    	if (useLuaJCCompiler)
-    		LuaJC.install(globals);
+		if (useLuaJCCompiler) {
+		    throw new RuntimeException("Can't use useLuaJCCompiler");
+        }
     	stdin = globals.STDIN;
     	stdout = globals.STDOUT;
     	stderr = globals.STDERR;
