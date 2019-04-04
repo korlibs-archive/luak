@@ -69,8 +69,8 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
     }
 
     // ResourceFinder implementation.
-    override fun findResource(filename: String): InputStream? {
-        var `is` = findInPlainFile(filename)
+    override fun findResource(filename: String): InputStream {
+        var `is`: InputStream? = findInPlainFile(filename)
         if (`is` != null) return `is`
         `is` = findInPlainFileAsResource("", filename)
         if (`is` != null) return `is`
@@ -81,7 +81,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
         `is` = findInZipFileAsResource("", filename)
         if (`is` != null) return `is`
         `is` = findInZipFileAsResource("/", filename)
-        return `is`
+        return `is`!!
     }
 
     private fun findInPlainFileAsResource(prefix: String, filename: String): InputStream {
