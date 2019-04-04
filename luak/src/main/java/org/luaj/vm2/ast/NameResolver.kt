@@ -93,12 +93,12 @@ class NameResolver : Visitor() {
         defineLocalVars(stat.names)
         val n = stat.names.size
         val m = if (stat.values != null) stat.values.size else 0
-        val isvarlist = m > 0 && m < n && (stat.values[m - 1] as Exp).isvarargexp()
+        val isvarlist = m > 0 && m < n && (stat.values!![m - 1] as Exp).isvarargexp()
         run {
             var i = 0
             while (i < n && i < if (isvarlist) m - 1 else m) {
-                if (stat.values[i] is Constant)
-                    (stat.names[i] as Name).variable!!.initialValue = (stat.values[i] as Constant).value
+                if (stat.values!![i] is Constant)
+                    (stat.names[i] as Name).variable!!.initialValue = (stat.values!![i] as Constant).value
                 i++
             }
         }

@@ -68,7 +68,7 @@ abstract class Visitor {
             var i = 0
             val n = stat.elseifblocks.size
             while (i < n) {
-                (stat.elseifexps[i] as Exp).accept(this)
+                (stat.elseifexps!![i] as Exp).accept(this)
                 (stat.elseifblocks[i] as Block).accept(this)
                 i++
             }
