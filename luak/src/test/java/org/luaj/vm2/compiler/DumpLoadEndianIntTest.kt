@@ -1,0 +1,171 @@
+package org.luaj.vm2.compiler
+
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.Reader
+import java.io.StringReader
+
+import junit.framework.TestCase
+
+import org.luaj.vm2.Globals
+import org.luaj.vm2.LoadState
+import org.luaj.vm2.LuaClosure
+import org.luaj.vm2.LuaFunction
+import org.luaj.vm2.LuaValue
+import org.luaj.vm2.Prototype
+import org.luaj.vm2.lib.jse.JsePlatform
+
+
+class DumpLoadEndianIntTest : TestCase() {
+
+    private var globals: Globals? = null
+
+    @Throws(Exception::class)
+    override fun setUp() {
+        super.setUp()
+        globals = JsePlatform.standardGlobals()
+        DumpState.ALLOW_INTEGER_CASTING = false
+    }
+
+    fun testBigDoubleCompile() {
+        doTest(
+            false,
+            DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES,
+            false,
+            mixedscript,
+            withdoubles,
+            withdoubles,
+            SHOULDPASS
+        )
+        doTest(
+            false,
+            DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES,
+            true,
+            mixedscript,
+            withdoubles,
+            withdoubles,
+            SHOULDPASS
+        )
+    }
+
+    fun testLittleDoubleCompile() {
+        doTest(
+            true,
+            DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES,
+            false,
+            mixedscript,
+            withdoubles,
+            withdoubles,
+            SHOULDPASS
+        )
+        doTest(true, DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES, true, mixedscript, withdoubles, withdoubles, SHOULDPASS)
+    }
+
+    fun testBigIntCompile() {
+        DumpState.ALLOW_INTEGER_CASTING = true
+        doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, false, mixedscript, withdoubles, withints, SHOULDPASS)
+        doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, true, mixedscript, withdoubles, withints, SHOULDPASS)
+        DumpState.ALLOW_INTEGER_CASTING = false
+        doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, false, mixedscript, withdoubles, withints, SHOULDFAIL)
+        doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, true, mixedscript, withdoubles, withints, SHOULDFAIL)
+        doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, false, intscript, withints, withints, SHOULDPASS)
+        doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, true, intscript, withints, withints, SHOULDPASS)
+    }
+
+    fun testLittleIntCompile() {
+        DumpState.ALLOW_INTEGER_CASTING = true
+        doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, false, mixedscript, withdoubles, withints, SHOULDPASS)
+        doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, true, mixedscript, withdoubles, withints, SHOULDPASS)
+        DumpState.ALLOW_INTEGER_CASTING = false
+        doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, false, mixedscript, withdoubles, withints, SHOULDFAIL)
+        doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, true, mixedscript, withdoubles, withints, SHOULDFAIL)
+        doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, false, intscript, withints, withints, SHOULDPASS)
+        doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, true, intscript, withints, withints, SHOULDPASS)
+    }
+
+    fun testBigNumpatchCompile() {
+        doTest(false, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, false, mixedscript, withdoubles, withdoubles, SHOULDPASS)
+        doTest(false, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, true, mixedscript, withdoubles, withdoubles, SHOULDPASS)
+    }
+
+    fun testLittleNumpatchCompile() {
+        doTest(true, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, false, mixedscript, withdoubles, withdoubles, SHOULDPASS)
+        doTest(true, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, true, mixedscript, withdoubles, withdoubles, SHOULDPASS)
+    }
+
+    fun doTest(
+        littleEndian: Boolean, numberFormat: Int, stripDebug: Boolean,
+        script: String, expectedPriorDump: String, expectedPostDump: String, shouldPass: Boolean
+    ) {
+        try {
+
+            // compile into prototype
+            val reader = StringReader(script)
+            val p = globals!!.compilePrototype(reader, "script")
+
+            // double check script result before dumping
+            var f: LuaFunction? = LuaClosure(p, globals)
+            var r = f!!.call()
+            var actual = r.tojstring()
+            TestCase.assertEquals(expectedPriorDump, actual)
+
+            // dump into bytes
+            val baos = ByteArrayOutputStream()
+            try {
+                DumpState.dump(p, baos, stripDebug, numberFormat, littleEndian)
+                if (!shouldPass)
+                    TestCase.fail("dump should not have succeeded")
+            } catch (e: Exception) {
+                if (shouldPass)
+                    TestCase.fail("dump threw $e")
+                else
+                    return
+            }
+
+            val dumped = baos.toByteArray()
+
+            // load again using compiler
+            val `is` = ByteArrayInputStream(dumped)
+            f = globals!!.load(`is`, "dumped", "b", globals).checkfunction()
+            r = f!!.call()
+            actual = r.tojstring()
+            TestCase.assertEquals(expectedPostDump, actual)
+
+            // write test chunk
+            if (System.getProperty(SAVECHUNKS) != null && script == mixedscript) {
+                File("build").mkdirs()
+                val filename = ("build/test-"
+                        + (if (littleEndian) "little-" else "big-")
+                        + (if (numberFormat == DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES)
+                    "double-"
+                else if (numberFormat == DumpState.NUMBER_FORMAT_INTS_ONLY)
+                    "int-"
+                else if (numberFormat == DumpState.NUMBER_FORMAT_NUM_PATCH_INT32) "numpatch4-" else "???-")
+                        + (if (stripDebug) "nodebug-" else "debug-")
+                        + "bin.lua")
+                val fos = FileOutputStream(filename)
+                fos.write(dumped)
+                fos.close()
+            }
+
+        } catch (e: IOException) {
+            TestCase.fail(e.toString())
+        }
+
+    }
+
+    companion object {
+        private val SAVECHUNKS = "SAVECHUNKS"
+
+        private val SHOULDPASS = true
+        private val SHOULDFAIL = false
+        private val mixedscript = "return tostring(1234)..'-#!-'..tostring(23.75)"
+        private val intscript = "return tostring(1234)..'-#!-'..tostring(23)"
+        private val withdoubles = "1234-#!-23.75"
+        private val withints = "1234-#!-23"
+    }
+}

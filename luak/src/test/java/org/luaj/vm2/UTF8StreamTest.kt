@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,24 +18,24 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- ******************************************************************************/
-package org.luaj.vm2;
+ */
+package org.luaj.vm2
 
-import junit.framework.TestCase;
+import junit.framework.TestCase
 
-import org.luaj.vm2.lib.jse.JsePlatform;
+import org.luaj.vm2.lib.jse.JsePlatform
 
-public class UTF8StreamTest  extends TestCase {
+class UTF8StreamTest : TestCase() {
 
-	public void testUtf8CharsInStream() {
-		String script = "x = \"98\u00b0: today's temp!\"\n"
-				+ "print('x = ', x)\n"
-				+ "return x";
-		Globals globals = JsePlatform.standardGlobals();
-		LuaValue chunk = globals.load(script);
-		LuaValue result = chunk.call();
-		String str = result.tojstring();
-		assertEquals("98\u00b0: today's temp!", str);
-	}
+    fun testUtf8CharsInStream() {
+        val script = ("x = \"98\u00b0: today's temp!\"\n"
+                + "print('x = ', x)\n"
+                + "return x")
+        val globals = JsePlatform.standardGlobals()
+        val chunk = globals.load(script)
+        val result = chunk.call()
+        val str = result.tojstring()
+        TestCase.assertEquals("98\u00b0: today's temp!", str)
+    }
 
 }

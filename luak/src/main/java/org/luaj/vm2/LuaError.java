@@ -46,8 +46,6 @@ public class LuaError extends RuntimeException {
 	protected String fileline;
 	
 	protected String traceback;
-	
-	protected Throwable cause;
 
 	private LuaValue object;
 	
@@ -82,8 +80,7 @@ public class LuaError extends RuntimeException {
 	 * @param cause the Throwable that caused the error, if known.  
 	 */
 	public LuaError(Throwable cause) {
-		super( "vm error: "+cause );
-		this.cause = cause;
+		super( "vm error: "+cause, cause );
 		this.level = 1;
 	}
 
@@ -117,14 +114,5 @@ public class LuaError extends RuntimeException {
 		this.object = message_object;
 		this.level = 1;
 	}	
-
-
-	/** 
-	 * Get the cause, if any.
-	 */
-	public Throwable getCause() {
-		return cause;
-	}
-
 
 }
