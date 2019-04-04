@@ -31,6 +31,7 @@ import java.io.InputStream;
  * Results are compared for exact match with 
  * the installed C-based lua environment. 
  */
+/*
 public class ErrorsTest extends ScriptDrivenTest {
 
 	private static final String dir = "errors/";
@@ -61,3 +62,4 @@ public class ErrorsTest extends ScriptDrivenTest {
 	public void testTableLibArgs()      { runTest("tablelibargs");     }
 	
 }
+*/

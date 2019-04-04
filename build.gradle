@@ -1,0 +1,10 @@
+apply plugin: 'idea'
+
+idea {
+    module {
+        excludeDirs = [file(".gradle")]
+        ["@ref", "gradle", ".idea"].each {
+            excludeDirs << file(it)
+        }
+    }
+}
