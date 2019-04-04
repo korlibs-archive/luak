@@ -180,9 +180,9 @@ abstract class Visitor {
     open fun visit(table: TableConstructor) {
         if (table.fields != null) {
             var i = 0
-            val n = table.fields.size
+            val n = table.fields!!.size
             while (i < n) {
-                (table.fields[i] as TableField).accept(this)
+                (table.fields!![i] as TableField).accept(this)
                 i++
             }
         }
