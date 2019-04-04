@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
     testImplementation "junit:junit:4.12"
+    api "org.jetbrains.kotlin:kotlin-stdlib"
 }
 
 test {
