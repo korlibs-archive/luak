@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,48 +18,72 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- ******************************************************************************/
-package org.luaj.vm2;
+ */
+package org.luaj.vm2
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.IOException
+import java.io.InputStream
 
-
+/*
 /**
  * Test argument type check errors
- * 
- * Results are compared for exact match with 
- * the installed C-based lua environment. 
+ *
+ * Results are compared for exact match with
+ * the installed C-based lua environment.
  */
-/*
-public class ErrorsTest extends ScriptDrivenTest {
+class ErrorsTest : ScriptDrivenTest(ScriptDrivenTest.PlatformType.JSE, dir) {
 
-	private static final String dir = "errors/";
+    @Throws(Exception::class)
+    override fun setUp() {
+        super.setUp()
+    }
 
-	public ErrorsTest() {
-		super(ScriptDrivenTest.PlatformType.JSE, dir);
-	}
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+    fun testBaseLibArgs() {
+        globals.STDIN = object : InputStream() {
+            @Throws(IOException::class)
+            override fun read(): Int {
+                return -1
+            }
+        }
+        runTest("baselibargs")
+    }
 
-	public void testBaseLibArgs()       { 
-		globals.STDIN = new InputStream() {
-			public int read() throws IOException {
-				return -1;
-			}
-		};
-		runTest("baselibargs");      
-	}
-	public void testCoroutineLibArgs()  { runTest("coroutinelibargs"); }	
-	public void testDebugLibArgs()      { runTest("debuglibargs"); }	
-	public void testIoLibArgs()         { runTest("iolibargs");        }	
-	public void testMathLibArgs()       { runTest("mathlibargs");      }	
-	public void testModuleLibArgs()     { runTest("modulelibargs");    }	
-	public void testOperators()         { runTest("operators");        }
-	public void testStringLibArgs()     { runTest("stringlibargs");    }
-	public void testTableLibArgs()      { runTest("tablelibargs");     }
-	
+    fun testCoroutineLibArgs() {
+        runTest("coroutinelibargs")
+    }
+
+    fun testDebugLibArgs() {
+        runTest("debuglibargs")
+    }
+
+    fun testIoLibArgs() {
+        runTest("iolibargs")
+    }
+
+    fun testMathLibArgs() {
+        runTest("mathlibargs")
+    }
+
+    fun testModuleLibArgs() {
+        runTest("modulelibargs")
+    }
+
+    fun testOperators() {
+        runTest("operators")
+    }
+
+    fun testStringLibArgs() {
+        runTest("stringlibargs")
+    }
+
+    fun testTableLibArgs() {
+        runTest("tablelibargs")
+    }
+
+    companion object {
+
+        private val dir = "errors/"
+    }
+
 }
 */
