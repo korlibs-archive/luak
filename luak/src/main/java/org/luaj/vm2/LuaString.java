@@ -514,7 +514,7 @@ public class LuaString extends LuaValue {
 	}
 	
 	public LuaValue len() {
-		return LuaInteger.valueOf(m_length);
+		return LuaInteger.valueOf2(m_length);
 	}
 
 	public int length() {

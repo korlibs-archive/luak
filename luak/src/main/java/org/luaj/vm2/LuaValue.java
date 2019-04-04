@@ -177,13 +177,13 @@ public class LuaValue extends Varargs {
 	public static final LuaValue   NONE      = None._NONE;
 	
 	/** LuaValue number constant equal to 0 */
-	public static final LuaNumber  ZERO      = LuaInteger.valueOf(0);
+	public static final LuaNumber  ZERO      = LuaInteger.valueOf2(0);
 	
 	/** LuaValue number constant equal to 1 */
-	public static final LuaNumber  ONE       = LuaInteger.valueOf(1);
+	public static final LuaNumber  ONE       = LuaInteger.valueOf2(1);
 
 	/** LuaValue number constant equal to -1 */
-	public static final LuaNumber  MINUSONE  = LuaInteger.valueOf(-1);
+	public static final LuaNumber  MINUSONE  = LuaInteger.valueOf2(-1);
 	
 	/** LuaValue array constant with no values */
 	public static final LuaValue[] NOVALS    = {};
@@ -1143,7 +1143,7 @@ public class LuaValue extends Varargs {
 	 * @see #get(LuaValue)
 	 * @see #rawget(int)
 	 */
-	public LuaValue get( int key ) { return get(LuaInteger.valueOf(key)); }
+	public LuaValue get( int key ) { return get(LuaInteger.valueOf2(key)); }
 
 	/** Get a value in a table including metatag processing using {@link #INDEX}.
 	 * @param key the key to look up, must not be null
@@ -1170,7 +1170,7 @@ public class LuaValue extends Varargs {
 	 * @throws LuaError if {@code this} is not a table, 
 	 * or there is no {@link #NEWINDEX} metatag  
 	 */
-	public void set( int key, LuaValue value ) { set(LuaInteger.valueOf(key), value ); }
+	public void set( int key, LuaValue value ) { set(LuaInteger.valueOf2(key), value ); }
 	
 	/** Set a value in a table without metatag processing using {@link #NEWINDEX}.
 	 * @param key the key to use
@@ -3163,7 +3163,7 @@ public class LuaValue extends Varargs {
 	 * @param i int value to convert
 	 * @return {@link LuaInteger} instance, possibly pooled, whose value is i
 	 */
-	public static LuaInteger  valueOf(int i)        { return LuaInteger.valueOf(i); }
+	public static LuaInteger  valueOf(int i)        { return LuaInteger.valueOf2(i); }
 	
 	/** Convert java double to a {@link LuaValue}.  
 	 * This may return a {@link LuaInteger} or {@link LuaDouble} depending 

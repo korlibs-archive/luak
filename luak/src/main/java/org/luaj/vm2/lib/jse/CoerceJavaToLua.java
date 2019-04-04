@@ -77,14 +77,14 @@ public class CoerceJavaToLua {
 	private static final class IntCoercion implements Coercion {
 		public LuaValue coerce( Object javaValue ) {
 			Number n = (Number) javaValue;
-			return LuaInteger.valueOf( n.intValue() );
+			return LuaInteger.valueOf2( n.intValue() );
 		}
 	}
 
 	private static final class CharCoercion implements Coercion {
 		public LuaValue coerce( Object javaValue ) {
 			Character c = (Character) javaValue;
-			return LuaInteger.valueOf( c.charValue() );
+			return LuaInteger.valueOf2( c.charValue() );
 		}
 	}
 
