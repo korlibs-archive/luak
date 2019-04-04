@@ -7,7 +7,7 @@ matrix:
       KBUILD=linux
       JAVA_OPTS=-Xmx2g
     script:
-    - ./gradlew -s -i check build
+      - ./gradlew -s -i check build
 #  - os: linux
 #    language: java
 #    jdk: oraclejdk8
