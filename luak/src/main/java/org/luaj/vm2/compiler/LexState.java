@@ -796,7 +796,7 @@ public class LexState extends Constants {
 
 
 	/* description of active local variable */
-	static class Vardesc {
+	static public class Vardesc {
 		final short idx;  /* variable index in stack */
 		Vardesc(int idx) {
 			this.idx = (short) idx;
