@@ -193,15 +193,13 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
 
     @Throws(IOException::class)
     internal fun dumpDebug(f: Prototype) {
-        var i: Int
-        var n: Int
         if (strip)
             dumpInt(0)
         else
             dumpString(f.source)
-        n = if (strip) 0 else f.lineinfo.size
+        var n = if (strip) 0 else f.lineinfo.size
         dumpInt(n)
-        i = 0
+        var i = 0
         while (i < n) {
             dumpInt(f.lineinfo[i])
             i++
@@ -220,7 +218,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         dumpInt(n)
         i = 0
         while (i < n) {
-            dumpString(f.upvalues[i].name)
+            dumpString(f.upvalues[i].name!!)
             i++
         }
     }
