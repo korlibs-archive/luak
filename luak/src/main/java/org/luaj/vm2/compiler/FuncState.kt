@@ -120,7 +120,7 @@ class FuncState constructor() : Constants() {
     }
 
     fun getlocvar(i: Int): LocVars {
-        val idx = ls!!.dyd.actvar[firstlocal + i].idx.toInt()
+        val idx = ls!!.dyd!!.actvar!![firstlocal + i].idx.toInt()
         Constants._assert(idx < nlocvars)
         return f!!.locvars[idx]
     }
@@ -182,7 +182,7 @@ class FuncState constructor() : Constants() {
         /* correct pending gotos to current block and try to close it
 		   with visible labels */
         while (i < ls!!.dyd.n_gt) {
-            val gt = gl[i]
+            val gt = gl!![i]!!
             if (gt.nactvar > bl.nactvar) {
                 if (bl.upval)
                     patchclose(gt.pc, bl.nactvar.toInt())
@@ -224,7 +224,7 @@ class FuncState constructor() : Constants() {
             this.movegotosout(bl)  /* update pending gotos to outer block */
         else if (bl.firstgoto < ls!!.dyd.n_gt)
         /* pending gotos in outer block? */
-            ls!!.undefgoto(ls!!.dyd.gt[bl.firstgoto.toInt()])  /* error */
+            ls!!.undefgoto(ls!!.dyd!!.gt!![bl.firstgoto.toInt()]!!)  /* error */
     }
 
     fun closelistfield(cc: ConsControl) {
@@ -233,7 +233,7 @@ class FuncState constructor() : Constants() {
         this.exp2nextreg(cc.v)
         cc.v.k = LexState.VVOID
         if (cc.tostore == Lua.LFIELDS_PER_FLUSH) {
-            this.setlist(cc.t.u.info, cc.na, cc.tostore) /* flush */
+            this.setlist(cc.t!!.u.info, cc.na, cc.tostore) /* flush */
             cc.tostore = 0 /* no more items pending */
         }
     }
@@ -246,13 +246,13 @@ class FuncState constructor() : Constants() {
         if (cc.tostore == 0) return
         if (hasmultret(cc.v.k)) {
             this.setmultret(cc.v)
-            this.setlist(cc.t.u.info, cc.na, Lua.LUA_MULTRET)
+            this.setlist(cc.t!!.u.info, cc.na, Lua.LUA_MULTRET)
             cc.na--
             /** do not count last expression (unknown number of elements)  */
         } else {
             if (cc.v.k != LexState.VVOID)
                 this.exp2nextreg(cc.v)
-            this.setlist(cc.t.u.info, cc.na, cc.tostore)
+            this.setlist(cc.t!!.u.info, cc.na, cc.tostore)
         }
     }
 
@@ -473,7 +473,7 @@ class FuncState constructor() : Constants() {
             this.freereg(e.u.info)
     }
 
-    fun addk(v: LuaValue): Int {
+    fun addk(v: LuaValue?): Int {
         if (this.h == null) {
             this.h = Hashtable<LuaValue, Int>()
         } else if (this.h!!.containsKey(v)) {
@@ -484,7 +484,7 @@ class FuncState constructor() : Constants() {
         val f = this.f
         if (f!!.k == null || nk + 1 >= f.k.size)
             f.k = Constants.realloc(f.k, nk * 2 + 1)
-        f.k[this.nk++] = v
+        f.k[this.nk++] = v ?: LuaValue.NIL
         return idx
     }
 
@@ -492,7 +492,7 @@ class FuncState constructor() : Constants() {
         return this.addk(s)
     }
 
-    fun numberK(r: LuaValue): Int {
+    fun numberK(r: LuaValue?): Int {
         var r = r
         if (r is LuaDouble) {
             val d = r.todouble()
