@@ -147,15 +147,15 @@ public class LuaInteger extends LuaNumber {
 	
 	// arithmetic operators
 	public LuaValue   add( LuaValue rhs )        { return rhs.add(v); }
-	public LuaValue   add( double lhs )     { return LuaDouble.valueOf(lhs + v); }
+	public LuaValue   add( double lhs )     { return LuaDouble.valueOf2(lhs + v); }
 	public LuaValue   add( int lhs )        { return LuaInteger.valueOf(lhs + (long)v); }
 	public LuaValue   sub( LuaValue rhs )        { return rhs.subFrom(v); }
-	public LuaValue   sub( double rhs )        { return LuaDouble.valueOf(v - rhs); }
+	public LuaValue   sub( double rhs )        { return LuaDouble.valueOf2(v - rhs); }
 	public LuaValue   sub( int rhs )        { return LuaDouble.valueOf(v - rhs); }
-	public LuaValue   subFrom( double lhs )   { return LuaDouble.valueOf(lhs - v); }
+	public LuaValue   subFrom( double lhs )   { return LuaDouble.valueOf2(lhs - v); }
 	public LuaValue   subFrom( int lhs )      { return LuaInteger.valueOf(lhs - (long)v); }
 	public LuaValue   mul( LuaValue rhs )        { return rhs.mul(v); }
-	public LuaValue   mul( double lhs )   { return LuaDouble.valueOf(lhs * v); }
+	public LuaValue   mul( double lhs )   { return LuaDouble.valueOf2(lhs * v); }
 	public LuaValue   mul( int lhs )      { return LuaInteger.valueOf(lhs * (long)v); }
 	public LuaValue   pow( LuaValue rhs )        { return rhs.powWith(v); }
 	public LuaValue   pow( double rhs )        { return MathLib.dpow(v,rhs); }

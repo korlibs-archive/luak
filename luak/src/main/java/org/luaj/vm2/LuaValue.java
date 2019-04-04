@@ -3172,7 +3172,7 @@ public class LuaValue extends Varargs {
 	 * @param d double value to convert
 	 * @return {@link LuaNumber} instance, possibly pooled, whose value is d
 	 */
-	public static LuaNumber   valueOf(double d)     { return LuaDouble.valueOf(d); };
+	public static LuaNumber   valueOf(double d)     { return LuaDouble.valueOf2(d); };
 	
 	/** Convert java string to a {@link LuaValue}.
 	 * 

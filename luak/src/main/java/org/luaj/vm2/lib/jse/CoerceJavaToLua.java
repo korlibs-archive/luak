@@ -91,7 +91,7 @@ public class CoerceJavaToLua {
 	private static final class DoubleCoercion implements Coercion {
 		public LuaValue coerce( Object javaValue ) {
 			Number n = (Number) javaValue;
-			return LuaDouble.valueOf( n.doubleValue() );
+			return LuaDouble.valueOf2( n.doubleValue() );
 		}
 	}
 

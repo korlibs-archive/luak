@@ -76,7 +76,7 @@ class SimpleTests : TestCase() {
     fun testDoubleHashCode() {
         for (i in samehash.indices) {
             val j = LuaInteger.valueOf(samehash[i])
-            val d = LuaDouble.valueOf(samehash[i])
+            val d = LuaDouble.valueOf(samehash[i].toDouble())
             val hj = j.hashCode()
             val hd = d.hashCode()
             TestCase.assertEquals(hj, hd)
