@@ -21,7 +21,9 @@
  */
 package org.luaj.vm2
 
-import java.lang.ref.WeakReference
+import com.soywiz.kmem.*
+import com.soywiz.weak.*
+import kotlin.jvm.*
 
 /**
  * Subclass of [LuaValue] for representing lua tables.
@@ -151,7 +153,7 @@ open class LuaTable : LuaValue, Metatable {
     @JvmOverloads
     constructor(varargs: Varargs, firstarg: Int = 1) {
         val nskip = firstarg - 1
-        val n = Math.max(varargs.narg() - nskip, 0)
+        val n = kotlin.math.max(varargs.narg() - nskip, 0)
         presize(n, 1)
         set(N, LuaValue.valueOf(n))
         for (i in 1..n)
@@ -551,7 +553,7 @@ open class LuaTable : LuaValue, Metatable {
         for (bit in 0..30) {
             if (i > array.size)
                 break
-            val j = Math.min(array.size, 1 shl bit)
+            val j = kotlin.math.min(array.size, 1 shl bit)
             var c = 0
             while (i <= j) {
                 if (array[i++ - 1] != null)
@@ -567,7 +569,7 @@ open class LuaTable : LuaValue, Metatable {
             var s: Slot? = hash[i]
             while (s != null) {
                 val k: Int
-                if ((run { k = s!!.arraykey(Integer.MAX_VALUE); k }) > 0) {
+                if ((run { k = s!!.arraykey(Int.MAX_VALUE); k }) > 0) {
                     nums[log2(k)]++
                     total++
                 }
@@ -639,7 +641,7 @@ open class LuaTable : LuaValue, Metatable {
                     ++i
                 }
             }
-            arraycopy(oldArray, 0, newArray, 0, Math.min(oldArray.size, newArraySize))
+            arraycopy(oldArray, 0, newArray, 0, kotlin.math.min(oldArray.size, newArraySize))
         } else {
             newArray = array
         }
@@ -1234,7 +1236,7 @@ open class LuaTable : LuaValue, Metatable {
         }
 
         override fun toString(): String {
-            val buf = StringBuffer()
+            val buf = StringBuilder()
             buf.append("<dead")
             val k = key()
             if (k != null) {
@@ -1314,7 +1316,7 @@ open class LuaTable : LuaValue, Metatable {
             x -= 1
             if (x < 0)
             // 2^(-(2^31)) is approximately 0
-                return Integer.MIN_VALUE
+                return Int.MIN_VALUE
             if (x and -0x10000 != 0) {
                 lg = 16
                 x = x ushr 16

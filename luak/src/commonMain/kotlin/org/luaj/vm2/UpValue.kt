@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+
 
 /** Upvalue used with Closure formulation
  *

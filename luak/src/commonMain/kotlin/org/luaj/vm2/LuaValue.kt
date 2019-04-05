@@ -21,6 +21,10 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.korio.lang.*
+import kotlin.jvm.*
+import kotlin.reflect.*
+
 /**
  * Base class for all concrete lua type values.
  *
@@ -316,7 +320,7 @@ abstract class LuaValue : Varargs() {
      * @see .optuserdata
      * @see .TUSERDATA
      */
-    open fun isuserdata(c: Class<*>): Boolean {
+    open fun isuserdata(c: KClass<*>): Boolean {
         return false
     }
 
@@ -437,7 +441,7 @@ abstract class LuaValue : Varargs() {
      * @see .TSTRING
      */
     override fun tojstring(): String {
-        return typename() + ": " + Integer.toHexString(hashCode())
+        return typename() + ": " + hashCode().toString(16)
     }
 
     /** Convert to userdata instance, or null.
@@ -459,7 +463,7 @@ abstract class LuaValue : Varargs() {
      * @see .isuserdata
      * @see .TUSERDATA
      */
-    open fun touserdata(c: Class<*>): Any? {
+    open fun touserdata(c: KClass<*>): Any? {
         return null
     }
 
@@ -754,8 +758,8 @@ abstract class LuaValue : Varargs() {
      * @see .optuserdata
      * @see .TUSERDATA
      */
-    open fun optuserdata(c: Class<*>, defval: Any?): Any? {
-        argerror(c.name)
+    open fun optuserdata(c: KClass<*>, defval: Any?): Any? {
+        argerror(c.portableSimpleName)
     }
 
     /** Perform argument check that this is not nil or none.
@@ -1015,7 +1019,7 @@ abstract class LuaValue : Varargs() {
      * @see .checkuserdata
      * @see .TUSERDATA
      */
-    open fun checkuserdata(c: Class<*>): Any? {
+    open fun checkuserdata(c: KClass<*>): Any? {
         argerror("userdata")
     }
 

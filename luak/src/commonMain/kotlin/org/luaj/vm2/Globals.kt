@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.classext.*
+import com.soywiz.kmem.*
 import org.luaj.vm2.lib.BaseLib
 import org.luaj.vm2.lib.DebugLib
 import org.luaj.vm2.lib.IoLib
@@ -333,13 +335,13 @@ open class Globals : LuaTable() {
         override fun read(b: ByteArray, i0: Int, n: Int): Int {
             val a = avail()
             if (a <= 0) return -1
-            val n_read = Math.min(a, n)
+            val n_read = kotlin.math.min(a, n)
             arraycopy(this.b, i, b, i0, n_read)
             i += n_read
             return n_read
         }
 
-        override fun skip(n: Long): Long = Math.min(n, (j - i).toLong()).also { i += it.toInt() }
+        override fun skip(n: Long): Long = kotlin.math.min(n, (j - i).toLong()).also { i += it.toInt() }
         override fun available(): Int = j - i
     }
 

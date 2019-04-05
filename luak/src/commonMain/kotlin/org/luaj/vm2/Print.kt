@@ -21,8 +21,9 @@
  */
 package org.luaj.vm2
 
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
+import com.soywiz.classext.*
+import com.soywiz.korio.lang.*
+import kotlin.jvm.*
 
 /**
  * Debug helper class to pretty-print lua bytecodes.
@@ -110,7 +111,7 @@ class Print : Lua() {
                         0x000B /* vertical tab */ -> ps.print("\\v")
                         else -> {
                             ps.print('\\')
-                            ps.print(Integer.toString(1000 + 0xff and c).substring(1))
+                            ps.print((1000 + 0xff and c).toString().substring(1))
                         }
                     }
                 }
@@ -232,7 +233,7 @@ class Print : Lua() {
                     if (Lua.ISK(c)) printConstant(ps, f, Lua.INDEXK(c)) else ps.print("-")
                 }
                 Lua.OP_JMP, Lua.OP_FORLOOP, Lua.OP_FORPREP -> ps.print("  ; to " + (sbx + pc + 2))
-                Lua.OP_CLOSURE -> ps.print("  ; " + f.p[bx].javaClass.name)
+                Lua.OP_CLOSURE -> ps.print("  ; " + f.p[bx]::class.portableSimpleName)
                 Lua.OP_SETLIST -> if (c == 0) ps.print("  ; " + code[++pc]) else ps.print("  ; $c")
                 Lua.OP_VARARG -> ps.print("  ; is_vararg=" + f.is_vararg)
                 else -> Unit
@@ -388,9 +389,9 @@ class Print : Lua() {
                         LuaValue.TUSERDATA -> {
                             val o = v.touserdata()
                             if (o != null) {
-                                var n = o.javaClass.name
+                                var n = o::class.portableSimpleName
                                 n = n.substring(n.lastIndexOf('.') + 1)
-                                ps.print(n + ": " + Integer.toHexString(o.hashCode()))
+                                ps.print(n + ": " + o.hashCode().toString(16))
                             } else {
                                 ps.print(v.toString())
                             }

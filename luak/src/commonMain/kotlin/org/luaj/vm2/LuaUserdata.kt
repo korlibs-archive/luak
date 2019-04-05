@@ -21,6 +21,9 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.classext.*
+import kotlin.jvm.*
+import kotlin.reflect.*
 
 open class LuaUserdata : LuaValue {
 
@@ -38,91 +41,50 @@ open class LuaUserdata : LuaValue {
         m_metatable = metatable
     }
 
-    override fun tojstring(): String {
-        return m_instance.toString()
-    }
+    override fun tojstring(): String = m_instance.toString()
+    override fun type(): Int = LuaValue.TUSERDATA
+    override fun typename(): String = "userdata"
+    override fun hashCode(): Int = m_instance.hashCode()
+    fun userdata(): Any = m_instance
+    override fun isuserdata(): Boolean = true
+    override fun isuserdata(c: KClass<*>): Boolean = c.isInstance(m_instance)
+    override fun touserdata(): Any = m_instance
+    override fun touserdata(c: KClass<*>): Any? = if (c.isInstance(m_instance)) m_instance else null
+    override fun optuserdata(defval: Any?): Any? = m_instance
 
-    override fun type(): Int {
-        return LuaValue.TUSERDATA
-    }
-
-    override fun typename(): String {
-        return "userdata"
-    }
-
-    override fun hashCode(): Int {
-        return m_instance.hashCode()
-    }
-
-    fun userdata(): Any {
+    override fun optuserdata(c: KClass<*>, defval: Any?): Any? {
+        if (!c.isInstance(m_instance))
+            typerror(c.portableLongName)
         return m_instance
     }
 
-    override fun isuserdata(): Boolean {
-        return true
-    }
-
-    override fun isuserdata(c: Class<*>): Boolean {
-        return c.isAssignableFrom(m_instance.javaClass)
-    }
-
-    override fun touserdata(): Any {
-        return m_instance
-    }
-
-    override fun touserdata(c: Class<*>): Any? {
-        return if (c.isAssignableFrom(m_instance.javaClass)) m_instance else null
-    }
-
-    override fun optuserdata(defval: Any?): Any? {
-        return m_instance
-    }
-
-    override fun optuserdata(c: Class<*>, defval: Any?): Any? {
-        if (!c.isAssignableFrom(m_instance.javaClass))
-            typerror(c.name)
-        return m_instance
-    }
-
-    override fun getmetatable(): LuaValue? {
-        return m_metatable
-    }
+    override fun getmetatable(): LuaValue? = m_metatable
 
     override fun setmetatable(metatable: LuaValue?): LuaValue {
         this.m_metatable = metatable
         return this
     }
 
-    override fun checkuserdata(): Any? {
-        return m_instance
-    }
+    override fun checkuserdata(): Any? = m_instance
 
-    override fun checkuserdata(c: Class<*>): Any? {
-        return if (c.isAssignableFrom(m_instance.javaClass)) m_instance else typerror(c.name)
-    }
+    override fun checkuserdata(c: KClass<*>): Any? =
+        if (c.isInstance(m_instance)) m_instance else typerror(c.portableLongName)
 
-    override fun get(key: LuaValue): LuaValue {
-        return if (m_metatable != null) LuaValue.gettable(this, key) else LuaValue.NIL
-    }
+    override fun get(key: LuaValue): LuaValue = if (m_metatable != null) LuaValue.gettable(this, key) else LuaValue.NIL
 
     override fun set(key: LuaValue, value: LuaValue) {
-        if (m_metatable == null || !LuaValue.settable(this, key, value))
-            LuaValue.error("cannot set $key for userdata")
+        if (m_metatable == null || !LuaValue.settable(this, key, value)) LuaValue.error("cannot set $key for userdata")
     }
 
     override fun equals(`val`: Any?): Boolean {
-        if (this === `val`)
-            return true
-        if (`val` !is LuaUserdata)
-            return false
+        if (this === `val`) return true
+        if (`val` !is LuaUserdata) return false
         val u = `val` as LuaUserdata?
         return m_instance == u!!.m_instance
     }
 
     // equality w/ metatable processing
-    override fun eq(`val`: LuaValue): LuaValue {
-        return if (eq_b(`val`)) LuaValue.TRUE else LuaValue.FALSE
-    }
+    override fun eq(`val`: LuaValue): LuaValue = if (eq_b(`val`)) LuaValue.TRUE else LuaValue.FALSE
 
     override fun eq_b(`val`: LuaValue): Boolean {
         if (`val`.raweq(this)) return true
@@ -132,13 +94,10 @@ open class LuaUserdata : LuaValue {
     }
 
     // equality w/o metatable processing
-    override fun raweq(`val`: LuaValue): Boolean {
-        return `val`.raweq(this)
-    }
+    override fun raweq(`val`: LuaValue): Boolean = `val`.raweq(this)
 
-    override fun raweq(`val`: LuaUserdata): Boolean {
-        return this === `val` || m_metatable === `val`.m_metatable && m_instance == `val`.m_instance
-    }
+    override fun raweq(`val`: LuaUserdata): Boolean =
+        this === `val` || m_metatable === `val`.m_metatable && m_instance == `val`.m_instance
 
     // __eq metatag processing
     fun eqmt(`val`: LuaValue): Boolean {

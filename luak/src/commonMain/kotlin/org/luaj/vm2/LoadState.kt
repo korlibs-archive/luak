@@ -21,6 +21,7 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.classext.*
 import kotlin.jvm.*
 
 /**

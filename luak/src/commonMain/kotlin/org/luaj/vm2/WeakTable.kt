@@ -21,7 +21,7 @@
  */
 package org.luaj.vm2
 
-import java.lang.ref.WeakReference
+import com.soywiz.weak.*
 
 import org.luaj.vm2.LuaTable.Slot
 import org.luaj.vm2.LuaTable.StrongSlot

@@ -21,6 +21,10 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.kmem.*
+import com.soywiz.korio.lang.*
+import kotlin.jvm.*
+
 
 /**
  * String buffer for use in string library methods, optimized for production

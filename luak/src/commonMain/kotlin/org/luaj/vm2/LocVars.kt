@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+
 /**
  * Data class to hold debug information relating to local variables for a [Prototype]
  */

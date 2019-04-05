@@ -22,13 +22,11 @@
 package org.luaj.vm2
 
 
-import java.io.ByteArrayInputStream
-import java.io.DataOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.PrintStream
-
+import com.soywiz.classext.*
+import com.soywiz.kmem.*
+import com.soywiz.korio.lang.*
 import org.luaj.vm2.lib.MathLib
+import kotlin.jvm.*
 
 /**
  * Subclass of [LuaValue] for representing lua strings.
@@ -540,7 +538,6 @@ private constructor(
          * @param string Java String containing characters to encode as UTF8
          * @return [LuaString] with UTF8 bytes corresponding to the supplied String
          */
-        @JvmName("valueOf2")
         @JvmStatic
         fun valueOf(string: String): LuaString {
             val c = string.toCharArray()
@@ -563,7 +560,6 @@ private constructor(
          * @param len length of the byte buffer
          * @return [LuaString] wrapping the byte buffer
          */
-        @JvmName("valueOf2")
         @JvmStatic
         fun valueOf(bytes: ByteArray, off: Int, len: Int): LuaString {
             if (len > RECENT_STRINGS_MAX_LENGTH)
@@ -640,7 +636,6 @@ private constructor(
          * @param bytes byte buffer
          * @return [LuaString] wrapping the byte buffer
          */
-        @JvmName("valueOf2")
         @JvmStatic
         fun valueOf(bytes: ByteArray): LuaString {
             return valueOf(bytes, 0, bytes.size)

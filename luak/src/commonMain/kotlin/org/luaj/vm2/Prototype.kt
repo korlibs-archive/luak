@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+
 /**
  * Prototype representing compiled lua code.
  *

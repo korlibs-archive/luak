@@ -21,6 +21,9 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.kmem.*
+import kotlin.reflect.*
+
 /**
  * Class to encapsulate varargs values, either as part of a variable argument list, or multiple return values.
  *
@@ -283,7 +286,7 @@ abstract class Varargs {
      * @return java Object value if argument i is a userdata whose instance Class c or a subclass, or defval if not supplied or nil
      * @exception LuaError if the argument is not a userdata or from whose instance c is not assignable
      */
-    fun optuserdata(i: Int, c: Class<*>, defval: Any): Any? = arg(i).optuserdata(c, defval)
+    fun optuserdata(i: Int, c: KClass<*>, defval: Any): Any? = arg(i).optuserdata(c, defval)
 
     /** Return argument i as a LuaValue if it exists, or `defval`.
      * @param i the index of the argument to test, 1 is the first argument
@@ -390,7 +393,7 @@ abstract class Varargs {
      * @return java Object value if argument i is a userdata whose instance Class c or a subclass
      * @exception LuaError if the argument is not a userdata or from whose instance c is not assignable
      */
-    fun checkuserdata(i: Int, c: Class<*>): Any? = arg(i).checkuserdata(c)
+    fun checkuserdata(i: Int, c: KClass<*>): Any? = arg(i).checkuserdata(c)
 
     /** Return argument i as a LuaValue if it exists, or throw an error.
      * @param i the index of the argument to test, 1 is the first argument
@@ -493,7 +496,7 @@ abstract class Varargs {
      * @param c the class to which the userdata instance must be assignable
      * @return java Object value if argument i is a userdata whose instance Class c or a subclass, otherwise null
      */
-    fun touserdata(i: Int, c: Class<*>): Any? = arg(i).touserdata(c)
+    fun touserdata(i: Int, c: KClass<*>): Any? = arg(i).touserdata(c)
 
     /** Convert the list of varargs values to a human readable java String.
      * @return String value in human readable form such as {1,2}.
@@ -618,7 +621,7 @@ abstract class Varargs {
         }
 
         override fun copyto(dest: Array<LuaValue>, offset: Int, length: Int) {
-            val n = Math.min(v.size, length)
+            val n = kotlin.math.min(v.size, length)
             arraycopy(v, 0, dest, offset, n)
             r.copyto(dest, offset + n, length - n)
         }
@@ -685,7 +688,7 @@ abstract class Varargs {
         }
 
         override fun copyto(dest: Array<LuaValue>, offset: Int, length: Int) {
-            val n = Math.min(this.length, length)
+            val n = kotlin.math.min(this.length, length)
             arraycopy(this.v, this.offset, dest, offset, n)
             more.copyto(dest, offset + n, length - n)
         }

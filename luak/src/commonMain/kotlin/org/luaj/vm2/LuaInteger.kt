@@ -22,6 +22,7 @@
 package org.luaj.vm2
 
 import org.luaj.vm2.lib.MathLib
+import kotlin.jvm.*
 
 /**
  * Extension of [LuaNumber] which can hold a Java int as its value.
@@ -69,11 +70,11 @@ internal constructor(
     override fun optint(defval: Int): Int = v
     override fun optinteger(defval: LuaInteger?): LuaInteger? = this
     override fun optlong(defval: Long): Long = v.toLong()
-    override fun tojstring(): String = Integer.toString(v)
-    override fun strvalue(): LuaString? = LuaString.valueOf(Integer.toString(v))
-    override fun optstring(defval: LuaString?): LuaString? = LuaString.valueOf(Integer.toString(v))
-    override fun tostring(): LuaValue = LuaString.valueOf(Integer.toString(v))
-    override fun optjstring(defval: String?): String? = Integer.toString(v)
+    override fun tojstring(): String = (v).toString()
+    override fun strvalue(): LuaString? = LuaString.valueOf((v).toString())
+    override fun optstring(defval: LuaString?): LuaString? = LuaString.valueOf((v).toString())
+    override fun tostring(): LuaValue = LuaString.valueOf((v).toString())
+    override fun optjstring(defval: String?): String? = (v).toString()
     override fun checkinteger(): LuaInteger? = this
     override fun isstring(): Boolean = true
     override fun hashCode(): Int = v
@@ -156,7 +157,6 @@ internal constructor(
     companion object {
         private val intValues = Array(512) { LuaInteger(it - 256) }
 
-        @JvmName("valueOf2")
         @JvmStatic
         fun valueOf(i: Int): LuaInteger = if (i <= 255 && i >= -256) intValues[i + 256]!! else LuaInteger(i)
 

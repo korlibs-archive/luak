@@ -26,7 +26,7 @@ import org.luaj.vm2.LuaTable.Slot
 /**
  * Provides operations that depend on the __mode key of the metatable.
  */
-public interface Metatable {
+interface Metatable {
 
     /** Return whether or not this table's keys are weak.  */
     fun useWeakKeys(): Boolean

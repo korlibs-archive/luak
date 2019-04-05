@@ -196,7 +196,6 @@ private constructor(
         /** Constant String representation for negative infinity, "-inf"  */
         @JvmField val JSTR_NEGINF = "-inf"
 
-        @JvmName("valueOf2")
         @JvmStatic fun valueOf(d: Double): LuaNumber =
             d.toInt().let { id -> if (d == id.toDouble()) LuaInteger.valueOf(id) else LuaDouble(d) }
 

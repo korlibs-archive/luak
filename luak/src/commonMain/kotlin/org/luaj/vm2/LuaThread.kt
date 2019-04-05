@@ -22,7 +22,10 @@
 package org.luaj.vm2
 
 
-import java.lang.ref.WeakReference
+import com.soywiz.classext.*
+import com.soywiz.weak.*
+import kotlinx.coroutines.*
+import kotlin.jvm.*
 
 /**
  * Subclass of [LuaValue] that implements
@@ -76,26 +79,20 @@ import java.lang.ref.WeakReference
  */
 class LuaThread : LuaValue {
 
-    @JvmField
-    val state: State
+    @JvmField val state: State
 
     /** Thread-local used by DebugLib to store debugging state.
      * This is an opaque value that should not be modified by applications.  */
-    @JvmField
-    var callstack: Any? = null
+    @JvmField var callstack: Any? = null
 
-    @JvmField
-    val globals: Globals
+    @JvmField val globals: Globals
 
     /** Error message handler for this thread, if any.   */
-    @JvmField
-    var errorfunc: LuaValue? = null
+    @JvmField var errorfunc: LuaValue? = null
 
-    val status: String
-        get() = STATUS_NAMES[state.status]
+    val status: String get() = STATUS_NAMES[state.status]
 
-    val isMainThread: Boolean
-        get() = this.state.function == null
+    val isMainThread: Boolean get() = this.state.function == null
 
     /** Private constructor for main thread only  */
     constructor(globals: Globals) {
@@ -146,8 +143,7 @@ class LuaThread : LuaValue {
         ) else s.lua_resume(this, args)
     }
 
-    class State internal constructor(private val globals: Globals, lua_thread: LuaThread, val function: LuaValue?) :
-        Runnable {
+    class State internal constructor(private val globals: Globals, lua_thread: LuaThread, val function: LuaValue?) : Runnable {
         @JvmField
         internal val lua_thread: WeakReference<*> = WeakReference(lua_thread)
         @JvmField
@@ -189,7 +185,7 @@ class LuaThread : LuaValue {
                 this.error = t.message
             } finally {
                 this.status = LuaThread.STATUS_DEAD
-                (this as java.lang.Object).notify()
+                (this as Any).notify()
             }
         }
 
@@ -203,12 +199,12 @@ class LuaThread : LuaValue {
                     this.status = STATUS_RUNNING
                     Thread(this, "Coroutine-" + ++coroutine_count).start()
                 } else {
-                    (this as java.lang.Object).notify()
+                    (this as Any).notify()
                 }
                 if (previous_thread != null)
                     previous_thread.state.status = STATUS_NORMAL
                 this.status = STATUS_RUNNING
-                (this as java.lang.Object).wait()
+                (this as Any).wait()
                 return if (this.error != null)
                     LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(this.error!!))
                 else
@@ -231,9 +227,9 @@ class LuaThread : LuaValue {
             try {
                 this.result = args
                 this.status = STATUS_SUSPENDED
-                (this as java.lang.Object).notify()
+                (this as Any).notify()
                 do {
-                    (this as java.lang.Object).wait(thread_orphan_check_interval)
+                    (this as Any).wait(thread_orphan_check_interval)
                     if (this.lua_thread.get() == null) {
                         this.status = STATUS_DEAD
                         throw OrphanedThread()
@@ -270,16 +266,11 @@ class LuaThread : LuaValue {
         @JvmField
         var thread_orphan_check_interval: Long = 5000
 
-        @JvmField
-        val STATUS_INITIAL = 0
-        @JvmField
-        val STATUS_SUSPENDED = 1
-        @JvmField
-        val STATUS_RUNNING = 2
-        @JvmField
-        val STATUS_NORMAL = 3
-        @JvmField
-        val STATUS_DEAD = 4
+        const val STATUS_INITIAL = 0
+        const val STATUS_SUSPENDED = 1
+        const val STATUS_RUNNING = 2
+        const val STATUS_NORMAL = 3
+        const val STATUS_DEAD = 4
         @JvmField
         val STATUS_NAMES = arrayOf("suspended", "suspended", "running", "normal", "dead")
 

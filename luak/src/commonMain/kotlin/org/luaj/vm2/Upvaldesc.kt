@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+
 class Upvaldesc(/* upvalue name (for debug information) */
     @JvmField var name: LuaString?, /* whether it is in stack */
     @JvmField val instack: Boolean, idx: Int

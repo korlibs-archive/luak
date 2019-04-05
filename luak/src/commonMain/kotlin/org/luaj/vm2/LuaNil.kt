@@ -21,6 +21,9 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+import kotlin.reflect.*
+
 /**
  * Class to encapsulate behavior of the singleton instance `nil`
  *
@@ -68,7 +71,7 @@ open class LuaNil internal constructor() : LuaValue() {
     override fun optjstring(defval: String?): String? = defval
     override fun optstring(defval: LuaString?): LuaString? = defval
     override fun optuserdata(defval: Any?): Any? = defval
-    override fun optuserdata(c: Class<*>, defval: Any?): Any? = defval
+    override fun optuserdata(c: KClass<*>, defval: Any?): Any? = defval
     override fun optvalue(defval: LuaValue): LuaValue = defval
 
     companion object {

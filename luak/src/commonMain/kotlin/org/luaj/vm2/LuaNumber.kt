@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+
 /**
  * Base class for representing numbers as lua values directly.
  *
@@ -51,7 +53,8 @@ abstract class LuaNumber : LuaValue() {
 
     companion object {
         /** Shared static metatable for all number values represented in lua.  */
-        @JvmField var s_metatable: LuaValue? = null
+        @JvmField
+        var s_metatable: LuaValue? = null
     }
 
 }
