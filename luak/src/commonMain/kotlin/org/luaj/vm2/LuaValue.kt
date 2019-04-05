@@ -3813,7 +3813,7 @@ abstract class LuaValue : Varargs() {
         /** Limit on lua stack size  */
         private val MAXSTACK = 250
 
-        /** Array of [.NIL] values to optimize filling stacks using System.arraycopy().
+        /** Array of [.NIL] values to optimize filling stacks using arraycopy().
          * Must not be modified.
          */
         @JvmField val NILS = Array(MAXSTACK) { NIL }

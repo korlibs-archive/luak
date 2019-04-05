@@ -21,24 +21,22 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 /** Base class for syntax elements of the parse tree that appear in source files.
  * The LuaParser class will fill these values out during parsing for use in
  * syntax highlighting, for example.
  */
 open class SyntaxElement {
     /** The line number on which the element begins.  */
-    @JvmField
-    var beginLine: Int = 0
+    @JvmField var beginLine: Int = 0
 
     /** The column at which the element begins.  */
-    @JvmField
-    var beginColumn: Short = 0
+    @JvmField var beginColumn: Short = 0
 
     /** The line number on which the element ends.  */
-    @JvmField
-    var endLine: Int = 0
+    @JvmField var endLine: Int = 0
 
     /** The column at which the element ends.  */
-    @JvmField
-    var endColumn: Short = 0
+    @JvmField var endColumn: Short = 0
 }

@@ -21,11 +21,10 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class TableConstructor : Exp() {
     @JvmField
     var fields: List<TableField>? = null
-
-    override fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
+    override fun accept(visitor: Visitor) = visitor.visit(this)
 }

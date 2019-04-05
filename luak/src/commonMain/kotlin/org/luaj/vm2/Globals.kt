@@ -334,7 +334,7 @@ open class Globals : LuaTable() {
             val a = avail()
             if (a <= 0) return -1
             val n_read = Math.min(a, n)
-            System.arraycopy(this.b, i, b, i0, n_read)
+            arraycopy(this.b, i, b, i0, n_read)
             i += n_read
             return n_read
         }
@@ -401,7 +401,7 @@ open class Globals : LuaTable() {
         override fun mark(n: Int) {
             if (i > 0 || n > b.size) {
                 val dest = if (n > b.size) ByteArray(n) else b
-                System.arraycopy(b, i, dest, 0, j - i)
+                arraycopy(b, i, dest, 0, j - i)
                 j -= i
                 i = 0
                 b = dest

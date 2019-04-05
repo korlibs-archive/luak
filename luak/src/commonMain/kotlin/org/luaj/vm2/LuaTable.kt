@@ -639,7 +639,7 @@ open class LuaTable : LuaValue, Metatable {
                     ++i
                 }
             }
-            System.arraycopy(oldArray, 0, newArray, 0, Math.min(oldArray.size, newArraySize))
+            arraycopy(oldArray, 0, newArray, 0, Math.min(oldArray.size, newArraySize))
         } else {
             newArray = array
         }
@@ -1279,7 +1279,7 @@ open class LuaTable : LuaValue, Metatable {
         /** Resize the table  */
         private fun resize(old: Array<LuaValue?>, n: Int): Array<LuaValue?> {
             val v = arrayOfNulls<LuaValue>(n)
-            System.arraycopy(old, 0, v, 0, old.size)
+            arraycopy(old, 0, v, 0, old.size)
             return v
         }
 

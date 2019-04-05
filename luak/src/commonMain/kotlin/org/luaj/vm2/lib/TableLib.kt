@@ -67,14 +67,14 @@ class TableLib : TwoArgFunction() {
      */
     override fun call(modname: LuaValue, env: LuaValue): LuaValue {
         val table = LuaTable()
-        table.set("concat", concat())
-        table.set("insert", insert())
-        table.set("pack", pack())
-        table.set("remove", remove())
-        table.set("sort", sort())
-        table.set("unpack", unpack())
-        env.set("table", table)
-        env.get("package").get("loaded").set("table", table)
+        table["concat"] = concat()
+        table["insert"] = insert()
+        table["pack"] = pack()
+        table["remove"] = remove()
+        table["sort"] = sort()
+        table["unpack"] = unpack()
+        env["table"] = table
+        env["package"]["loaded"]["table"] = table
         return LuaValue.NIL
     }
 
@@ -86,39 +86,30 @@ class TableLib : TwoArgFunction() {
 
     // "concat" (table [, sep [, i [, j]]]) -> string
     internal class concat : TableLibFunction() {
-        override fun call(list: LuaValue): LuaValue {
-            return list.checktable()!!.concat(LuaValue.EMPTYSTRING, 1, list.length())
-        }
+        override fun call(list: LuaValue): LuaValue = list.checktable()!!.concat(LuaValue.EMPTYSTRING, 1, list.length())
 
-        override fun call(list: LuaValue, sep: LuaValue): LuaValue {
-            return list.checktable()!!.concat(sep.checkstring()!!, 1, list.length())
-        }
+        override fun call(list: LuaValue, sep: LuaValue): LuaValue =
+            list.checktable()!!.concat(sep.checkstring()!!, 1, list.length())
 
-        override fun call(list: LuaValue, sep: LuaValue, i: LuaValue): LuaValue {
-            return list.checktable()!!.concat(sep.checkstring()!!, i.checkint(), list.length())
-        }
+        override fun call(list: LuaValue, sep: LuaValue, i: LuaValue): LuaValue =
+            list.checktable()!!.concat(sep.checkstring()!!, i.checkint(), list.length())
 
-        override fun call(list: LuaValue, sep: LuaValue, i: LuaValue, j: LuaValue): LuaValue {
-            return list.checktable()!!.concat(sep.checkstring()!!, i.checkint(), j.checkint())
-        }
+        override fun call(list: LuaValue, sep: LuaValue, i: LuaValue, j: LuaValue): LuaValue =
+            list.checktable()!!.concat(sep.checkstring()!!, i.checkint(), j.checkint())
     }
 
     // "insert" (table, [pos,] value)
     internal class insert : VarArgFunction() {
-        override fun invoke(args: Varargs): Varargs {
-            when (args.narg()) {
-                0, 1 -> {
-                    return LuaValue.argerror(2, "value expected")
-                }
-                2 -> {
-                    val table = args.arg1().checktable()
-                    table!!.insert(table.length() + 1, args.arg(2))
-                    return LuaValue.NONE
-                }
-                else -> {
-                    args.arg1().checktable()!!.insert(args.checkint(2), args.arg(3))
-                    return LuaValue.NONE
-                }
+        override fun invoke(args: Varargs): Varargs = when (args.narg()) {
+            0, 1 -> LuaValue.argerror(2, "value expected")
+            2 -> {
+                val table = args.arg1().checktable()
+                table!!.insert(table.length() + 1, args.arg(2))
+                LuaValue.NONE
+            }
+            else -> {
+                args.arg1().checktable()!!.insert(args.checkint(2), args.arg(3))
+                LuaValue.NONE
             }
         }
     }
@@ -127,24 +118,20 @@ class TableLib : TwoArgFunction() {
     internal class pack : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             val t = LuaValue.tableOf(args, 1)
-            t.set("n", args.narg())
+            t["n"] = args.narg()
             return t
         }
     }
 
     // "remove" (table [, pos]) -> removed-ele
     internal class remove : VarArgFunction() {
-        override fun invoke(args: Varargs): Varargs {
-            return args.arg1().checktable()!!.remove(args.optint(2, 0))
-        }
+        override fun invoke(args: Varargs): Varargs = args.arg1().checktable()!!.remove(args.optint(2, 0))
     }
 
     // "sort" (table [, comp])
     internal class sort : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
-            args.arg1().checktable()!!.sort(
-                if (args.arg(2).isnil()) LuaValue.NIL else args.arg(2).checkfunction()!!
-            )
+            args.arg1().checktable()!!.sort(if (args.arg(2).isnil()) LuaValue.NIL else args.arg(2).checkfunction()!!)
             return LuaValue.NONE
         }
     }
@@ -154,10 +141,10 @@ class TableLib : TwoArgFunction() {
     internal class unpack : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             val t = args.checktable(1)!!
-            when (args.narg()) {
-                1 -> return t.unpack()
-                2 -> return t.unpack(args.checkint(2))
-                else -> return t.unpack(args.checkint(2), args.checkint(3))
+            return when (args.narg()) {
+                1 -> t.unpack()
+                2 -> t.unpack(args.checkint(2))
+                else -> t.unpack(args.checkint(2), args.checkint(3))
             }
         }
     }

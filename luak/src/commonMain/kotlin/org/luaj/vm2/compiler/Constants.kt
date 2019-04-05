@@ -21,6 +21,7 @@
  */
 package org.luaj.vm2.compiler
 
+import com.soywiz.kmem.*
 import org.luaj.vm2.LocVars
 import org.luaj.vm2.Lua
 import org.luaj.vm2.LuaError
@@ -28,6 +29,7 @@ import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Prototype
 import org.luaj.vm2.Upvaldesc
+import kotlin.jvm.*
 
 /**
  * Constants used by the LuaC compiler and related classes.
@@ -40,7 +42,8 @@ open class Constants protected constructor() : Lua() {
     companion object {
 
         /** Maximum stack size of a luaj vm interpreter instance.  */
-        @JvmField val MAXSTACK = 250
+        @JvmField
+        val MAXSTACK = 250
 
         @JvmField val LUAI_MAXUPVAL = 0xff
         @JvmField val LUAI_MAXVARS = 200
@@ -113,42 +116,42 @@ open class Constants protected constructor() : Lua() {
         @JvmStatic fun realloc(v: Array<LuaValue>?, n: Int): Array<LuaValue> {
             val a = arrayOfNulls<LuaValue>(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v as Array<LuaValue?>, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LuaValue>
         }
 
         @JvmStatic fun realloc(v: Array<Prototype>?, n: Int): Array<Prototype> {
             val a = arrayOfNulls<Prototype>(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v as Array<Prototype?>, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<Prototype>
         }
 
         @JvmStatic fun realloc(v: Array<LuaString>?, n: Int): Array<LuaString> {
             val a = arrayOfNulls<LuaString>(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v as Array<LuaString?>, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LuaString>
         }
 
         @JvmStatic fun realloc(v: Array<LocVars>?, n: Int): Array<LocVars> {
             val a = arrayOfNulls<LocVars>(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v as Array<LocVars?>, 0, a , 0, kotlin.math.min(v.size, n))
             return a as Array<LocVars>
         }
 
         @JvmStatic fun realloc(v: Array<Upvaldesc>?, n: Int): Array<Upvaldesc> {
             val a = arrayOfNulls<Upvaldesc>(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v as Array<Upvaldesc?>, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<Upvaldesc>
         }
 
         @JvmStatic fun realloc(v: Array<LexState.Vardesc>?, n: Int): Array<LexState.Vardesc> {
             val a = arrayOfNulls<LexState.Vardesc>(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v as Array<LexState.Vardesc?>, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LexState.Vardesc>
         }
 
@@ -159,29 +162,33 @@ open class Constants protected constructor() : Lua() {
         @JvmStatic fun realloc(v: Array<LexState.Labeldesc>?, n: Int): Array<LexState.Labeldesc> {
             val a = arrayOfNulls<LexState.Labeldesc>(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v as Array<LexState.Labeldesc?>, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LexState.Labeldesc>
         }
 
         @JvmStatic fun realloc(v: IntArray?, n: Int): IntArray {
             val a = IntArray(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a
         }
 
         @JvmStatic fun realloc(v: ByteArray?, n: Int): ByteArray {
             val a = ByteArray(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a
         }
 
         @JvmStatic fun realloc(v: CharArray?, n: Int): CharArray {
             val a = CharArray(n)
             if (v != null)
-                System.arraycopy(v, 0, a, 0, Math.min(v.size, n))
+                arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a
         }
+
+        private inline fun arraycopy(src: CharArray, srcPos: Int, dst: CharArray, dstPos: Int, size: Int): Unit =
+            run { src.copyInto(dst, dstPos, srcPos, srcPos + size) }
+
     }
 }

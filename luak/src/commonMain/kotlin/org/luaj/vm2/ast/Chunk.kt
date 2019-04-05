@@ -21,8 +21,8 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class Chunk(@JvmField val block: Block) : SyntaxElement() {
-    fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
+    fun accept(visitor: Visitor) = visitor.visit(this)
 }

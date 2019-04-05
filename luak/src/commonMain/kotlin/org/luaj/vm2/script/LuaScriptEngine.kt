@@ -62,7 +62,6 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
     override fun compile(script: String): CompiledScript = compile(StringReader(script))
 
-    @Throws(ScriptException::class)
     override fun compile(script: Reader): CompiledScript {
         try {
             val `is` = Utf8Encoder(script)

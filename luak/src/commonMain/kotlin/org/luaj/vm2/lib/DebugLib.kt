@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2.lib
 
+import com.soywiz.kmem.*
+import com.soywiz.korio.lang.*
 import org.luaj.vm2.Globals
 import org.luaj.vm2.Lua
 import org.luaj.vm2.LuaBoolean
@@ -37,6 +39,8 @@ import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Print
 import org.luaj.vm2.Prototype
 import org.luaj.vm2.Varargs
+import kotlin.jvm.*
+import kotlin.math.*
 
 /**
  * Subclass of [LibFunction] which implements the lua standard `debug`
@@ -95,11 +99,11 @@ class DebugLib : TwoArgFunction() {
         globals = env.checkglobals()
         globals!!.debuglib = this
         val debug = LuaTable()
-        debug.set("debug", Debug())
+        debug["debug"] = Debug()
         debug["gethook"] = Gethook()
         debug["getinfo"] = Getinfo()
         debug["getlocal"] = Getlocal()
-        debug.set("getmetatable", Getmetatable())
+        debug["getmetatable"] = Getmetatable()
         debug["getregistry"] = Getregistry()
         debug["getupvalue"] = Getupvalue()
         debug["getuservalue"] = Getuservalue()
@@ -491,9 +495,9 @@ class DebugLib : TwoArgFunction() {
         @Synchronized
         private fun pushcall(): CallFrame {
             if (calls >= frame.size) {
-                val n = Math.max(4, frame.size * 3 / 2)
+                val n = max(4, frame.size * 3 / 2)
                 val f = arrayOfNulls<CallFrame>(n)
-                System.arraycopy(frame, 0, f, 0, frame.size)
+                arraycopy(frame as Array<CallFrame?>, 0, f, 0, frame.size)
                 for (i in frame.size until n)
                     f[i] = CallFrame()
                 frame = f as Array<CallFrame>
@@ -533,7 +537,7 @@ class DebugLib : TwoArgFunction() {
         @Synchronized
         internal fun traceback(level: Int): String {
             var level = level
-            val sb = StringBuffer()
+            val sb = StringBuilder()
             sb.append("stack traceback:")
             var c: CallFrame?
             while ((run { c = getCallFrame(level++); c }) != null) {
@@ -705,12 +709,13 @@ class DebugLib : TwoArgFunction() {
 
         init {
             try {
-                CALLS = null != System.getProperty("CALLS")
+
+                CALLS = null != Environment["CALLS"]
             } catch (e: Exception) {
             }
 
             try {
-                TRACE = null != System.getProperty("TRACE")
+                TRACE = null != Environment["TRACE"]
             } catch (e: Exception) {
             }
 

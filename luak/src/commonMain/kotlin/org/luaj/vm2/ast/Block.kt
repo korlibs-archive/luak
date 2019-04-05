@@ -21,19 +21,16 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class Block : Stat() {
-    @JvmField
-    var stats: MutableList<Stat> = ArrayList()
-    @JvmField
-    var scope: NameScope? = null
+    @JvmField var stats: MutableList<Stat> = ArrayList()
+    @JvmField var scope: NameScope? = null
 
     fun add(s: Stat?) {
-        if (s == null)
-            return
+        if (s == null) return
         stats.add(s)
     }
 
-    override fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
+    override fun accept(visitor: Visitor) = visitor.visit(this)
 }

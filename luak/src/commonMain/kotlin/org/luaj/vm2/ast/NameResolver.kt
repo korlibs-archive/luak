@@ -1,15 +1,8 @@
 package org.luaj.vm2.ast
 
-import org.luaj.vm2.LuaValue
-import org.luaj.vm2.ast.Exp.Constant
-import org.luaj.vm2.ast.Exp.NameExp
-import org.luaj.vm2.ast.Exp.VarExp
-import org.luaj.vm2.ast.Stat.Assign
-import org.luaj.vm2.ast.Stat.FuncDef
-import org.luaj.vm2.ast.Stat.GenericFor
-import org.luaj.vm2.ast.Stat.LocalAssign
-import org.luaj.vm2.ast.Stat.LocalFuncDef
-import org.luaj.vm2.ast.Stat.NumericFor
+import org.luaj.vm2.*
+import org.luaj.vm2.ast.Exp.*
+import org.luaj.vm2.ast.Stat.*
 
 /**
  * Visitor that resolves names to scopes.

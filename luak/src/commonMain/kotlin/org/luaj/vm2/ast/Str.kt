@@ -21,10 +21,10 @@
  */
 package org.luaj.vm2.ast
 
-import java.io.ByteArrayOutputStream
-import java.io.UnsupportedEncodingException
-
+import com.soywiz.kmem.*
+import com.soywiz.korio.lang.*
 import org.luaj.vm2.LuaString
+import kotlin.jvm.*
 
 object Str {
 
@@ -51,95 +51,89 @@ object Str {
     }
 
     @JvmStatic
-    fun iso88591bytes(s: String): ByteArray {
-        try {
-            return s.toByteArray(charset("ISO8859-1"))
-        } catch (e: UnsupportedEncodingException) {
-            throw IllegalStateException("ISO8859-1 not supported")
-        }
-
-    }
+    fun iso88591bytes(s: String): ByteArray = s.toByteArray(LATIN1)
 
     @JvmStatic
     fun unquote(s: String): ByteArray {
-        val baos = ByteArrayOutputStream()
-        val c = s.toCharArray()
-        val n = c.size
-        var i = 0
-        loop@while (i < n) {
-            if (c[i] == '\\' && i < n) {
-                when (c[++i]) {
-                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
-                        var d = c[i++] - '0'
-                        var j = 0
-                        while (i < n && j < 2 && c[i] >= '0' && c[i] <= '9') {
-                            d = d * 10 + (c[i] - '0')
+        return buildByteArray {
+            val baos = this
+            val c = s.toCharArray()
+            val n = c.size
+            var i = 0
+            loop@while (i < n) {
+                if (c[i] == '\\' && i < n) {
+                    when (c[++i]) {
+                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
+                            var d = c[i++] - '0'
+                            var j = 0
+                            while (i < n && j < 2 && c[i] >= '0' && c[i] <= '9') {
+                                d = d * 10 + (c[i] - '0')
+                                i++
+                                j++
+                            }
+                            baos.appendByte(d.toByte().toInt())
+                            --i
                             i++
-                            j++
+                            continue@loop
                         }
-                        baos.write(d.toByte().toInt())
-                        --i
-                        i++
-                        continue@loop
+                        'a' -> {
+                            baos.appendByte(7.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        'b' -> {
+                            baos.appendByte('\b'.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        'f' -> {
+                            //baos.write('\f'.toByte().toInt())
+                            baos.appendByte('\u000c'.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        'n' -> {
+                            baos.appendByte('\n'.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        'r' -> {
+                            baos.appendByte('\r'.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        't' -> {
+                            baos.appendByte('\t'.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        'v' -> {
+                            baos.appendByte(11.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        '"' -> {
+                            baos.appendByte('"'.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        '\'' -> {
+                            baos.appendByte('\''.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        '\\' -> {
+                            baos.appendByte('\\'.toByte().toInt())
+                            i++
+                            continue@loop
+                        }
+                        else -> baos.appendByte(c[i].toByte().toInt())
                     }
-                    'a' -> {
-                        baos.write(7.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    'b' -> {
-                        baos.write('\b'.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    'f' -> {
-                        //baos.write('\f'.toByte().toInt())
-                        baos.write('\u000c'.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    'n' -> {
-                        baos.write('\n'.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    'r' -> {
-                        baos.write('\r'.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    't' -> {
-                        baos.write('\t'.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    'v' -> {
-                        baos.write(11.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    '"' -> {
-                        baos.write('"'.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    '\'' -> {
-                        baos.write('\''.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    '\\' -> {
-                        baos.write('\\'.toByte().toInt())
-                        i++
-                        continue@loop
-                    }
-                    else -> baos.write(c[i].toByte().toInt())
+                } else {
+                    baos.appendByte(c[i].toByte().toInt())
                 }
-            } else {
-                baos.write(c[i].toByte().toInt())
+                i++
             }
-            i++
         }
-        return baos.toByteArray()
     }
 }

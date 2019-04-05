@@ -619,7 +619,7 @@ abstract class Varargs {
 
         override fun copyto(dest: Array<LuaValue>, offset: Int, length: Int) {
             val n = Math.min(v.size, length)
-            System.arraycopy(v, 0, dest, offset, n)
+            arraycopy(v, 0, dest, offset, n)
             r.copyto(dest, offset + n, length - n)
         }
     }
@@ -686,7 +686,7 @@ abstract class Varargs {
 
         override fun copyto(dest: Array<LuaValue>, offset: Int, length: Int) {
             val n = Math.min(this.length, length)
-            System.arraycopy(this.v, this.offset, dest, offset, n)
+            arraycopy(this.v, this.offset, dest, offset, n)
             more.copyto(dest, offset + n, length - n)
         }
     }

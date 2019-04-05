@@ -22,6 +22,7 @@
 package org.luaj.vm2.ast
 
 import org.luaj.vm2.LuaValue
+import kotlin.jvm.*
 
 /** Variable is created lua name scopes, and is a named, lua variable that
  * either refers to a lua local, global, or upvalue storage location.
@@ -47,10 +48,8 @@ class Variable {
     /** When hasassignments == false, and the initial value is a constant, this is the initial value  */
     @JvmField
     var initialValue: LuaValue? = null
-    val isLocal: Boolean
-        get() = this.definingScope != null
-    val isConstant: Boolean
-        get() = !hasassignments && initialValue != null
+    val isLocal: Boolean get() = this.definingScope != null
+    val isConstant: Boolean get() = !hasassignments && initialValue != null
 
     /** Global is named variable not associated with a defining scope  */
     constructor(name: String) {

@@ -160,22 +160,11 @@ abstract class Visitor {
         exp.args.accept(this)
     }
 
-    open fun visit(exp: Exp.NameExp) {
-        visit(exp.name)
-    }
-
-    open fun visit(exp: Exp.ParensExp) {
-        exp.exp.accept(this)
-    }
-
-    open fun visit(exp: Exp.UnopExp) {
-        exp.rhs.accept(this)
-    }
-
-    open fun visit(exp: Exp.VarargsExp) {}
-    open fun visit(pars: ParList) {
-        visitNames(pars.names)
-    }
+    open fun visit(exp: Exp.NameExp) = visit(exp.name)
+    open fun visit(exp: Exp.ParensExp) = exp.exp.accept(this)
+    open fun visit(exp: Exp.UnopExp) = exp.rhs.accept(this)
+    open fun visit(exp: Exp.VarargsExp) = Unit
+    open fun visit(pars: ParList) = visitNames(pars.names)
 
     open fun visit(table: TableConstructor) {
         if (table.fields != null) {

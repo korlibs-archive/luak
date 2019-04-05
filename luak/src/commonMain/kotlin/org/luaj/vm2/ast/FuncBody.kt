@@ -21,14 +21,13 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class FuncBody(
     parlist: ParList?,
     @JvmField var block: Block
 ) : SyntaxElement() {
     @JvmField var scope: NameScope? = null
     @JvmField var parlist: ParList = parlist ?: ParList.EMPTY_PARLIST
-
-    fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
+    fun accept(visitor: Visitor) = visitor.visit(this)
 }

@@ -22,53 +22,38 @@
 package org.luaj.vm2.ast
 
 import org.luaj.vm2.ast.Exp.VarExp
+import kotlin.jvm.*
 
 abstract class Stat : SyntaxElement() {
     abstract fun accept(visitor: Visitor)
 
     class Goto(val name: String) : Stat() {
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class Label(val name: String) : Stat() {
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class Assign(val vars: List<VarExp>, val exps: List<Exp>) : Stat() {
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
 
     }
 
     class WhileDo(val exp: Exp, val block: Block) : Stat() {
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class RepeatUntil(val block: Block, val exp: Exp) : Stat() {
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class Break : Stat() {
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class Return(val values: List<Exp>?) : Stat() {
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
 
         fun nreturns(): Int {
             var n = values?.size ?: 0
@@ -79,126 +64,53 @@ abstract class Stat : SyntaxElement() {
     }
 
     class FuncCallStat(val funccall: Exp.FuncCall) : Stat() {
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class LocalFuncDef(name: String, val body: FuncBody) : Stat() {
-        val name: Name
-
-        init {
-            this.name = Name(name)
-        }
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        val name: Name = Name(name)
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class FuncDef(val name: FuncName, val body: FuncBody) : Stat() {
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class GenericFor(var names: List<Name>, var exps: List<Exp>, var block: Block) : Stat() {
         var scope: NameScope? = null
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class NumericFor(name: String, val initial: Exp, val limit: Exp, val step: Exp?, val block: Block) : Stat() {
         val name: Name = Name(name)
         var scope: NameScope? = null
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class LocalAssign(val names: List<Name>, val values: List<Exp>?) : Stat() {
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     class IfThenElse(
         val ifexp: Exp, val ifblock: Block, val elseifexps: List<Exp>?,
         val elseifblocks: List<Block>?, val elseblock: Block?
     ) : Stat() {
-
-        override fun accept(visitor: Visitor) {
-            visitor.visit(this)
-        }
+        override fun accept(visitor: Visitor) = visitor.visit(this)
     }
 
     companion object {
-
-        @JvmStatic
-        fun block(block: Block): Stat {
-            return block
-        }
-
-        @JvmStatic
-        fun whiledo(exp: Exp, block: Block): Stat {
-            return WhileDo(exp, block)
-        }
-
-        @JvmStatic
-        fun repeatuntil(block: Block, exp: Exp): Stat {
-            return RepeatUntil(block, exp)
-        }
-
-        @JvmStatic
-        fun breakstat(): Stat {
-            return Break()
-        }
-
-        @JvmStatic
-        fun returnstat(exps: List<Exp>?): Stat {
-            return Return(exps)
-        }
-
-        @JvmStatic
-        fun assignment(vars: List<VarExp>, exps: List<Exp>): Stat {
-            return Assign(vars, exps)
-        }
-
-        @JvmStatic
-        fun functioncall(funccall: Exp.FuncCall): Stat {
-            return FuncCallStat(funccall)
-        }
-
-        @JvmStatic
-        fun localfunctiondef(name: String, funcbody: FuncBody): Stat {
-            return LocalFuncDef(name, funcbody)
-        }
-
-        @JvmStatic
-        fun fornumeric(name: String, initial: Exp, limit: Exp, step: Exp?, block: Block): Stat {
-            return NumericFor(name, initial, limit, step, block)
-        }
-
-        @JvmStatic
-        fun functiondef(funcname: FuncName, funcbody: FuncBody): Stat {
-            return FuncDef(funcname, funcbody)
-        }
-
-        @JvmStatic
-        fun forgeneric(names: List<Name>, exps: List<Exp>, block: Block): Stat {
-            return GenericFor(names, exps, block)
-        }
-
-        @JvmStatic
-        fun localassignment(names: List<Name>, values: List<Exp>?): Stat {
-            return LocalAssign(names, values)
-        }
+        @JvmStatic fun block(block: Block): Stat = block
+        @JvmStatic fun whiledo(exp: Exp, block: Block): Stat = WhileDo(exp, block)
+        @JvmStatic fun repeatuntil(block: Block, exp: Exp): Stat = RepeatUntil(block, exp)
+        @JvmStatic fun breakstat(): Stat = Break()
+        @JvmStatic fun returnstat(exps: List<Exp>?): Stat = Return(exps)
+        @JvmStatic fun assignment(vars: List<VarExp>, exps: List<Exp>): Stat = Assign(vars, exps)
+        @JvmStatic fun functioncall(funccall: Exp.FuncCall): Stat = FuncCallStat(funccall)
+        @JvmStatic fun localfunctiondef(name: String, funcbody: FuncBody): Stat = LocalFuncDef(name, funcbody)
+        @JvmStatic fun fornumeric(name: String, initial: Exp, limit: Exp, step: Exp?, block: Block): Stat = NumericFor(name, initial, limit, step, block)
+        @JvmStatic fun functiondef(funcname: FuncName, funcbody: FuncBody): Stat = FuncDef(funcname, funcbody)
+        @JvmStatic fun forgeneric(names: List<Name>, exps: List<Exp>, block: Block): Stat = GenericFor(names, exps, block)
+        @JvmStatic fun localassignment(names: List<Name>, values: List<Exp>?): Stat = LocalAssign(names, values)
 
         @JvmStatic
         fun ifthenelse(
@@ -207,18 +119,9 @@ abstract class Stat : SyntaxElement() {
             elseifexps: List<Exp>?,
             elseifblocks: List<Block>?,
             elseblock: Block?
-        ): Stat {
-            return IfThenElse(ifexp, ifblock, elseifexps, elseifblocks, elseblock)
-        }
+        ): Stat = IfThenElse(ifexp, ifblock, elseifexps, elseifblocks, elseblock)
 
-        @JvmStatic
-        fun gotostat(name: String): Stat {
-            return Goto(name)
-        }
-
-        @JvmStatic
-        fun labelstat(name: String): Stat {
-            return Label(name)
-        }
+        @JvmStatic fun gotostat(name: String): Stat = Goto(name)
+        @JvmStatic fun labelstat(name: String): Stat = Label(name)
     }
 }

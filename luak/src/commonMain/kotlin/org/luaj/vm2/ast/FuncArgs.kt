@@ -22,9 +22,9 @@
 package org.luaj.vm2.ast
 
 import org.luaj.vm2.LuaString
+import kotlin.jvm.*
 
 class FuncArgs : SyntaxElement {
-
     @JvmField
     val exps: MutableList<Exp>?
 
@@ -42,29 +42,18 @@ class FuncArgs : SyntaxElement {
         this.exps.add(table)
     }
 
-    fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
+    fun accept(visitor: Visitor) = visitor.visit(this)
 
     companion object {
 
         /** exp1,exp2...  */
-        @JvmStatic
-        fun explist(explist: MutableList<Exp>?): FuncArgs {
-            return FuncArgs(explist)
-        }
+        @JvmStatic fun explist(explist: MutableList<Exp>?): FuncArgs = FuncArgs(explist)
 
         /** {...}  */
-        @JvmStatic
-        fun tableconstructor(table: TableConstructor): FuncArgs {
-            return FuncArgs(table)
-        }
+        @JvmStatic fun tableconstructor(table: TableConstructor): FuncArgs = FuncArgs(table)
 
         /** "mylib"  */
-        @JvmStatic
-        fun string(string: LuaString): FuncArgs {
-            return FuncArgs(string)
-        }
+        @JvmStatic fun string(string: LuaString): FuncArgs = FuncArgs(string)
     }
 
 }

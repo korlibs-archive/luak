@@ -21,31 +21,19 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class TableField(
     @JvmField val index: Exp?,
     @JvmField val name: String?,
     @JvmField val rhs: Exp?
 ) : SyntaxElement() {
-
-    fun accept(visitor: Visitor) {
-        visitor.visit(this)
-    }
+    fun accept(visitor: Visitor) = visitor.visit(this)
 
     companion object {
-
+        @JvmStatic fun keyedField(index: Exp, rhs: Exp): TableField = TableField(index, null, rhs)
+        @JvmStatic fun namedField(name: String, rhs: Exp): TableField = TableField(null, name, rhs)
         @JvmStatic
-        fun keyedField(index: Exp, rhs: Exp): TableField {
-            return TableField(index, null, rhs)
-        }
-
-        @JvmStatic
-        fun namedField(name: String, rhs: Exp): TableField {
-            return TableField(null, name, rhs)
-        }
-
-        @JvmStatic
-        fun listField(rhs: Exp): TableField {
-            return TableField(null, null, rhs)
-        }
+        fun listField(rhs: Exp): TableField = TableField(null, null, rhs)
     }
 }

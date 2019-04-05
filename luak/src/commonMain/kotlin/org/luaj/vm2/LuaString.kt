@@ -190,8 +190,8 @@ private constructor(
     override fun concatTo(lhs: LuaNumber): LuaValue = concatTo(lhs.strvalue()!!)
     override fun concatTo(lhs: LuaString): LuaValue {
         val b = ByteArray(lhs.m_length + this.m_length)
-        System.arraycopy(lhs.m_bytes, lhs.m_offset, b, 0, lhs.m_length)
-        System.arraycopy(this.m_bytes, this.m_offset, b, lhs.m_length, this.m_length)
+        arraycopy(lhs.m_bytes, lhs.m_offset, b, 0, lhs.m_length)
+        arraycopy(this.m_bytes, this.m_offset, b, lhs.m_length, this.m_length)
         return valueUsing(b, 0, b.size)
     }
 
@@ -334,7 +334,7 @@ private constructor(
      * @param len number of bytes to copy
      */
     fun copyInto(strOffset: Int, bytes: ByteArray, arrayOffset: Int, len: Int) =
-        System.arraycopy(m_bytes, m_offset + strOffset, bytes, arrayOffset, len)
+        arraycopy(m_bytes, m_offset + strOffset, bytes, arrayOffset, len)
 
     /** Java version of strpbrk - find index of any byte that in an accept string.
      * @param accept [LuaString] containing characters to look for.

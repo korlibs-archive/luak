@@ -200,7 +200,7 @@ class Buffer {
     fun prepend(s: LuaString): Buffer {
         val n = s.m_length
         makeroom(n, 0)
-        System.arraycopy(s.m_bytes, s.m_offset, bytes!!, offset - n, n)
+        arraycopy(s.m_bytes, s.m_offset, bytes!!, offset - n, n)
         offset -= n
         length += n
         value = null
@@ -218,7 +218,7 @@ class Buffer {
             length = s!!.m_length
             offset = nbefore
             bytes = ByteArray(nbefore + length + nafter)
-            System.arraycopy(s.m_bytes, s.m_offset, bytes!!, offset, length)
+            arraycopy(s.m_bytes, s.m_offset, bytes!!, offset, length)
         } else if (offset + length + nafter > bytes!!.size || offset < nbefore) {
             val n = nbefore + length + nafter
             val m = if (n < 32) 32 else if (n < length * 2) length * 2 else n
@@ -233,7 +233,7 @@ class Buffer {
     private fun realloc(newSize: Int, newOffset: Int) {
         if (newSize != bytes!!.size) {
             val newBytes = ByteArray(newSize)
-            System.arraycopy(bytes!!, offset, newBytes, newOffset, length)
+            arraycopy(bytes!!, offset, newBytes, newOffset, length)
             bytes = newBytes
             offset = newOffset
         }

@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class ParList(
     @JvmField val names: List<Name>?,
     @JvmField val isvararg: Boolean

@@ -21,24 +21,23 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class FuncName(name: String) : SyntaxElement() {
     // example: a.b.c.d:e
 
     // initial base name: "a"
-    @JvmField
-    val name: Name = Name(name)
+    @JvmField val name: Name = Name(name)
 
     // intermediate field accesses: "b", "c", "d"
-    @JvmField
-    var dots: MutableList<String>? = null
+    @JvmField var dots: MutableList<String>? = null
 
     // optional final method name: "e"
     @JvmField
     var method: String? = null
 
     fun adddot(dot: String) {
-        if (dots == null)
-            dots = ArrayList()
+        if (dots == null) dots = ArrayList()
         dots!!.add(dot)
     }
 

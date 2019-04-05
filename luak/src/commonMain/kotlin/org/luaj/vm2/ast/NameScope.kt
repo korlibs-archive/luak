@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 class NameScope {
 
     @JvmField
@@ -45,7 +47,6 @@ class NameScope {
     }
 
     /** Look up a name.  If it is a global name, then throw IllegalArgumentException.  */
-    @Throws(IllegalArgumentException::class)
     fun find(name: String): Variable {
         validateIsNotKeyword(name)
         var n: NameScope? = this
@@ -60,7 +61,6 @@ class NameScope {
     }
 
     /** Define a name in this scope.  If it is a global name, then throw IllegalArgumentException.  */
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun define(name: String): Variable {
         validateIsNotKeyword(name)
         val value = Variable(name, this)

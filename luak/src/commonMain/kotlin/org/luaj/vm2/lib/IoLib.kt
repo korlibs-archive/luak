@@ -114,11 +114,9 @@ abstract class IoLib : TwoArgFunction() {
         abstract fun remaining(): Int
 
         // peek ahead one character
-        @Throws(IOException::class, EOFException::class)
         abstract fun peek(): Int
 
         // return char if read, -1 if eof, throw IOException on other exception
-        @Throws(IOException::class, EOFException::class)
         abstract fun read(): Int
 
         // return number of bytes read if positive, false if eof, throw IOException on other exception

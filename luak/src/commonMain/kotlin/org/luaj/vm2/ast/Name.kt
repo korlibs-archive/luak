@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2.ast
 
+import kotlin.jvm.*
+
 
 class Name(@JvmField val name: String) {
     @JvmField var variable: Variable? = null
