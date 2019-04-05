@@ -87,14 +87,14 @@ class LuaJavaCoercionTest : TestCase() {
         TestCase.assertEquals(LuaInteger.valueOf(444), v.get(ONE))
         TestCase.assertEquals(LuaInteger.valueOf(555), v.get(TWO))
         try {
-            v.set(ZERO, LuaInteger.valueOf(777))
+            v[ZERO] = LuaInteger.valueOf(777)
             TestCase.fail("array bound exception not thrown")
         } catch (lee: LuaError) {
             // expected
         }
 
         try {
-            v.set(THREE, LuaInteger.valueOf(777))
+            v[THREE] = LuaInteger.valueOf(777)
             TestCase.fail("array bound exception not thrown")
         } catch (lee: LuaError) {
             // expected

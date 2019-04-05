@@ -4098,7 +4098,7 @@ abstract public class LuaValue : Varargs() {
          * @throws LuaError if there is a loop in metatag processing
          * @return true if assignment or metatag processing succeeded, false otherwise
          */
-        @JvmStatic protected fun settable(t: LuaValue, key: LuaValue, value: LuaValue): Boolean {
+        @JvmStatic fun settable(t: LuaValue, key: LuaValue, value: LuaValue): Boolean {
             var t = t
             lateinit var tm: LuaValue
             var loop = 0
