@@ -195,7 +195,7 @@ open class Globals : LuaTable() {
      */
     fun loadfile(filename: String): LuaValue {
         try {
-            return load(finder!!.findResource(filename), "@$filename", "bt", this)
+            return load(finder!!.findResource(filename)!!, "@$filename", "bt", this)
         } catch (e: Exception) {
             return LuaValue.error("load $filename: $e")
         }

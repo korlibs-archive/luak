@@ -65,5 +65,5 @@ interface ResourceFinder {
      * @param filename
      * @return InputStream, or null if not found.
      */
-    fun findResource(filename: String): InputStream
+    fun findResource(filename: String): InputStream?
 }

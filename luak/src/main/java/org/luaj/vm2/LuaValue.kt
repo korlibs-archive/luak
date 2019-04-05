@@ -1081,7 +1081,7 @@ abstract public class LuaValue : Varargs() {
      * @throws LuaError in all cases
      */
     protected fun typerror(expected: String): Nothing {
-        throw LuaError(expected + " expected, got " + typename())
+        throw LuaError("$expected expected, got ${typename()}")
     }
 
     /**
@@ -1089,7 +1089,7 @@ abstract public class LuaValue : Varargs() {
      * @throws LuaError in all cases
      */
     protected fun unimplemented(`fun`: String): Nothing {
-        throw LuaError("'" + `fun` + "' not implemented for " + typename())
+        throw LuaError("'$`fun`' not implemented for ${typename()}")
     }
 
     /**
