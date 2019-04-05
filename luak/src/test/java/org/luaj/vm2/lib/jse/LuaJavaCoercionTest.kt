@@ -27,11 +27,11 @@ class LuaJavaCoercionTest : TestCase() {
 
     fun testLuaIntToJavaInt() {
         val i = LuaInteger.valueOf(777)
-        var o = CoerceLuaToJava.coerce(i, Int::class.javaPrimitiveType)
-        TestCase.assertEquals(Int::class.javaObjectType, o.javaClass)
+        var o = CoerceLuaToJava.coerce(i, Int::class.javaObjectType)!!
+        TestCase.assertEquals(Int::class.javaObjectType, o::class.java)
         TestCase.assertEquals(777, (o as Number).toInt())
-        o = CoerceLuaToJava.coerce(i, Int::class.java)
-        TestCase.assertEquals(Int::class.javaObjectType, o.javaClass)
+        o = CoerceLuaToJava.coerce(i, Int::class.java)!!
+        TestCase.assertEquals(Int::class.javaObjectType, o::class.java)
         TestCase.assertEquals(777, o)
     }
 
@@ -44,7 +44,7 @@ class LuaJavaCoercionTest : TestCase() {
 
     fun testLuaStringToJavaString() {
         val s = LuaValue.valueOf("777")
-        val o = CoerceLuaToJava.coerce(s, String::class.java)
+        val o = CoerceLuaToJava.coerce(s, String::class.java)!!
         TestCase.assertEquals(String::class.java, o.javaClass)
         TestCase.assertEquals("777", o)
     }
@@ -107,7 +107,7 @@ class LuaJavaCoercionTest : TestCase() {
         t.set(1, LuaInteger.valueOf(222))
         t.set(2, LuaInteger.valueOf(333))
         var i: IntArray? = null
-        val o = CoerceLuaToJava.coerce(t, IntArray::class.java)
+        val o = CoerceLuaToJava.coerce(t, IntArray::class.java)!!
         TestCase.assertEquals(IntArray::class.java, o.javaClass)
         i = o as IntArray
         TestCase.assertEquals(2, i.size)
@@ -123,17 +123,17 @@ class LuaJavaCoercionTest : TestCase() {
         val tc = LuaTable()
         tc.set(1, tb)
 
-        val saa = CoerceLuaToJava.getCoercion(Int::class.javaPrimitiveType).score(la)
+        val saa = CoerceLuaToJava.getCoercion(Int::class.javaObjectType).score(la)
         val sab = CoerceLuaToJava.getCoercion(IntArray::class.java).score(la)
         val sac = CoerceLuaToJava.getCoercion(Array<IntArray>::class.java).score(la)
         TestCase.assertTrue(saa < sab)
         TestCase.assertTrue(saa < sac)
-        val sba = CoerceLuaToJava.getCoercion(Int::class.javaPrimitiveType).score(tb)
+        val sba = CoerceLuaToJava.getCoercion(Int::class.javaObjectType).score(tb)
         val sbb = CoerceLuaToJava.getCoercion(IntArray::class.java).score(tb)
         val sbc = CoerceLuaToJava.getCoercion(Array<IntArray>::class.java).score(tb)
         TestCase.assertTrue(sbb < sba)
         TestCase.assertTrue(sbb < sbc)
-        val sca = CoerceLuaToJava.getCoercion(Int::class.javaPrimitiveType).score(tc)
+        val sca = CoerceLuaToJava.getCoercion(Int::class.javaObjectType).score(tc)
         val scb = CoerceLuaToJava.getCoercion(IntArray::class.java).score(tc)
         val scc = CoerceLuaToJava.getCoercion(Array<IntArray>::class.java).score(tc)
         TestCase.assertTrue(scc < sca)
@@ -148,17 +148,17 @@ class LuaJavaCoercionTest : TestCase() {
         val vb = CoerceJavaToLua.coerce(b)
         val vc = CoerceJavaToLua.coerce(c)
 
-        val vaa = CoerceLuaToJava.getCoercion(Int::class.javaPrimitiveType).score(va)
+        val vaa = CoerceLuaToJava.getCoercion(Int::class.javaObjectType).score(va)
         val vab = CoerceLuaToJava.getCoercion(IntArray::class.java).score(va)
         val vac = CoerceLuaToJava.getCoercion(Array<IntArray>::class.java).score(va)
         TestCase.assertTrue(vaa < vab)
         TestCase.assertTrue(vaa < vac)
-        val vba = CoerceLuaToJava.getCoercion(Int::class.javaPrimitiveType).score(vb)
+        val vba = CoerceLuaToJava.getCoercion(Int::class.javaObjectType).score(vb)
         val vbb = CoerceLuaToJava.getCoercion(IntArray::class.java).score(vb)
         val vbc = CoerceLuaToJava.getCoercion(Array<IntArray>::class.java).score(vb)
         TestCase.assertTrue(vbb < vba)
         TestCase.assertTrue(vbb < vbc)
-        val vca = CoerceLuaToJava.getCoercion(Int::class.javaPrimitiveType).score(vc)
+        val vca = CoerceLuaToJava.getCoercion(Int::class.javaObjectType).score(vc)
         val vcb = CoerceLuaToJava.getCoercion(IntArray::class.java).score(vc)
         val vcc = CoerceLuaToJava.getCoercion(Array<IntArray>::class.java).score(vc)
         TestCase.assertTrue(vcc < vca)

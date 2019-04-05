@@ -63,20 +63,19 @@ internal abstract class JavaMember protected constructor(params: Array<Class<*>>
     }
 
     protected fun convertArgs(args: Varargs): Array<Any> {
-        val a: Array<Any>
-        if (varargs == null) {
-            a = Array(fixedargs.size) { fixedargs[it].coerce(args.arg(it + 1)) }
+        val a: Array<Any?> = if (varargs == null) {
+            Array(fixedargs.size) { fixedargs[it].coerce(args.arg(it + 1)) }
         } else {
             val n = Math.max(fixedargs.size, args.narg())
-            a = arrayOfNulls<Any>(n) as Array<Any>
-            for (i in fixedargs.indices) a[i] = fixedargs[i].coerce(args.arg(i + 1))
-            for (i in fixedargs.size until n) a[i] = varargs.coerce(args.arg(i + 1))
+            arrayOfNulls<Any>(n).also { a ->
+                for (i in fixedargs.indices) a[i] = fixedargs[i].coerce(args.arg(i + 1))
+                for (i in fixedargs.size until n) a[i] = varargs.coerce(args.arg(i + 1))
+            }
         }
-        return a
+        return a as Array<Any>
     }
 
     companion object {
-
         const val METHOD_MODIFIERS_VARARGS = 0x80
     }
 }
