@@ -116,7 +116,7 @@ package org.luaj.vm2
  *
  * @see Varargs
  */
-abstract public class LuaValue : Varargs() {
+abstract class LuaValue : Varargs() {
 
     // type
     /** Get the enumeration value for the type of this value.
@@ -536,7 +536,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optboolean(defval: Boolean): Boolean {
         argerror("boolean")
-        return false
     }
 
     /** Check that optional argument is a closure and return as [LuaClosure]
@@ -554,7 +553,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optclosure(defval: LuaClosure?): LuaClosure? {
         argerror("closure")
-        return null
     }
 
     /** Check that optional argument is a number or string convertible to number and return as double
@@ -573,7 +571,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optdouble(defval: Double): Double {
         argerror("double")
-        return 0.0
     }
 
     /** Check that optional argument is a function and return as [LuaFunction]
@@ -593,7 +590,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optfunction(defval: LuaFunction?): LuaFunction? {
         argerror("function")
-        return null
     }
 
     /** Check that optional argument is a number or string convertible to number and return as int
@@ -613,7 +609,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optint(defval: Int): Int {
         argerror("int")
-        return 0
     }
 
     /** Check that optional argument is a number or string convertible to number and return as [LuaInteger]
@@ -632,7 +627,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optinteger(defval: LuaInteger?): LuaInteger? {
         argerror("integer")
-        return null
     }
 
     /** Check that optional argument is a number or string convertible to number and return as long
@@ -651,7 +645,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optlong(defval: Long): Long {
         argerror("long")
-        return 0
     }
 
     /** Check that optional argument is a number or string convertible to number and return as [LuaNumber]
@@ -671,7 +664,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optnumber(defval: LuaNumber?): LuaNumber? {
         argerror("number")
-        return null
     }
 
     /** Check that optional argument is a string or number and return as Java String
@@ -688,7 +680,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optjstring(defval: String?): String? {
         argerror("String")
-        return null
     }
 
     /** Check that optional argument is a string or number and return as [LuaString]
@@ -705,7 +696,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optstring(defval: LuaString?): LuaString? {
         argerror("string")
-        return null
     }
 
     /** Check that optional argument is a table and return as [LuaTable]
@@ -720,7 +710,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun opttable(defval: LuaTable?): LuaTable? {
         argerror("table")
-        return null
     }
 
     /** Check that optional argument is a thread and return as [LuaThread]
@@ -735,7 +724,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optthread(defval: LuaThread?): LuaThread? {
         argerror("thread")
-        return null
     }
 
     /** Check that optional argument is a userdata and return the Object instance
@@ -751,7 +739,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optuserdata(defval: Any?): Any? {
         argerror("object")
-        return null
     }
 
     /** Check that optional argument is a userdata whose instance is of a type
@@ -769,7 +756,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun optuserdata(c: Class<*>, defval: Any?): Any? {
         argerror(c.name)
-        return null
     }
 
     /** Perform argument check that this is not nil or none.
@@ -799,7 +785,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkboolean(): Boolean {
         argerror("boolean")
-        return false
     }
 
     /** Check that the value is a [LuaClosure] ,
@@ -816,7 +801,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkclosure(): LuaClosure? {
         argerror("closure")
-        return null
     }
 
     /** Check that the value is numeric and return the value as a double,
@@ -835,7 +819,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkdouble(): Double {
         argerror("double")
-        return 0.0
     }
 
     /** Check that the value is a function , or throw [LuaError] if not
@@ -850,7 +833,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkfunction(): LuaFunction? {
         argerror("function")
-        return null
     }
 
 
@@ -861,9 +843,8 @@ abstract public class LuaValue : Varargs() {
      * @return `this` if if an instance fof [Globals]
      * @throws LuaError if not a [Globals] instance.
      */
-    open fun checkglobals(): Globals? {
+    open fun checkglobals(): Globals {
         argerror("globals")
-        return null
     }
 
     /** Check that the value is numeric, and convert and cast value to int, or throw [LuaError] if not numeric
@@ -882,7 +863,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkint(): Int {
         argerror("int")
-        return 0
     }
 
     /** Check that the value is numeric, and convert and cast value to int, or throw [LuaError] if not numeric
@@ -901,7 +881,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkinteger(): LuaInteger? {
         argerror("integer")
-        return null
     }
 
     /** Check that the value is numeric, and convert and cast value to long, or throw [LuaError] if not numeric
@@ -920,7 +899,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checklong(): Long {
         argerror("long")
-        return 0
     }
 
     /** Check that the value is numeric, and return as a LuaNumber if so, or throw [LuaError]
@@ -938,7 +916,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checknumber(): LuaNumber? {
         argerror("number")
-        return null
     }
 
     /** Check that the value is numeric, and return as a LuaNumber if so, or throw [LuaError]
@@ -975,7 +952,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkjstring(): String? {
         argerror("string")
-        return null
     }
 
     /** Check that this is a lua string, or throw [LuaError] if it is not.
@@ -993,9 +969,8 @@ abstract public class LuaValue : Varargs() {
      * @see .isstring
      * @see .TSTRING
      */
-    open fun checkstring(): LuaString? {
+    open fun checkstring(): LuaString {
         argerror("string")
-        return null
     }
 
     /** Check that this is a [LuaTable], or throw [LuaError] if it is not
@@ -1007,7 +982,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checktable(): LuaTable? {
         argerror("table")
-        return null
     }
 
     /** Check that this is a [LuaThread], or throw [LuaError] if it is not
@@ -1019,7 +993,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkthread(): LuaThread? {
         argerror("thread")
-        return null
     }
 
     /** Check that this is a [LuaUserdata], or throw [LuaError] if it is not
@@ -1032,7 +1005,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkuserdata(): Any? {
         argerror("userdata")
-        return null
     }
 
     /** Check that this is a [LuaUserdata], or throw [LuaError] if it is not
@@ -1045,7 +1017,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun checkuserdata(c: Class<*>): Any? {
         argerror("userdata")
-        return null
     }
 
     /** Check that this is not the value [.NIL], or throw [LuaError] if it is
@@ -3245,7 +3216,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun gt_b(rhs: Double): Boolean {
         compareerror("number")
-        return false
     }
 
     /** Greater than or equals: Perform numeric or string comparison with another value
@@ -3344,7 +3314,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun gteq_b(rhs: Int): Boolean {
         compareerror("number")
-        return false
     }
 
     /** Greater than or equals: Perform numeric comparison with another value
@@ -3365,7 +3334,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun gteq_b(rhs: Double): Boolean {
         compareerror("number")
-        return false
     }
 
     /** Perform metatag processing for comparison operations.
@@ -3583,7 +3551,6 @@ abstract public class LuaValue : Varargs() {
      */
     open fun strvalue(): LuaString? {
         typerror("strValue")
-        return null
     }
 
     /** Return this value as a strong reference, or null if it was weak and is no longer referenced.
@@ -3785,7 +3752,7 @@ abstract public class LuaValue : Varargs() {
         @JvmField val MINUSONE: LuaNumber = LuaInteger.valueOf(-1)
 
         /** LuaValue array constant with no values  */
-        @JvmField val NOVALS = arrayOf<LuaValue>()
+        @JvmField val NOVALS = arrayOf<LuaValue?>()
 
         /** The variable name of the environment.  */
         @JvmField var ENV = valueOf("_ENV")

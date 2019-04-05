@@ -416,7 +416,7 @@ private constructor(
         return tojstring()
     }
 
-    override fun checkstring(): LuaString? {
+    override fun checkstring(): LuaString {
         return LuaString.valueOf(tojstring())
     }
 

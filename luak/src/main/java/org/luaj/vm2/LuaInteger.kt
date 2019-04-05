@@ -391,7 +391,7 @@ internal constructor(
         return v.toString()
     }
 
-    override fun checkstring(): LuaString? {
+    override fun checkstring(): LuaString {
         return LuaValue.valueOf(v.toString())
     }
 

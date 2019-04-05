@@ -184,7 +184,7 @@ open class Globals : LuaTable() {
     }
 
     /** Check that this object is a Globals object, and return it, otherwise throw an error.  */
-    override fun checkglobals(): Globals? {
+    override fun checkglobals(): Globals {
         return this
     }
 

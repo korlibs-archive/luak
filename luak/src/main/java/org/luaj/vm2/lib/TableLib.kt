@@ -91,15 +91,15 @@ class TableLib : TwoArgFunction() {
         }
 
         override fun call(list: LuaValue, sep: LuaValue): LuaValue {
-            return list.checktable()!!.concat(sep.checkstring(), 1, list.length())
+            return list.checktable()!!.concat(sep.checkstring()!!, 1, list.length())
         }
 
         override fun call(list: LuaValue, sep: LuaValue, i: LuaValue): LuaValue {
-            return list.checktable()!!.concat(sep.checkstring(), i.checkint(), list.length())
+            return list.checktable()!!.concat(sep.checkstring()!!, i.checkint(), list.length())
         }
 
         override fun call(list: LuaValue, sep: LuaValue, i: LuaValue, j: LuaValue): LuaValue {
-            return list.checktable()!!.concat(sep.checkstring(), i.checkint(), j.checkint())
+            return list.checktable()!!.concat(sep.checkstring()!!, i.checkint(), j.checkint())
         }
     }
 
@@ -143,7 +143,7 @@ class TableLib : TwoArgFunction() {
     internal class sort : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             args.arg1().checktable()!!.sort(
-                if (args.arg(2).isnil()) LuaValue.NIL else args.arg(2).checkfunction()
+                if (args.arg(2).isnil()) LuaValue.NIL else args.arg(2).checkfunction()!!
             )
             return LuaValue.NONE
         }
