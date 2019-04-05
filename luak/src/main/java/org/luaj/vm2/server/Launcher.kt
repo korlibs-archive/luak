@@ -52,7 +52,7 @@ interface Launcher {
      * @param arg Optional arguments supplied to the script.
      * @return return values from the script.
      */
-    fun launch(script: String, arg: Array<Any>?): Array<Any>?
+    fun launch(script: String, arg: Array<Any>?): Array<Any?>?
 
     /** Launch a script from an InputStream.
      *
@@ -60,7 +60,7 @@ interface Launcher {
      * @param arg Optional arguments supplied to the script.
      * @return return values from the script.
      */
-    fun launch(script: InputStream, arg: Array<Any>?): Array<Any>?
+    fun launch(script: InputStream, arg: Array<Any>?): Array<Any?>?
 
     /** Launch a script from a Reader.
      *
@@ -68,5 +68,5 @@ interface Launcher {
      * @param arg Optional arguments supplied to the script.
      * @return return values from the script.
      */
-    fun launch(script: Reader, arg: Array<Any>?): Array<Any>?
+    fun launch(script: Reader, arg: Array<Any>?): Array<Any?>?
 }

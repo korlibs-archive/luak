@@ -42,117 +42,37 @@ package org.luaj.vm2
  */
 open class LuaNil internal constructor() : LuaValue() {
 
-    override fun type(): Int {
-        return LuaValue.TNIL
-    }
-
-    override fun toString(): String {
-        return "nil"
-    }
-
-    override fun typename(): String {
-        return "nil"
-    }
-
-    override fun tojstring(): String {
-        return "nil"
-    }
-
-    override fun not(): LuaValue {
-        return LuaValue.TRUE
-    }
-
-    override fun toboolean(): Boolean {
-        return false
-    }
-
-    override fun isnil(): Boolean {
-        return true
-    }
-
-    override fun getmetatable(): LuaValue? {
-        return s_metatable
-    }
-
-    override fun equals(o: Any?): Boolean {
-        return o is LuaNil
-    }
-
-    override fun checknotnil(): LuaValue {
-        return argerror("value")
-    }
-
-    override fun isvalidkey(): Boolean {
-        return false
-    }
+    override fun type(): Int = LuaValue.TNIL
+    override fun toString(): String = "nil"
+    override fun typename(): String = "nil"
+    override fun tojstring(): String = "nil"
+    override fun not(): LuaValue = LuaValue.TRUE
+    override fun toboolean(): Boolean = false
+    override fun isnil(): Boolean = true
+    override fun getmetatable(): LuaValue? = s_metatable
+    override fun equals(o: Any?): Boolean = o is LuaNil
+    override fun checknotnil(): LuaValue = argerror("value")
+    override fun isvalidkey(): Boolean = false
 
     // optional argument conversions - nil alwas falls badk to default value
-    override fun optboolean(defval: Boolean): Boolean {
-        return defval
-    }
-
-    override fun optclosure(defval: LuaClosure?): LuaClosure? {
-        return defval
-    }
-
-    override fun optdouble(defval: Double): Double {
-        return defval
-    }
-
-    override fun optfunction(defval: LuaFunction?): LuaFunction? {
-        return defval
-    }
-
-    override fun optint(defval: Int): Int {
-        return defval
-    }
-
-    override fun optinteger(defval: LuaInteger?): LuaInteger? {
-        return defval
-    }
-
-    override fun optlong(defval: Long): Long {
-        return defval
-    }
-
-    override fun optnumber(defval: LuaNumber?): LuaNumber? {
-        return defval
-    }
-
-    override fun opttable(defval: LuaTable?): LuaTable? {
-        return defval
-    }
-
-    override fun optthread(defval: LuaThread?): LuaThread? {
-        return defval
-    }
-
-    override fun optjstring(defval: String?): String? {
-        return defval
-    }
-
-    override fun optstring(defval: LuaString?): LuaString? {
-        return defval
-    }
-
-    override fun optuserdata(defval: Any?): Any? {
-        return defval
-    }
-
-    override fun optuserdata(c: Class<*>, defval: Any?): Any? {
-        return defval
-    }
-
-    override fun optvalue(defval: LuaValue): LuaValue {
-        return defval
-    }
+    override fun optboolean(defval: Boolean): Boolean = defval
+    override fun optclosure(defval: LuaClosure?): LuaClosure? = defval
+    override fun optdouble(defval: Double): Double = defval
+    override fun optfunction(defval: LuaFunction?): LuaFunction? = defval
+    override fun optint(defval: Int): Int = defval
+    override fun optinteger(defval: LuaInteger?): LuaInteger? = defval
+    override fun optlong(defval: Long): Long = defval
+    override fun optnumber(defval: LuaNumber?): LuaNumber? = defval
+    override fun opttable(defval: LuaTable?): LuaTable? = defval
+    override fun optthread(defval: LuaThread?): LuaThread? = defval
+    override fun optjstring(defval: String?): String? = defval
+    override fun optstring(defval: LuaString?): LuaString? = defval
+    override fun optuserdata(defval: Any?): Any? = defval
+    override fun optuserdata(c: Class<*>, defval: Any?): Any? = defval
+    override fun optvalue(defval: LuaValue): LuaValue = defval
 
     companion object {
-
-        @JvmField
-        internal val _NIL = LuaNil()
-
-        @JvmField
-        var s_metatable: LuaValue? = null
+        @JvmField internal val _NIL = LuaNil()
+        @JvmField var s_metatable: LuaValue? = null
     }
 }

@@ -75,14 +75,6 @@ class ParseException : Exception {
     constructor(message: String) : super(message) {}
 
     companion object {
-
-        /**
-         * The version identifier for this Serializable class.
-         * Increment only if the *serialized* form of the
-         * class changes.
-         */
-        private val serialVersionUID = 1L
-
         /**
          * It uses "currentToken" and "expectedTokenSequences" to generate a parse
          * error message and returns it.  If this object has been created

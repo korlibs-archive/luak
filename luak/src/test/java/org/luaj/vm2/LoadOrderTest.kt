@@ -46,16 +46,16 @@ class LoadOrderTest : TestCase() {
 
     class TestLauncherLoadStringFirst : Launcher {
 
-        override fun launch(script: String, arg: Array<Any>?): Array<Any>? {
+        override fun launch(script: String, arg: Array<Any>?): Array<Any?>? {
             //return arrayOf(FOO)
             return arrayOf(LuaString.valueOf("foo"))
         }
 
-        override fun launch(script: InputStream, arg: Array<Any>?): Array<Any>? {
+        override fun launch(script: InputStream, arg: Array<Any>?): Array<Any?>? {
             return null
         }
 
-        override fun launch(script: Reader, arg: Array<Any>?): Array<Any>? {
+        override fun launch(script: Reader, arg: Array<Any>?): Array<Any?>? {
             return null
         }
 

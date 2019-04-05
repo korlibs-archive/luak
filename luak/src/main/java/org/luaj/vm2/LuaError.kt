@@ -126,9 +126,4 @@ class LuaError : RuntimeException {
         return luaCause
     }
 
-    companion object {
-        private val serialVersionUID = 1L
-    }
-
-
 }

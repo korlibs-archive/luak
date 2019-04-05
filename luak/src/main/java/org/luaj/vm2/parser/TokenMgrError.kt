@@ -12,8 +12,8 @@ class TokenMgrError : Error {
     internal var errorCode: Int = 0
 
     /*
-   * Constructors of various flavors follow.
-   */
+     * Constructors of various flavors follow.
+     */
 
     /** No arg constructor.  */
     constructor() {}
@@ -32,45 +32,25 @@ class TokenMgrError : Error {
         errorAfter: String,
         curChar: Char,
         reason: Int
-    ) : this(LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar), reason) {
-    }
+    ) : this(LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar), reason)
 
     companion object {
 
-        /**
-         * The version identifier for this Serializable class.
-         * Increment only if the *serialized* form of the
-         * class changes.
-         */
-        private val serialVersionUID = 1L
-
         /*
-   * Ordinals for various reasons why an Error of this type can be thrown.
-   */
-
-        /**
-         * Lexical error occurred.
+         * Ordinals for various reasons why an Error of this type can be thrown.
          */
-        @JvmField
-        val LEXICAL_ERROR = 0
 
-        /**
-         * An attempt was made to create a second instance of a static token manager.
-         */
-        @JvmField
-        val STATIC_LEXER_ERROR = 1
+        /** Lexical error occurred. */
+        const val LEXICAL_ERROR = 0
 
-        /**
-         * Tried to change to an invalid lexical state.
-         */
-        @JvmField
-        val INVALID_LEXICAL_STATE = 2
+        /** An attempt was made to create a second instance of a static token manager. */
+        const val STATIC_LEXER_ERROR = 1
 
-        /**
-         * Detected (and bailed out of) an infinite loop in the token manager.
-         */
-        @JvmField
-        val LOOP_DETECTED = 3
+        /** Tried to change to an invalid lexical state. */
+        const val INVALID_LEXICAL_STATE = 2
+
+        /** Detected (and bailed out of) an infinite loop in the token manager. */
+        const val LOOP_DETECTED = 3
 
         /**
          * Replaces unprintable characters by their escaped (or unicode escaped)
@@ -82,45 +62,21 @@ class TokenMgrError : Error {
             var ch: Char
             loop@for (i in 0 until str.length) {
                 when (str[i]) {
-                    '\u0000' -> continue@loop
-                    '\b' -> {
-                        retval.append("\\b")
-                        continue@loop
-                    }
-                    '\t' -> {
-                        retval.append("\\t")
-                        continue@loop
-                    }
-                    '\n' -> {
-                        retval.append("\\n")
-                        continue@loop
-                    }
-                    //'\f' -> {
-                    '\u000c' -> {
-                        retval.append("\\f")
-                        continue@loop
-                    }
-                    '\r' -> {
-                        retval.append("\\r")
-                        continue@loop
-                    }
-                    '\"' -> {
-                        retval.append("\\\"")
-                        continue@loop
-                    }
-                    '\'' -> {
-                        retval.append("\\\'")
-                        continue@loop
-                    }
-                    '\\' -> {
-                        retval.append("\\\\")
-                        continue@loop
-                    }
+                    '\u0000' -> Unit
+                    '\b' -> retval.append("\\b")
+                    '\t' -> retval.append("\\t")
+                    '\n' -> retval.append("\\n")
+                    '\u000c' -> retval.append("\\f")
+                    '\r' -> retval.append("\\r")
+                    '\"' -> retval.append("\\\"")
+                    '\'' -> retval.append("\\\'")
+                    '\\' -> retval.append("\\\\")
                     else -> {
                         if (run {
                                 ch = str[i]
                                 (ch).toInt() < 0x20
-                            }|| ch.toInt() > 0x7e) {
+                            } || ch.toInt() > 0x7e
+                        ) {
                             val s = "0000" + Integer.toString(ch.toInt(), 16)
                             retval.append("\\u" + s.substring(s.length - 4, s.length))
                         } else {
@@ -147,19 +103,14 @@ class TokenMgrError : Error {
          */
         @JvmStatic
         protected fun LexicalError(
-            EOFSeen: Boolean,
-            lexState: Int,
-            errorLine: Int,
-            errorColumn: Int,
-            errorAfter: String,
+            EOFSeen: Boolean, lexState: Int,
+            errorLine: Int, errorColumn: Int, errorAfter: String,
             curChar: Char
-        ): String {
-            return "Lexical error at line " +
-                    errorLine + ", column " +
-                    errorColumn + ".  Encountered: " +
-                    (if (EOFSeen) "<EOF> " else "\"" + addEscapes(curChar.toString()) + "\"" + " (" + curChar.toInt() + "), ") +
-                    "after : \"" + addEscapes(errorAfter) + "\""
-        }
+        ): String = "Lexical error at line " +
+                errorLine + ", column " +
+                errorColumn + ".  Encountered: " +
+                (if (EOFSeen) "<EOF> " else "\"" + addEscapes(curChar.toString()) + "\"" + " (" + curChar.toInt() + "), ") +
+                "after : \"" + addEscapes(errorAfter) + "\""
     }
 }
 /* JavaCC - OriginalChecksum=bd3720425dc7b44a5223b12676db358c (do not edit this line) */

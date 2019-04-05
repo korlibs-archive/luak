@@ -10,137 +10,137 @@ interface LuaParserConstants {
     companion object {
 
         /** End of File.  */
-        @JvmField val EOF = 0
+        const val EOF = 0
         /** RegularExpression Id.  */
-        @JvmField val COMMENT = 17
+        const val COMMENT = 17
         /** RegularExpression Id.  */
-        @JvmField val LONGCOMMENT0 = 18
+        const val LONGCOMMENT0 = 18
         /** RegularExpression Id.  */
-        @JvmField val LONGCOMMENT1 = 19
+        const val LONGCOMMENT1 = 19
         /** RegularExpression Id.  */
-        @JvmField val LONGCOMMENT2 = 20
+        const val LONGCOMMENT2 = 20
         /** RegularExpression Id.  */
-        @JvmField val LONGCOMMENT3 = 21
+        const val LONGCOMMENT3 = 21
         /** RegularExpression Id.  */
-        @JvmField val LONGCOMMENTN = 22
+        const val LONGCOMMENTN = 22
         /** RegularExpression Id.  */
-        @JvmField val LONGSTRING0 = 23
+        const val LONGSTRING0 = 23
         /** RegularExpression Id.  */
-        @JvmField val LONGSTRING1 = 24
+        const val LONGSTRING1 = 24
         /** RegularExpression Id.  */
-        @JvmField val LONGSTRING2 = 25
+        const val LONGSTRING2 = 25
         /** RegularExpression Id.  */
-        @JvmField val LONGSTRING3 = 26
+        const val LONGSTRING3 = 26
         /** RegularExpression Id.  */
-        @JvmField val LONGSTRINGN = 27
+        const val LONGSTRINGN = 27
         /** RegularExpression Id.  */
-        @JvmField val AND = 29
+        const val AND = 29
         /** RegularExpression Id.  */
-        @JvmField val BREAK = 30
+        const val BREAK = 30
         /** RegularExpression Id.  */
-        @JvmField val DO = 31
+        const val DO = 31
         /** RegularExpression Id.  */
-        @JvmField val ELSE = 32
+        const val ELSE = 32
         /** RegularExpression Id.  */
-        @JvmField val ELSEIF = 33
+        const val ELSEIF = 33
         /** RegularExpression Id.  */
-        @JvmField val END = 34
+        const val END = 34
         /** RegularExpression Id.  */
-        @JvmField val FALSE = 35
+        const val FALSE = 35
         /** RegularExpression Id.  */
-        @JvmField val FOR = 36
+        const val FOR = 36
         /** RegularExpression Id.  */
-        @JvmField val FUNCTION = 37
+        const val FUNCTION = 37
         /** RegularExpression Id.  */
-        @JvmField val GOTO = 38
+        const val GOTO = 38
         /** RegularExpression Id.  */
-        @JvmField val IF = 39
+        const val IF = 39
         /** RegularExpression Id.  */
-        @JvmField val IN = 40
+        const val IN = 40
         /** RegularExpression Id.  */
-        @JvmField val LOCAL = 41
+        const val LOCAL = 41
         /** RegularExpression Id.  */
-        @JvmField val NIL = 42
+        const val NIL = 42
         /** RegularExpression Id.  */
-        @JvmField val NOT = 43
+        const val NOT = 43
         /** RegularExpression Id.  */
-        @JvmField val OR = 44
+        const val OR = 44
         /** RegularExpression Id.  */
-        @JvmField val RETURN = 45
+        const val RETURN = 45
         /** RegularExpression Id.  */
-        @JvmField val REPEAT = 46
+        const val REPEAT = 46
         /** RegularExpression Id.  */
-        @JvmField val THEN = 47
+        const val THEN = 47
         /** RegularExpression Id.  */
-        @JvmField val TRUE = 48
+        const val TRUE = 48
         /** RegularExpression Id.  */
-        @JvmField val UNTIL = 49
+        const val UNTIL = 49
         /** RegularExpression Id.  */
-        @JvmField val WHILE = 50
+        const val WHILE = 50
         /** RegularExpression Id.  */
-        @JvmField val NAME = 51
+        const val NAME = 51
         /** RegularExpression Id.  */
-        @JvmField val NUMBER = 52
+        const val NUMBER = 52
         /** RegularExpression Id.  */
-        @JvmField val FLOAT = 53
+        const val FLOAT = 53
         /** RegularExpression Id.  */
-        @JvmField val FNUM = 54
+        const val FNUM = 54
         /** RegularExpression Id.  */
-        @JvmField val DIGIT = 55
+        const val DIGIT = 55
         /** RegularExpression Id.  */
-        @JvmField val EXP = 56
+        const val EXP = 56
         /** RegularExpression Id.  */
-        @JvmField val HEX = 57
+        const val HEX = 57
         /** RegularExpression Id.  */
-        @JvmField val HEXNUM = 58
+        const val HEXNUM = 58
         /** RegularExpression Id.  */
-        @JvmField val HEXDIGIT = 59
+        const val HEXDIGIT = 59
         /** RegularExpression Id.  */
-        @JvmField val HEXEXP = 60
+        const val HEXEXP = 60
         /** RegularExpression Id.  */
-        @JvmField val STRING = 61
+        const val STRING = 61
         /** RegularExpression Id.  */
-        @JvmField val CHARSTRING = 62
+        const val CHARSTRING = 62
         /** RegularExpression Id.  */
-        @JvmField val QUOTED = 63
+        const val QUOTED = 63
         /** RegularExpression Id.  */
-        @JvmField val DECIMAL = 64
+        const val DECIMAL = 64
         /** RegularExpression Id.  */
-        @JvmField val DBCOLON = 65
+        const val DBCOLON = 65
         /** RegularExpression Id.  */
-        @JvmField val UNICODE = 66
+        const val UNICODE = 66
         /** RegularExpression Id.  */
-        @JvmField val CHAR = 67
+        const val CHAR = 67
         /** RegularExpression Id.  */
-        @JvmField val LF = 68
+        const val LF = 68
 
         /** Lexical state.  */
-        @JvmField val DEFAULT = 0
+        const val DEFAULT = 0
         /** Lexical state.  */
-        @JvmField val IN_COMMENT = 1
+        const val IN_COMMENT = 1
         /** Lexical state.  */
-        @JvmField val IN_LC0 = 2
+        const val IN_LC0 = 2
         /** Lexical state.  */
-        @JvmField val IN_LC1 = 3
+        const val IN_LC1 = 3
         /** Lexical state.  */
-        @JvmField val IN_LC2 = 4
+        const val IN_LC2 = 4
         /** Lexical state.  */
-        @JvmField val IN_LC3 = 5
+        const val IN_LC3 = 5
         /** Lexical state.  */
-        @JvmField val IN_LCN = 6
+        const val IN_LCN = 6
         /** Lexical state.  */
-        @JvmField val IN_LS0 = 7
+        const val IN_LS0 = 7
         /** Lexical state.  */
-        @JvmField val IN_LS1 = 8
+        const val IN_LS1 = 8
         /** Lexical state.  */
-        @JvmField val IN_LS2 = 9
+        const val IN_LS2 = 9
         /** Lexical state.  */
-        @JvmField val IN_LS3 = 10
+        const val IN_LS3 = 10
         /** Lexical state.  */
-        @JvmField val IN_LSN = 11
+        const val IN_LSN = 11
 
         /** Literal token values.  */
-        @JvmField val tokenImage = arrayOf(
+        val tokenImage = arrayOf(
             "<EOF>",
             "\" \"",
             "\"\\t\"",

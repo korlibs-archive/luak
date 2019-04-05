@@ -131,217 +131,63 @@ private constructor(
         val recent_short_strings = arrayOfNulls<LuaString>(RECENT_STRINGS_CACHE_SIZE)
     }
 
-    override fun isstring(): Boolean {
-        return true
-    }
-
-    override fun getmetatable(): LuaValue? {
-        return s_metatable
-    }
-
-    override fun type(): Int {
-        return LuaValue.TSTRING
-    }
-
-    override fun typename(): String {
-        return "string"
-    }
-
-    override fun tojstring(): String {
-        return decodeAsUtf8(m_bytes, m_offset, m_length)
-    }
+    override fun isstring(): Boolean = true
+    override fun getmetatable(): LuaValue? = s_metatable
+    override fun type(): Int = LuaValue.TSTRING
+    override fun typename(): String = "string"
+    override fun tojstring(): String = decodeAsUtf8(m_bytes, m_offset, m_length)
 
     // unary operators
-    override fun neg(): LuaValue {
-        val d = scannumber()
-        return if ((d).isNaN()) super.neg() else LuaValue.valueOf(-d)
-    }
+    override fun neg(): LuaValue = scannumber().let { d -> if ((d).isNaN()) super.neg() else LuaValue.valueOf(-d) }
 
     // basic binary arithmetic
-    override fun add(rhs: LuaValue): LuaValue {
-        val d = scannumber()
-        return if ((d).isNaN()) arithmt(LuaValue.ADD, rhs) else rhs.add(d)
-    }
-
-    override fun add(rhs: Double): LuaValue {
-        return LuaValue.valueOf(checkarith() + rhs)
-    }
-
-    override fun add(rhs: Int): LuaValue {
-        return LuaValue.valueOf(checkarith() + rhs)
-    }
-
-    override fun sub(rhs: LuaValue): LuaValue {
-        val d = scannumber()
-        return if ((d).isNaN()) arithmt(LuaValue.SUB, rhs) else rhs.subFrom(d)
-    }
-
-    override fun sub(rhs: Double): LuaValue {
-        return LuaValue.valueOf(checkarith() - rhs)
-    }
-
-    override fun sub(rhs: Int): LuaValue {
-        return LuaValue.valueOf(checkarith() - rhs)
-    }
-
-    override fun subFrom(lhs: Double): LuaValue {
-        return LuaValue.valueOf(lhs - checkarith())
-    }
-
-    override fun mul(rhs: LuaValue): LuaValue {
-        val d = scannumber()
-        return if ((d).isNaN()) arithmt(LuaValue.MUL, rhs) else rhs.mul(d)
-    }
-
-    override fun mul(rhs: Double): LuaValue {
-        return LuaValue.valueOf(checkarith() * rhs)
-    }
-
-    override fun mul(rhs: Int): LuaValue {
-        return LuaValue.valueOf(checkarith() * rhs)
-    }
-
-    override fun pow(rhs: LuaValue): LuaValue {
-        val d = scannumber()
-        return if ((d).isNaN()) arithmt(LuaValue.POW, rhs) else rhs.powWith(d)
-    }
-
-    override fun pow(rhs: Double): LuaValue {
-        return MathLib.dpow(checkarith(), rhs)
-    }
-
-    override fun pow(rhs: Int): LuaValue {
-        return MathLib.dpow(checkarith(), rhs.toDouble())
-    }
-
-    override fun powWith(lhs: Double): LuaValue {
-        return MathLib.dpow(lhs, checkarith())
-    }
-
-    override fun powWith(lhs: Int): LuaValue {
-        return MathLib.dpow(lhs.toDouble(), checkarith())
-    }
-
-    override fun div(rhs: LuaValue): LuaValue {
-        val d = scannumber()
-        return if ((d).isNaN()) arithmt(LuaValue.DIV, rhs) else rhs.divInto(d)
-    }
-
-    override fun div(rhs: Double): LuaValue {
-        return LuaDouble.ddiv(checkarith(), rhs)
-    }
-
-    override fun div(rhs: Int): LuaValue {
-        return LuaDouble.ddiv(checkarith(), rhs.toDouble())
-    }
-
-    override fun divInto(lhs: Double): LuaValue {
-        return LuaDouble.ddiv(lhs, checkarith())
-    }
-
-    override fun mod(rhs: LuaValue): LuaValue {
-        val d = scannumber()
-        return if ((d).isNaN()) arithmt(LuaValue.MOD, rhs) else rhs.modFrom(d)
-    }
-
-    override fun mod(rhs: Double): LuaValue {
-        return LuaDouble.dmod(checkarith(), rhs)
-    }
-
-    override fun mod(rhs: Int): LuaValue {
-        return LuaDouble.dmod(checkarith(), rhs.toDouble())
-    }
-
-    override fun modFrom(lhs: Double): LuaValue {
-        return LuaDouble.dmod(lhs, checkarith())
-    }
+    override fun add(rhs: LuaValue): LuaValue = scannumber().let { d -> if ((d).isNaN()) arithmt(LuaValue.ADD, rhs) else rhs.add(d) }
+    override fun add(rhs: Double): LuaValue = LuaValue.valueOf(checkarith() + rhs)
+    override fun add(rhs: Int): LuaValue = LuaValue.valueOf(checkarith() + rhs)
+    override fun sub(rhs: LuaValue): LuaValue = scannumber().let { d -> if ((d).isNaN()) arithmt(LuaValue.SUB, rhs) else rhs.subFrom(d) }
+    override fun sub(rhs: Double): LuaValue = LuaValue.valueOf(checkarith() - rhs)
+    override fun sub(rhs: Int): LuaValue = LuaValue.valueOf(checkarith() - rhs)
+    override fun subFrom(lhs: Double): LuaValue = LuaValue.valueOf(lhs - checkarith())
+    override fun mul(rhs: LuaValue): LuaValue = scannumber().let { d -> if ((d).isNaN()) arithmt(LuaValue.MUL, rhs) else rhs.mul(d) }
+    override fun mul(rhs: Double): LuaValue = LuaValue.valueOf(checkarith() * rhs)
+    override fun mul(rhs: Int): LuaValue = LuaValue.valueOf(checkarith() * rhs)
+    override fun pow(rhs: LuaValue): LuaValue = scannumber().let { d -> if ((d).isNaN()) arithmt(LuaValue.POW, rhs) else rhs.powWith(d) }
+    override fun pow(rhs: Double): LuaValue = MathLib.dpow(checkarith(), rhs)
+    override fun pow(rhs: Int): LuaValue = MathLib.dpow(checkarith(), rhs.toDouble())
+    override fun powWith(lhs: Double): LuaValue = MathLib.dpow(lhs, checkarith())
+    override fun powWith(lhs: Int): LuaValue = MathLib.dpow(lhs.toDouble(), checkarith())
+    override fun div(rhs: LuaValue): LuaValue = scannumber().let { d -> if ((d).isNaN()) arithmt(LuaValue.DIV, rhs) else rhs.divInto(d) }
+    override fun div(rhs: Double): LuaValue = LuaDouble.ddiv(checkarith(), rhs)
+    override fun div(rhs: Int): LuaValue = LuaDouble.ddiv(checkarith(), rhs.toDouble())
+    override fun divInto(lhs: Double): LuaValue = LuaDouble.ddiv(lhs, checkarith())
+    override fun mod(rhs: LuaValue): LuaValue = scannumber().let { d -> if ((d).isNaN()) arithmt(LuaValue.MOD, rhs) else rhs.modFrom(d) }
+    override fun mod(rhs: Double): LuaValue = LuaDouble.dmod(checkarith(), rhs)
+    override fun mod(rhs: Int): LuaValue = LuaDouble.dmod(checkarith(), rhs.toDouble())
+    override fun modFrom(lhs: Double): LuaValue = LuaDouble.dmod(lhs, checkarith())
 
     // relational operators, these only work with other strings
-    override fun lt(rhs: LuaValue): LuaValue {
-        return if (rhs.strcmp(this) > 0) LuaValue.TRUE else LuaValue.FALSE
-    }
+    override fun lt(rhs: LuaValue): LuaValue = if (rhs.strcmp(this) > 0) LuaValue.TRUE else LuaValue.FALSE
+    override fun lt_b(rhs: LuaValue): Boolean = rhs.strcmp(this) > 0
 
-    override fun lt_b(rhs: LuaValue): Boolean {
-        return rhs.strcmp(this) > 0
-    }
-
-    override fun lt_b(rhs: Int): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
-
-    override fun lt_b(rhs: Double): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
-
-    override fun lteq(rhs: LuaValue): LuaValue {
-        return if (rhs.strcmp(this) >= 0) LuaValue.TRUE else LuaValue.FALSE
-    }
-
-    override fun lteq_b(rhs: LuaValue): Boolean {
-        return rhs.strcmp(this) >= 0
-    }
-
-    override fun lteq_b(rhs: Int): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
-
-    override fun lteq_b(rhs: Double): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
-
-    override fun gt(rhs: LuaValue): LuaValue {
-        return if (rhs.strcmp(this) < 0) LuaValue.TRUE else LuaValue.FALSE
-    }
-
-    override fun gt_b(rhs: LuaValue): Boolean {
-        return rhs.strcmp(this) < 0
-    }
-
-    override fun gt_b(rhs: Int): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
-
-    override fun gt_b(rhs: Double): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
-
-    override fun gteq(rhs: LuaValue): LuaValue {
-        return if (rhs.strcmp(this) <= 0) LuaValue.TRUE else LuaValue.FALSE
-    }
-
-    override fun gteq_b(rhs: LuaValue): Boolean {
-        return rhs.strcmp(this) <= 0
-    }
-
-    override fun gteq_b(rhs: Int): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
-
-    override fun gteq_b(rhs: Double): Boolean {
-        typerror("attempt to compare string with number")
-        return false
-    }
+    override fun lt_b(rhs: Int): Boolean = typerror("attempt to compare string with number")
+    override fun lt_b(rhs: Double): Boolean = typerror("attempt to compare string with number")
+    override fun lteq(rhs: LuaValue): LuaValue = if (rhs.strcmp(this) >= 0) LuaValue.TRUE else LuaValue.FALSE
+    override fun lteq_b(rhs: LuaValue): Boolean = rhs.strcmp(this) >= 0
+    override fun lteq_b(rhs: Int): Boolean = typerror("attempt to compare string with number")
+    override fun lteq_b(rhs: Double): Boolean = typerror("attempt to compare string with number")
+    override fun gt(rhs: LuaValue): LuaValue = if (rhs.strcmp(this) < 0) LuaValue.TRUE else LuaValue.FALSE
+    override fun gt_b(rhs: LuaValue): Boolean = rhs.strcmp(this) < 0
+    override fun gt_b(rhs: Int): Boolean = typerror("attempt to compare string with number")
+    override fun gt_b(rhs: Double): Boolean = typerror("attempt to compare string with number")
+    override fun gteq(rhs: LuaValue): LuaValue = if (rhs.strcmp(this) <= 0) LuaValue.TRUE else LuaValue.FALSE
+    override fun gteq_b(rhs: LuaValue): Boolean = rhs.strcmp(this) <= 0
+    override fun gteq_b(rhs: Int): Boolean = typerror("attempt to compare string with number")
+    override fun gteq_b(rhs: Double): Boolean = typerror("attempt to compare string with number")
 
     // concatenation
-    override fun concat(rhs: LuaValue): LuaValue {
-        return rhs.concatTo(this)
-    }
-
-    override fun concat(rhs: Buffer): Buffer {
-        return rhs.concatTo(this)
-    }
-
-    override fun concatTo(lhs: LuaNumber): LuaValue {
-        return concatTo(lhs.strvalue()!!)
-    }
-
+    override fun concat(rhs: LuaValue): LuaValue = rhs.concatTo(this)
+    override fun concat(rhs: Buffer): Buffer = rhs.concatTo(this)
+    override fun concatTo(lhs: LuaNumber): LuaValue = concatTo(lhs.strvalue()!!)
     override fun concatTo(lhs: LuaString): LuaValue {
         val b = ByteArray(lhs.m_length + this.m_length)
         System.arraycopy(lhs.m_bytes, lhs.m_offset, b, 0, lhs.m_length)
@@ -350,9 +196,7 @@ private constructor(
     }
 
     // string comparison
-    override fun strcmp(lhs: LuaValue): Int {
-        return -lhs.strcmp(this)
-    }
+    override fun strcmp(lhs: LuaValue): Int = -lhs.strcmp(this)
 
     override fun strcmp(rhs: LuaString): Int {
         var i = 0
@@ -370,34 +214,21 @@ private constructor(
     /** Check for number in arithmetic, or throw aritherror  */
     private fun checkarith(): Double {
         val d = scannumber()
-        if ((d).isNaN())
-            aritherror()
+        if ((d).isNaN()) aritherror()
         return d
     }
 
-    override fun checkint(): Int {
-        return checkdouble().toLong().toInt()
-    }
-
-    override fun checkinteger(): LuaInteger? {
-        return LuaValue.valueOf(checkint())
-    }
-
-    override fun checklong(): Long {
-        return checkdouble().toLong()
-    }
+    override fun checkint(): Int = checkdouble().toLong().toInt()
+    override fun checkinteger(): LuaInteger? = LuaValue.valueOf(checkint())
+    override fun checklong(): Long = checkdouble().toLong()
 
     override fun checkdouble(): Double {
         val d = scannumber()
-        if ((d).isNaN())
-            argerror("number")
+        if ((d).isNaN()) argerror("number")
         return d
     }
 
-    override fun checknumber(): LuaNumber? {
-        return LuaValue.valueOf(checkdouble())
-    }
-
+    override fun checknumber(): LuaNumber? = LuaValue.valueOf(checkdouble())
     override fun checknumber(msg: String): LuaNumber {
         val d = scannumber()
         if ((d).isNaN())
@@ -405,10 +236,7 @@ private constructor(
         return LuaValue.valueOf(d)
     }
 
-    override fun isnumber(): Boolean {
-        val d = scannumber()
-        return !(d.isNaN())
-    }
+    override fun isnumber(): Boolean = scannumber().let { d -> !(d.isNaN()) }
 
     override fun isint(): Boolean {
         val d = scannumber()
@@ -426,70 +254,23 @@ private constructor(
         return l.toDouble() == d
     }
 
-    override fun tobyte(): Byte {
-        return toint().toByte()
-    }
+    override fun tobyte(): Byte = toint().toByte()
+    override fun tochar(): Char = toint().toChar()
 
-    override fun tochar(): Char {
-        return toint().toChar()
-    }
-
-    override fun todouble(): Double {
-        val d = scannumber()
-        return if ((d.isNaN())) 0.0 else d
-    }
-
-    override fun tofloat(): Float {
-        return todouble().toFloat()
-    }
-
-    override fun toint(): Int {
-        return tolong().toInt()
-    }
-
-    override fun tolong(): Long {
-        return todouble().toLong()
-    }
-
-    override fun toshort(): Short {
-        return toint().toShort()
-    }
-
-    override fun optdouble(defval: Double): Double {
-        return checknumber()!!.checkdouble()
-    }
-
-    override fun optint(defval: Int): Int {
-        return checknumber()!!.checkint()
-    }
-
-    override fun optinteger(defval: LuaInteger?): LuaInteger? {
-        return checknumber()!!.checkinteger()
-    }
-
-    override fun optlong(defval: Long): Long {
-        return checknumber()!!.checklong()
-    }
-
-    override fun optnumber(defval: LuaNumber?): LuaNumber? {
-        return checknumber()!!.checknumber()
-    }
-
-    override fun optstring(defval: LuaString?): LuaString? {
-        return this
-    }
-
-    override fun tostring(): LuaValue {
-        return this
-    }
-
-    override fun optjstring(defval: String?): String? {
-        return tojstring()
-    }
-
-    override fun strvalue(): LuaString? {
-        return this
-    }
+    override fun todouble(): Double = scannumber().let { d -> if ((d.isNaN())) 0.0 else d }
+    override fun tofloat(): Float = todouble().toFloat()
+    override fun toint(): Int = tolong().toInt()
+    override fun tolong(): Long = todouble().toLong()
+    override fun toshort(): Short = toint().toShort()
+    override fun optdouble(defval: Double): Double = checknumber()!!.checkdouble()
+    override fun optint(defval: Int): Int = checknumber()!!.checkint()
+    override fun optinteger(defval: LuaInteger?): LuaInteger? = checknumber()!!.checkinteger()
+    override fun optlong(defval: Long): Long = checknumber()!!.checklong()
+    override fun optnumber(defval: LuaNumber?): LuaNumber? = checknumber()!!.checknumber()
+    override fun optstring(defval: LuaString?): LuaString? = this
+    override fun tostring(): LuaValue = this
+    override fun optjstring(defval: String?): String? = tojstring()
+    override fun strvalue(): LuaString? = this
 
     /** Take a substring using Java zero-based indexes for begin and end or range.
      * @param beginIndex  The zero-based index of the first character to include.
@@ -500,99 +281,50 @@ private constructor(
     fun substring(beginIndex: Int, endIndex: Int): LuaString {
         val off = m_offset + beginIndex
         val len = endIndex - beginIndex
-        return if (len >= m_length / 2)
-            valueUsing(m_bytes, off, len)
-        else
-            valueOf(m_bytes, off, len)
+        return if (len >= m_length / 2) valueUsing(m_bytes, off, len) else valueOf(m_bytes, off, len)
     }
 
-    override fun hashCode(): Int {
-        return m_hashcode
-    }
+    override fun hashCode(): Int = m_hashcode
 
     // object comparison, used in key comparison
-    override fun equals(o: Any?): Boolean {
-        return if (o is LuaString) {
-            raweq(o)
-        } else false
-    }
+    override fun equals(o: Any?): Boolean = if (o is LuaString) raweq(o) else false
 
     // equality w/ metatable processing
-    override fun eq(`val`: LuaValue): LuaValue {
-        return if (`val`.raweq(this)) LuaValue.TRUE else LuaValue.FALSE
-    }
-
-    override fun eq_b(`val`: LuaValue): Boolean {
-        return `val`.raweq(this)
-    }
+    override fun eq(`val`: LuaValue): LuaValue = if (`val`.raweq(this)) LuaValue.TRUE else LuaValue.FALSE
+    override fun eq_b(`val`: LuaValue): Boolean = `val`.raweq(this)
 
     // equality w/o metatable processing
-    override fun raweq(`val`: LuaValue): Boolean {
-        return `val`.raweq(this)
-    }
+    override fun raweq(`val`: LuaValue): Boolean = `val`.raweq(this)
 
     override fun raweq(s: LuaString): Boolean {
-        if (this === s)
-            return true
-        if (s.m_length != m_length)
-            return false
-        if (s.m_bytes == m_bytes && s.m_offset == m_offset)
-            return true
-        if (s.hashCode() != hashCode())
-            return false
-        for (i in 0 until m_length)
-            if (s.m_bytes[s.m_offset + i] != m_bytes[m_offset + i])
-                return false
+        if (this === s) return true
+        if (s.m_length != m_length) return false
+        if (s.m_bytes == m_bytes && s.m_offset == m_offset) return true
+        if (s.hashCode() != hashCode()) return false
+        for (i in 0 until m_length) if (s.m_bytes[s.m_offset + i] != m_bytes[m_offset + i]) return false
         return true
     }
 
     /** Return true if the bytes in the supplied range match this LuaStrings bytes.  */
-    private fun byteseq(bytes: ByteArray, off: Int, len: Int): Boolean {
-        return m_length == len && equals(m_bytes, m_offset, bytes, off, len)
-    }
-
-    @Throws(IOException::class)
-    fun write(writer: DataOutputStream, i: Int, len: Int) {
-        writer.write(m_bytes, m_offset + i, len)
-    }
-
-    override fun len(): LuaValue {
-        return LuaInteger.valueOf(m_length)
-    }
-
-    override fun length(): Int {
-        return m_length
-    }
-
-    override fun rawlen(): Int {
-        return m_length
-    }
-
-    fun luaByte(index: Int): Int {
-        return m_bytes[m_offset + index].toInt() and 0x0FF
-    }
-
+    private fun byteseq(bytes: ByteArray, off: Int, len: Int): Boolean = m_length == len && equals(m_bytes, m_offset, bytes, off, len)
+    fun write(writer: DataOutputStream, i: Int, len: Int) = writer.write(m_bytes, m_offset + i, len)
+    override fun len(): LuaValue = LuaInteger.valueOf(m_length)
+    override fun length(): Int = m_length
+    override fun rawlen(): Int = m_length
+    fun luaByte(index: Int): Int = m_bytes[m_offset + index].toInt() and 0x0FF
     fun charAt(index: Int): Int {
-        if (index < 0 || index >= m_length)
-            throw IndexOutOfBoundsException()
+        if (index < 0 || index >= m_length) throw IndexOutOfBoundsException()
         return luaByte(index)
     }
 
-    override fun checkjstring(): String? {
-        return tojstring()
-    }
-
-    override fun checkstring(): LuaString {
-        return this
-    }
+    override fun checkjstring(): String? = tojstring()
+    override fun checkstring(): LuaString = this
 
     /** Convert value to an input stream.
      *
      * @return [InputStream] whose data matches the bytes in this [LuaString]
      */
-    fun toInputStream(): InputStream {
-        return ByteArrayInputStream(m_bytes, m_offset, m_length)
-    }
+    fun toInputStream(): InputStream = ByteArrayInputStream(m_bytes, m_offset, m_length)
 
     /**
      * Copy the bytes of the string into the given byte array.
@@ -601,9 +333,8 @@ private constructor(
      * @param arrayOffset offset in destination
      * @param len number of bytes to copy
      */
-    fun copyInto(strOffset: Int, bytes: ByteArray, arrayOffset: Int, len: Int) {
+    fun copyInto(strOffset: Int, bytes: ByteArray, arrayOffset: Int, len: Int) =
         System.arraycopy(m_bytes, m_offset + strOffset, bytes, arrayOffset, len)
-    }
 
     /** Java version of strpbrk - find index of any byte that in an accept string.
      * @param accept [LuaString] containing characters to look for.
@@ -629,10 +360,7 @@ private constructor(
      * @return index of first match found, or -1 if not found.
      */
     fun indexOf(b: Byte, start: Int): Int {
-        for (i in start until m_length) {
-            if (m_bytes[m_offset + i] == b)
-                return i
-        }
+        for (i in start until m_length) if (m_bytes[m_offset + i] == b) return i
         return -1
     }
 
@@ -645,10 +373,7 @@ private constructor(
     fun indexOf(s: LuaString, start: Int): Int {
         val slen = s.length()
         val limit = m_length - slen
-        for (i in start..limit) {
-            if (equals(m_bytes, m_offset + i, s.m_bytes, s.m_offset, slen))
-                return i
-        }
+        for (i in start..limit) if (equals(m_bytes, m_offset + i, s.m_bytes, s.m_offset, slen)) return i
         return -1
     }
 
@@ -660,10 +385,7 @@ private constructor(
     fun lastIndexOf(s: LuaString): Int {
         val slen = s.length()
         val limit = m_length - slen
-        for (i in limit downTo 0) {
-            if (equals(m_bytes, m_offset + i, s.m_bytes, s.m_offset, slen))
-                return i
-        }
+        for (i in limit downTo 0) if (equals(m_bytes, m_offset + i, s.m_bytes, s.m_offset, slen)) return i
         return -1
     }
 
@@ -954,11 +676,8 @@ private constructor(
             var i = i
             var j = j
             var n = n
-            if (a.size < i + n || b.size < j + n)
-                return false
-            while (--n >= 0)
-                if (a[i++] != b[j++])
-                    return false
+            if (a.size < i + n || b.size < j + n) return false
+            while (--n >= 0) if (a[i++] != b[j++]) return false
             return true
         }
 
@@ -1019,13 +738,10 @@ private constructor(
         @JvmStatic
         fun lengthAsUtf8(chars: CharArray): Int {
             var i: Int
-            var b: Int
             var c: Char
-            b = chars.size
+            var b = chars.size
             i = b
-            while (--i >= 0)
-                if ((run { c = chars[i]; c }).toInt() >= 0x80)
-                    b += if (c.toInt() >= 0x800) 2 else 1
+            while (--i >= 0) if ((run { c = chars[i]; c }).toInt() >= 0x80) b += if (c.toInt() >= 0x800) 2 else 1
             return b
         }
 
@@ -1050,15 +766,17 @@ private constructor(
             var c: Char
             var j = off
             for (i in 0 until nchars) {
-                if ((run { c = chars[i]; c }).toInt() < 0x80) {
-                    bytes[j++] = c.toByte()
-                } else if (c.toInt() < 0x800) {
-                    bytes[j++] = (0xC0 or (c.toInt() shr 6 and 0x1f)).toByte()
-                    bytes[j++] = (0x80 or (c.toInt() and 0x3f)).toByte()
-                } else {
-                    bytes[j++] = (0xE0 or (c.toInt() shr 12 and 0x0f)).toByte()
-                    bytes[j++] = (0x80 or (c.toInt() shr 6 and 0x3f)).toByte()
-                    bytes[j++] = (0x80 or (c.toInt() and 0x3f)).toByte()
+                when {
+                    (run { c = chars[i]; c }).toInt() < 0x80 -> bytes[j++] = c.toByte()
+                    c.toInt() < 0x800 -> {
+                        bytes[j++] = (0xC0 or (c.toInt() shr 6 and 0x1f)).toByte()
+                        bytes[j++] = (0x80 or (c.toInt() and 0x3f)).toByte()
+                    }
+                    else -> {
+                        bytes[j++] = (0xE0 or (c.toInt() shr 12 and 0x0f)).toByte()
+                        bytes[j++] = (0x80 or (c.toInt() shr 6 and 0x3f)).toByte()
+                        bytes[j++] = (0x80 or (c.toInt() and 0x3f)).toByte()
+                    }
                 }
             }
             return j - off

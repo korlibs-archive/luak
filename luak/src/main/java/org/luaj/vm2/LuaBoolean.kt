@@ -49,62 +49,28 @@ class LuaBoolean internal constructor(
     val v: Boolean
 ) : LuaValue() {
 
-    override fun type(): Int {
-        return LuaValue.TBOOLEAN
-    }
-
-    override fun typename(): String {
-        return "boolean"
-    }
-
-    override fun isboolean(): Boolean {
-        return true
-    }
-
-    override fun not(): LuaValue {
-        return if (v) LuaValue.FALSE else LuaValue.TRUE
-    }
+    override fun type(): Int = LuaValue.TBOOLEAN
+    override fun typename(): String = "boolean"
+    override fun isboolean(): Boolean = true
+    override fun not(): LuaValue = if (v) LuaValue.FALSE else LuaValue.TRUE
 
     /**
      * Return the boolean value for this boolean
      * @return value as a Java boolean
      */
-    fun booleanValue(): Boolean {
-        return v
-    }
-
-    override fun toboolean(): Boolean {
-        return v
-    }
-
-    override fun tojstring(): String {
-        return if (v) "true" else "false"
-    }
-
-    override fun optboolean(defval: Boolean): Boolean {
-        return this.v
-    }
-
-    override fun checkboolean(): Boolean {
-        return v
-    }
-
-    override fun getmetatable(): LuaValue? {
-        return s_metatable
-    }
+    fun booleanValue(): Boolean = v
+    override fun toboolean(): Boolean = v
+    override fun tojstring(): String = if (v) "true" else "false"
+    override fun optboolean(defval: Boolean): Boolean = this.v
+    override fun checkboolean(): Boolean = v
+    override fun getmetatable(): LuaValue? = s_metatable
 
     companion object {
-
         /** The singleton instance representing lua `true`  */
-        @JvmField
-        internal val _TRUE = LuaBoolean(true)
-
+        @JvmField internal val _TRUE = LuaBoolean(true)
         /** The singleton instance representing lua `false`  */
-        @JvmField
-        internal val _FALSE = LuaBoolean(false)
-
+        @JvmField internal val _FALSE = LuaBoolean(false)
         /** Shared static metatable for boolean values represented in lua.  */
-        @JvmField
-        var s_metatable: LuaValue? = null
+        @JvmField var s_metatable: LuaValue? = null
     }
 }

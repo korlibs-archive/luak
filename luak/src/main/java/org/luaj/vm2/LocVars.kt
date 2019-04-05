@@ -24,26 +24,19 @@ package org.luaj.vm2
 /**
  * Data class to hold debug information relating to local variables for a [Prototype]
  */
-class LocVars
 /**
  * Construct a LocVars instance.
  * @param varname The local variable name
  * @param startpc The instruction offset when the variable comes into scope
  * @param endpc The instruction offset when the variable goes out of scope
  */
-    (
+class LocVars(
     /** The local variable name  */
-    @JvmField
-    var varname: LuaString,
+    @JvmField var varname: LuaString,
     /** The instruction offset when the variable comes into scope  */
-    @JvmField
-    var startpc: Int,
+    @JvmField var startpc: Int,
     /** The instruction offset when the variable goes out of scope  */
-    @JvmField
-    var endpc: Int
+    @JvmField var endpc: Int
 ) {
-
-    fun tojstring(): String {
-        return "$varname $startpc-$endpc"
-    }
+    fun tojstring(): String = "$varname $startpc-$endpc"
 }

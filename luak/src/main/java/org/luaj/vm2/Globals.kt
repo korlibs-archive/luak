@@ -165,41 +165,33 @@ open class Globals : LuaTable() {
     /** Interface for module that converts a Prototype into a LuaFunction with an environment.  */
     interface Loader {
         /** Convert the prototype into a LuaFunction with the supplied environment.  */
-        @Throws(IOException::class)
         fun load(prototype: Prototype, chunkname: String, env: LuaValue): LuaFunction
     }
 
     /** Interface for module that converts lua source text into a prototype.  */
     interface Compiler {
         /** Compile lua source into a Prototype. The InputStream is assumed to be in UTF-8.  */
-        @Throws(IOException::class)
         fun compile(stream: InputStream, chunkname: String): Prototype
     }
 
     /** Interface for module that loads lua binary chunk into a prototype.  */
     interface Undumper {
         /** Load the supplied input stream into a prototype.  */
-        @Throws(IOException::class)
         fun undump(stream: InputStream, chunkname: String): Prototype?
     }
 
     /** Check that this object is a Globals object, and return it, otherwise throw an error.  */
-    override fun checkglobals(): Globals {
-        return this
-    }
+    override fun checkglobals(): Globals = this
 
     /** Convenience function for loading a file that is either binary lua or lua source.
      * @param filename Name of the file to load.
      * @return LuaValue that can be call()'ed or invoke()'ed.
      * @throws LuaError if the file could not be loaded.
      */
-    fun loadfile(filename: String): LuaValue {
-        try {
-            return load(finder!!.findResource(filename)!!, "@$filename", "bt", this)
-        } catch (e: Exception) {
-            return LuaValue.error("load $filename: $e")
-        }
-
+    fun loadfile(filename: String): LuaValue = try {
+        load(finder!!.findResource(filename)!!, "@$filename", "bt", this)
+    } catch (e: Exception) {
+        LuaValue.error("load $filename: $e")
     }
 
     /** Convenience function to load a string value as a script.  Must be lua source.
@@ -208,18 +200,14 @@ open class Globals : LuaTable() {
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @throws LuaError if the script could not be compiled.
      */
-    open fun load(script: String, chunkname: String): LuaValue {
-        return load(StrReader(script), chunkname)
-    }
+    open fun load(script: String, chunkname: String): LuaValue = load(StrReader(script), chunkname)
 
     /** Convenience function to load a string value as a script.  Must be lua source.
      * @param script Contents of a lua script, such as "print 'hello, world.'"
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @throws LuaError if the script could not be compiled.
      */
-    open fun load(script: String): LuaValue {
-        return load(StrReader(script), script)
-    }
+    open fun load(script: String): LuaValue = load(StrReader(script), script)
 
     /** Convenience function to load a string value as a script with a custom environment.
      * Must be lua source.
@@ -229,9 +217,8 @@ open class Globals : LuaTable() {
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @throws LuaError if the script could not be compiled.
      */
-    fun load(script: String, chunkname: String, environment: LuaTable): LuaValue {
-        return load(StrReader(script), chunkname, environment)
-    }
+    fun load(script: String, chunkname: String, environment: LuaTable): LuaValue =
+        load(StrReader(script), chunkname, environment)
 
     /** Load the content form a reader as a text file.  Must be lua source.
      * The source is converted to UTF-8, so any characters appearing in quoted literals
@@ -241,9 +228,7 @@ open class Globals : LuaTable() {
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @throws LuaError if the script could not be compiled.
      */
-    fun load(reader: Reader, chunkname: String): LuaValue {
-        return load(UTF8Stream(reader), chunkname, "t", this)
-    }
+    fun load(reader: Reader, chunkname: String): LuaValue = load(UTF8Stream(reader), chunkname, "t", this)
 
     /** Load the content form a reader as a text file, supplying a custom environment.
      * Must be lua source. The source is converted to UTF-8, so any characters
@@ -255,9 +240,8 @@ open class Globals : LuaTable() {
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @throws LuaError if the script could not be compiled.
      */
-    fun load(reader: Reader, chunkname: String, environment: LuaTable): LuaValue {
-        return load(UTF8Stream(reader), chunkname, "t", environment)
-    }
+    fun load(reader: Reader, chunkname: String, environment: LuaTable): LuaValue =
+        load(UTF8Stream(reader), chunkname, "t", environment)
 
     /** Load the content form an input stream as a binary chunk or text file.
      * @param is InputStream containing a lua script or compiled lua"
@@ -267,8 +251,7 @@ open class Globals : LuaTable() {
      */
     fun load(`is`: InputStream, chunkname: String, mode: String, environment: LuaValue): LuaValue {
         try {
-            val p = loadPrototype(`is`, chunkname, mode)
-            return loader!!.load(p, chunkname, environment)
+            return loader!!.load(loadPrototype(`is`, chunkname, mode), chunkname, environment)
         } catch (l: LuaError) {
             throw l
         } catch (e: Exception) {
@@ -287,19 +270,14 @@ open class Globals : LuaTable() {
     fun loadPrototype(`is`: InputStream, chunkname: String, mode: String): Prototype {
         var `is` = `is`
         if (mode.indexOf('b') >= 0) {
-            if (undumper == null)
-                LuaValue.error("No undumper.")
-            if (!`is`.markSupported())
-                `is` = BufferedStream(`is`)
+            if (undumper == null) LuaValue.error("No undumper.")
+            if (!`is`.markSupported()) `is` = BufferedStream(`is`)
             `is`.mark(4)
             val p = undumper!!.undump(`is`, chunkname)
-            if (p != null)
-                return p
+            if (p != null) return p
             `is`.reset()
         }
-        if (mode.indexOf('t') >= 0) {
-            return compilePrototype(`is`, chunkname)
-        }
+        if (mode.indexOf('t') >= 0) return compilePrototype(`is`, chunkname)
         LuaValue.error("Failed to load prototype $chunkname using mode '$mode'")
         //return null
         kotlin.error("Failed to load prototype $chunkname using mode '$mode'")
@@ -309,19 +287,14 @@ open class Globals : LuaTable() {
      * are converted to bytes using the UTF-8 encoding, so a string literal containing
      * characters with codepoints 128 or above will be converted into multiple bytes.
      */
-    @Throws(IOException::class)
-    fun compilePrototype(reader: Reader, chunkname: String): Prototype {
-        return compilePrototype(UTF8Stream(reader), chunkname)
-    }
+    fun compilePrototype(reader: Reader, chunkname: String): Prototype = compilePrototype(UTF8Stream(reader), chunkname)
 
     /** Compile lua source from an InputStream into a Prototype.
      * The input is assumed to be UTf-8, but since bytes in the range 128-255 are passed along as
      * literal bytes, any ASCII-compatible encoding such as ISO 8859-1 may also be used.
      */
-    @Throws(IOException::class)
     fun compilePrototype(stream: InputStream, chunkname: String): Prototype {
-        if (compiler == null)
-            LuaValue.error("No compiler.")
+        if (compiler == null) LuaValue.error("No compiler.")
         return compiler!!.compile(stream, chunkname)
     }
 
@@ -330,8 +303,7 @@ open class Globals : LuaTable() {
      * @return Values supplied as arguments to the resume() call that reactivates this thread.
      */
     fun yield(args: Varargs): Varargs {
-        if (running == null || running!!.isMainThread)
-            throw LuaError("cannot yield main thread")
+        if (running == null || running!!.isMainThread) throw LuaError("cannot yield main thread")
         val s = running!!.state
         return s.lua_yield(args)
     }
@@ -339,30 +311,14 @@ open class Globals : LuaTable() {
     /** Reader implementation to read chars from a String in JME or JSE.  */
     internal class StrReader(val s: String) : Reader() {
         var i = 0
-        val n: Int
+        val n: Int = s.length
 
-        init {
-            n = s.length
-        }
+        override fun close() = run { i = n }
+        override fun read(): Int = if (i < n) s[i++].toInt() and 0xFF else -1
 
-        @Throws(IOException::class)
-        override fun close() {
-            i = n
-        }
-
-        @Throws(IOException::class)
-        override fun read(): Int {
-            return if (i < n) s[i++].toInt() and 0xFF else -1
-        }
-
-        @Throws(IOException::class)
         override fun read(cbuf: CharArray, off: Int, len: Int): Int {
             var j = 0
-            while (j < len && i < n) {
-                cbuf[off + j] = s[i]
-                ++j
-                ++i
-            }
+            while (j < len && i < n) cbuf[off + j++] = s[i++]
             return if (j > 0 || len == 0) j else -1
         }
     }
@@ -371,29 +327,13 @@ open class Globals : LuaTable() {
 	 * This class may be moved to its own package in the future.
 	 */
     internal abstract class AbstractBufferedStream protected constructor(buflen: Int) : InputStream() {
-        protected var b: ByteArray
+        protected var b: ByteArray = ByteArray(buflen)
         protected var i = 0
         protected var j = 0
 
-        init {
-            this.b = ByteArray(buflen)
-        }
-
-        @Throws(IOException::class)
         protected abstract fun avail(): Int
-
-        @Throws(IOException::class)
-        override fun read(): Int {
-            val a = avail()
-            return if (a <= 0) -1 else 0xff and b[i++].toInt() and 0xFF
-        }
-
-        @Throws(IOException::class)
-        override fun read(b: ByteArray): Int {
-            return read(b, 0, b.size)
-        }
-
-        @Throws(IOException::class)
+        override fun read(): Int = avail().let { a -> if (a <= 0) -1 else 0xff and b[i++].toInt() and 0xFF }
+        override fun read(b: ByteArray): Int = read(b, 0, b.size)
         override fun read(b: ByteArray, i0: Int, n: Int): Int {
             val a = avail()
             if (a <= 0) return -1
@@ -403,17 +343,8 @@ open class Globals : LuaTable() {
             return n_read
         }
 
-        @Throws(IOException::class)
-        override fun skip(n: Long): Long {
-            val k = Math.min(n, (j - i).toLong())
-            i += k.toInt()
-            return k
-        }
-
-        @Throws(IOException::class)
-        override fun available(): Int {
-            return j - i
-        }
+        override fun skip(n: Long): Long = Math.min(n, (j - i).toLong()).also { i += it.toInt() }
+        override fun available(): Int = j - i
     }
 
     /**  Simple converter from Reader to InputStream using UTF8 encoding that will work
@@ -422,16 +353,14 @@ open class Globals : LuaTable() {
      */
     internal class UTF8Stream(private val r: Reader) : AbstractBufferedStream(96) {
         private val c = CharArray(32)
-        @Throws(IOException::class)
+
         override fun avail(): Int {
             if (i < j) return j - i
             var n = r.read(c)
-            if (n < 0)
-                return -1
+            if (n < 0) return -1
             if (n == 0) {
                 val u = r.read()
-                if (u < 0)
-                    return -1
+                if (u < 0) return -1
                 c[0] = u.toChar()
                 n = 1
             }
@@ -439,10 +368,7 @@ open class Globals : LuaTable() {
             return j
         }
 
-        @Throws(IOException::class)
-        override fun close() {
-            r.close()
-        }
+        override fun close() = run { r.close() }
     }
 
     /** Simple buffered InputStream that supports mark.
@@ -452,9 +378,8 @@ open class Globals : LuaTable() {
      * This class may be moved to its own package in the future.
      */
     internal class BufferedStream(buflen: Int, private val s: InputStream) : AbstractBufferedStream(buflen) {
-        constructor(s: InputStream) : this(128, s) {}
+        constructor(s: InputStream) : this(128, s)
 
-        @Throws(IOException::class)
         override fun avail(): Int {
             if (i < j) return j - i
             if (j >= b.size) {
@@ -463,12 +388,10 @@ open class Globals : LuaTable() {
             }
             // leave previous bytes in place to implement mark()/reset().
             var n = s.read(b, j, b.size - j)
-            if (n < 0)
-                return -1
+            if (n < 0) return -1
             if (n == 0) {
                 val u = s.read()
-                if (u < 0)
-                    return -1
+                if (u < 0) return -1
                 b[j] = u.toByte()
                 n = 1
             }
@@ -476,10 +399,7 @@ open class Globals : LuaTable() {
             return n
         }
 
-        @Throws(IOException::class)
-        override fun close() {
-            s.close()
-        }
+        override fun close() = run { s.close() }
 
         @Synchronized
         override fun mark(n: Int) {
@@ -492,14 +412,9 @@ open class Globals : LuaTable() {
             }
         }
 
-        override fun markSupported(): Boolean {
-            return true
-        }
+        override fun markSupported(): Boolean = true
 
         @Synchronized
-        @Throws(IOException::class)
-        override fun reset() {
-            i = 0
-        }
+        override fun reset() = run { i = 0 }
     }
 }

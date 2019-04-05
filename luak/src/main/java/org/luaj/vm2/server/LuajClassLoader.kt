@@ -80,23 +80,13 @@ class LuajClassLoader : ClassLoader() {
                 val baos = ByteArrayOutputStream()
                 val b = ByteArray(1024)
                 var n = 0
-                while (run {
-                        n = `is`.read(b)
-                        (n) >= 0
-                    })
-                    baos.write(b, 0, n)
+                while (run { n = `is`.read(b); n } >= 0) baos.write(b, 0, n)
                 val bytes = baos.toByteArray()
-                val result = super.defineClass(
-                    classname, bytes, 0,
-                    bytes.size
-                )
+                val result = super.defineClass(classname, bytes, 0, bytes.size)
                 classes[classname] = result
                 return result
             } catch (e: java.io.IOException) {
-                throw ClassNotFoundException(
-                    "Read failed: " + classname
-                            + ": " + e
-                )
+                throw ClassNotFoundException("Read failed: $classname: $e")
             }
 
         }
@@ -128,12 +118,8 @@ class LuajClassLoader : ClassLoader() {
         </P> */
         @Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
         @JvmOverloads
-        fun NewLauncher(launcher_class: Class<out Launcher> = DefaultLauncher::class.java): Launcher {
-            val loader = LuajClassLoader()
-            val instance = loader.loadAsUserClass(launcher_class.name)
-                .newInstance()
-            return instance as Launcher
-        }
+        fun NewLauncher(launcher_class: Class<out Launcher> = DefaultLauncher::class.java): Launcher =
+            LuajClassLoader().loadAsUserClass(launcher_class.name).newInstance() as Launcher
 
         /**
          * Test if a class name should be considered a user class and loaded
@@ -142,9 +128,8 @@ class LuajClassLoader : ClassLoader() {
          * @return true if this should be loaded into this class loader.
          */
         @JvmStatic
-        fun isUserClass(classname: String): Boolean {
-            return classname.startsWith(luajPackageRoot) && !classname.startsWith(launcherInterfaceRoot)
-        }
+        fun isUserClass(classname: String): Boolean =
+            classname.startsWith(luajPackageRoot) && !classname.startsWith(launcherInterfaceRoot)
     }
 }
 /**

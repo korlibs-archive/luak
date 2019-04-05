@@ -96,52 +96,29 @@ class LuaClosure
  */
     (val p: Prototype, env: LuaValue?) : LuaFunction() {
 
-    var upValues: Array<UpValue?>
-
-    internal val globals: Globals?
-
-    init {
-        if (p.upvalues == null || p.upvalues.size == 0)
-            this.upValues = NOUPVALUES
-        else {
-            this.upValues = arrayOfNulls(p.upvalues.size)
-            this.upValues[0] = UpValue(arrayOf(env), 0)
-        }
-        globals = if (env is Globals) env else null
+    var upValues: Array<UpValue?> = when {
+        p.upvalues == null || p.upvalues.isEmpty() -> NOUPVALUES
+        else -> arrayOfNulls<UpValue>(p.upvalues.size).also { it[0] = UpValue(arrayOf(env), 0) }
     }
 
-    override fun isclosure(): Boolean {
-        return true
-    }
+    internal val globals: Globals? = if (env is Globals) env else null
 
-    override fun optclosure(defval: LuaClosure?): LuaClosure? {
-        return this
-    }
-
-    override fun checkclosure(): LuaClosure? {
-        return this
-    }
-
-    override fun getmetatable(): LuaValue? {
-        return LuaFunction.s_metatable
-    }
-
-    override fun tojstring(): String {
-        return "function: $p"
-    }
+    override fun isclosure(): Boolean = true
+    override fun optclosure(defval: LuaClosure?): LuaClosure? = this
+    override fun checkclosure(): LuaClosure? = this
+    override fun getmetatable(): LuaValue? = LuaFunction.s_metatable
+    override fun tojstring(): String = "function: $p"
 
     override fun call(): LuaValue {
         val stack = arrayOfNulls<LuaValue>(p.maxstacksize) as Array<LuaValue>
-        for (i in 0 until p.numparams)
-            stack[i] = LuaValue.NIL
+        for (i in 0 until p.numparams) stack[i] = LuaValue.NIL
         return execute(stack, LuaValue.NONE).arg1()
     }
 
     override fun call(arg: LuaValue): LuaValue {
         val stack = arrayOfNulls<LuaValue>(p.maxstacksize) as Array<LuaValue>
         System.arraycopy(LuaValue.NILS, 0, stack, 0, p.maxstacksize)
-        for (i in 1 until p.numparams)
-            stack[i] = LuaValue.NIL
+        for (i in 1 until p.numparams) stack[i] = LuaValue.NIL
         when (p.numparams) {
             0 -> return execute(stack, arg).arg1()
             else -> {
@@ -153,8 +130,7 @@ class LuaClosure
 
     override fun call(arg1: LuaValue, arg2: LuaValue): LuaValue {
         val stack = arrayOfNulls<LuaValue>(p.maxstacksize) as Array<LuaValue>
-        for (i in 2 until p.numparams)
-            stack[i] = LuaValue.NIL
+        for (i in 2 until p.numparams) stack[i] = LuaValue.NIL
         when (p.numparams) {
             1 -> {
                 stack[0] = arg1
@@ -171,39 +147,32 @@ class LuaClosure
 
     override fun call(arg1: LuaValue, arg2: LuaValue, arg3: LuaValue): LuaValue {
         val stack = arrayOfNulls<LuaValue>(p.maxstacksize) as Array<LuaValue>
-        for (i in 3 until p.numparams)
-            stack[i] = LuaValue.NIL
-        when (p.numparams) {
+        for (i in 3 until p.numparams) stack[i] = LuaValue.NIL
+        return when (p.numparams) {
+            0 -> execute(stack, if (p.is_vararg != 0) LuaValue.varargsOf(arg1, arg2, arg3) else LuaValue.NONE).arg1()
+            1 -> {
+                stack[0] = arg1
+                execute(stack, if (p.is_vararg != 0) LuaValue.varargsOf(arg2, arg3) else LuaValue.NONE).arg1()
+            }
             2 -> {
                 stack[0] = arg1
                 stack[1] = arg2
-                return execute(stack, arg3).arg1()
+                execute(stack, arg3).arg1()
             }
-            1 -> {
-                stack[0] = arg1
-                return execute(stack, if (p.is_vararg != 0) LuaValue.varargsOf(arg2, arg3) else LuaValue.NONE).arg1()
-            }
-            0 -> return execute(
-                stack,
-                if (p.is_vararg != 0) LuaValue.varargsOf(arg1, arg2, arg3) else LuaValue.NONE
-            ).arg1()
             else -> {
                 stack[0] = arg1
                 stack[1] = arg2
                 stack[2] = arg3
-                return execute(stack, LuaValue.NONE).arg1()
+                execute(stack, LuaValue.NONE).arg1()
             }
         }
     }
 
-    override fun invoke(varargs: Varargs): Varargs {
-        return onInvoke(varargs).eval()
-    }
+    override fun invoke(varargs: Varargs): Varargs = onInvoke(varargs).eval()
 
     override fun onInvoke(varargs: Varargs): Varargs {
         val stack = arrayOfNulls<LuaValue>(p.maxstacksize) as Array<LuaValue>
-        for (i in 0 until p.numparams)
-            stack[i] = varargs.arg(i + 1)
+        for (i in 0 until p.numparams) stack[i] = varargs.arg(i + 1)
         return execute(stack, if (p.is_vararg != 0) varargs.subargs(p.numparams + 1) else LuaValue.NONE)
     }
 
@@ -691,8 +660,7 @@ class LuaClosure
                 ++pc
             }
         } catch (le: LuaError) {
-            if (le.traceback == null)
-                processErrorHooks(le, p, pc)
+            if (le.traceback == null) processErrorHooks(le, p, pc)
             throw le
         } catch (e: Exception) {
             val le = LuaError(e)
@@ -701,12 +669,9 @@ class LuaClosure
         } finally {
             if (openups != null) {
                 var u = openups.size
-                while (--u >= 0)
-                    if (openups[u] != null)
-                        openups[u]!!.close()
+                while (--u >= 0) if (openups[u] != null) openups[u]!!.close()
             }
-            if (globals != null && globals.debuglib != null)
-                globals.debuglib!!.onReturn()
+            if (globals != null && globals.debuglib != null) globals.debuglib!!.onReturn()
         }
     }
 
@@ -717,55 +682,36 @@ class LuaClosure
     internal fun errorHook(msg: String, level: Int): String {
         if (globals == null) return msg
         val r = globals.running
-        if (r.errorfunc == null)
-            return if (globals.debuglib != null)
-                msg + "\n" + globals.debuglib!!.traceback(level)
-            else
-                msg
+        if (r.errorfunc == null) return if (globals.debuglib != null) msg + "\n" + globals.debuglib!!.traceback(level) else msg
         val e = r.errorfunc
         r.errorfunc = null
-        try {
-            return e!!.call(LuaValue.valueOf(msg)).tojstring()
+        return try {
+            e!!.call(LuaValue.valueOf(msg)).tojstring()
         } catch (t: Throwable) {
-            return "error in error handling"
+            "error in error handling"
         } finally {
             r.errorfunc = e
         }
     }
 
     private fun processErrorHooks(le: LuaError, p: Prototype, pc: Int) {
-        le.fileline = ((if (p.source != null) p.source.tojstring() else "?") + ":"
-                + if (p.lineinfo != null && pc >= 0 && pc < p.lineinfo.size) p.lineinfo[pc].toString() else "?")
+        le.fileline = ((if (p.source != null) p.source.tojstring() else "?") + ":" + if (p.lineinfo != null && pc >= 0 && pc < p.lineinfo.size) p.lineinfo[pc].toString() else "?")
         le.traceback = errorHook(le.message!!, le.level)
     }
 
     private fun findupval(stack: Array<LuaValue?>, idx: Short, openups: Array<UpValue?>): UpValue? {
         val n = openups.size
-        for (i in 0 until n)
-            if (openups[i] != null && openups[i]!!.index == idx.toInt())
-                return openups[i]
-        for (i in 0 until n)
-            if (openups[i] == null)
-                return UpValue(stack, idx.toInt()).also { openups[i] = it }
+        for (i in 0 until n) if (openups[i] != null && openups[i]!!.index == idx.toInt()) return openups[i]
+        for (i in 0 until n) if (openups[i] == null) return UpValue(stack, idx.toInt()).also { openups[i] = it }
         LuaValue.error("No space for upvalue")
         return null
     }
 
-    protected fun getUpvalue(i: Int): LuaValue? {
-        return upValues[i]?.value
-    }
-
-    protected fun setUpvalue(i: Int, v: LuaValue) {
-        upValues[i]?.value = v
-    }
-
-    override fun name(): String {
-        return "<" + p.shortsource() + ":" + p.linedefined + ">"
-    }
+    protected fun getUpvalue(i: Int): LuaValue? = upValues[i]?.value
+    protected fun setUpvalue(i: Int, v: LuaValue) = run { upValues[i]?.value = v }
+    override fun name(): String = "<" + p.shortsource() + ":" + p.linedefined + ">"
 
     companion object {
         private val NOUPVALUES = arrayOfNulls<UpValue>(0)
     }
-
-
 }

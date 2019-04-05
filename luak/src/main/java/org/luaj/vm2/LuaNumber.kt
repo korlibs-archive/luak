@@ -35,63 +35,23 @@ package org.luaj.vm2
  */
 abstract class LuaNumber : LuaValue() {
 
-    override fun type(): Int {
-        return LuaValue.TNUMBER
-    }
-
-    override fun typename(): String {
-        return "number"
-    }
-
-    override fun checknumber(): LuaNumber? {
-        return this
-    }
-
-    override fun checknumber(errmsg: String): LuaNumber {
-        return this
-    }
-
-    override fun optnumber(defval: LuaNumber?): LuaNumber? {
-        return this
-    }
-
-    override fun tonumber(): LuaValue {
-        return this
-    }
-
-    override fun isnumber(): Boolean {
-        return true
-    }
-
-    override fun isstring(): Boolean {
-        return true
-    }
-
-    override fun getmetatable(): LuaValue? {
-        return s_metatable
-    }
-
-    override fun concat(rhs: LuaValue): LuaValue {
-        return rhs.concatTo(this)
-    }
-
-    override fun concat(rhs: Buffer): Buffer {
-        return rhs.concatTo(this)
-    }
-
-    override fun concatTo(lhs: LuaNumber): LuaValue {
-        return strvalue()!!.concatTo(lhs.strvalue()!!)
-    }
-
-    override fun concatTo(lhs: LuaString): LuaValue {
-        return strvalue()!!.concatTo(lhs)
-    }
+    override fun type(): Int = LuaValue.TNUMBER
+    override fun typename(): String = "number"
+    override fun checknumber(): LuaNumber? = this
+    override fun checknumber(errmsg: String): LuaNumber = this
+    override fun optnumber(defval: LuaNumber?): LuaNumber? = this
+    override fun tonumber(): LuaValue = this
+    override fun isnumber(): Boolean = true
+    override fun isstring(): Boolean = true
+    override fun getmetatable(): LuaValue? = s_metatable
+    override fun concat(rhs: LuaValue): LuaValue = rhs.concatTo(this)
+    override fun concat(rhs: Buffer): Buffer = rhs.concatTo(this)
+    override fun concatTo(lhs: LuaNumber): LuaValue = strvalue()!!.concatTo(lhs.strvalue()!!)
+    override fun concatTo(lhs: LuaString): LuaValue = strvalue()!!.concatTo(lhs)
 
     companion object {
-
         /** Shared static metatable for all number values represented in lua.  */
-        @JvmField
-        var s_metatable: LuaValue? = null
+        @JvmField var s_metatable: LuaValue? = null
     }
 
 }

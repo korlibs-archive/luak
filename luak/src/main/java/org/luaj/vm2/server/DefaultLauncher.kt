@@ -51,38 +51,30 @@ class DefaultLauncher : Launcher {
     protected var g: Globals = JsePlatform.standardGlobals()
 
     /** Launches the script with chunk name 'main'  */
-    override fun launch(script: String, arg: Array<Any>?): Array<Any>? {
-        return launchChunk(g.load(script, "main"), arg!!)
-    }
+    override fun launch(script: String, arg: Array<Any>?): Array<Any?>? = launchChunk(g.load(script, "main"), arg!!)
 
     /** Launches the script with chunk name 'main' and loading using modes 'bt'  */
-    override fun launch(script: InputStream, arg: Array<Any>?): Array<Any>? {
-        return launchChunk(g.load(script, "main", "bt", g), arg!!)
-    }
+    override fun launch(script: InputStream, arg: Array<Any>?): Array<Any?>? =
+        launchChunk(g.load(script, "main", "bt", g), arg!!)
 
     /** Launches the script with chunk name 'main'  */
-    override fun launch(script: Reader, arg: Array<Any>?): Array<Any>? {
-        return launchChunk(g.load(script, "main"), arg!!)
-    }
+    override fun launch(script: Reader, arg: Array<Any>?): Array<Any?> = launchChunk(g.load(script, "main"), arg!!)
 
-    private fun launchChunk(chunk: LuaValue, arg: Array<Any>): Array<Any> {
-        val args = Array<LuaValue>(arg.size) { CoerceJavaToLua.coerce(arg[it]) }
+    private fun launchChunk(chunk: LuaValue, arg: Array<Any>): Array<Any?> {
+        val args = Array(arg.size) { CoerceJavaToLua.coerce(arg[it]) }
         val results = chunk.invoke(LuaValue.varargsOf(args))
 
-        val n = results.narg()
-        val return_values = arrayOfNulls<Any>(n)
-        for (i in 0 until n) {
+        return Array(results.narg()) { i ->
             val r = results.arg(i + 1)
             when (r.type()) {
-                LuaValue.TBOOLEAN -> return_values[i] = r.toboolean()
-                LuaValue.TNUMBER -> return_values[i] = r.todouble()
-                LuaValue.TINT -> return_values[i] = r.toint()
-                LuaValue.TNIL -> return_values[i] = null
-                LuaValue.TSTRING -> return_values[i] = r.tojstring()
-                LuaValue.TUSERDATA -> return_values[i] = r.touserdata()
-                else -> return_values[i] = r
+                LuaValue.TBOOLEAN -> r.toboolean()
+                LuaValue.TNUMBER -> r.todouble()
+                LuaValue.TINT -> r.toint()
+                LuaValue.TNIL -> null
+                LuaValue.TSTRING -> r.tojstring()
+                LuaValue.TUSERDATA -> r.touserdata()
+                else -> r
             }
         }
-        return return_values as Array<Any>
     }
 }

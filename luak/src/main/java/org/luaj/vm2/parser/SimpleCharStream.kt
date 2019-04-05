@@ -35,28 +35,22 @@ class SimpleCharStream
     protected var tabSize = 1
 
     /** Get token end column number.  */
-    val endColumn: Int
-        get() = bufcolumn!![bufpos]
+    val endColumn: Int get() = bufcolumn!![bufpos]
 
     /** Get token end line number.  */
-    val endLine: Int
-        get() = bufline!![bufpos]
+    val endLine: Int get() = bufline!![bufpos]
 
     /** Get token beginning column number.  */
-    val beginColumn: Int
-        get() = bufcolumn!![tokenBegin]
+    val beginColumn: Int get() = bufcolumn!![tokenBegin]
 
     /** Get token beginning line number.  */
-    val beginLine: Int
-        get() = bufline!![tokenBegin]
+    val beginLine: Int get() = bufline!![tokenBegin]
 
     fun setTabSize(i: Int) {
         tabSize = i
     }
 
-    fun getTabSize(i: Int): Int {
-        return tabSize
-    }
+    fun getTabSize(i: Int): Int = tabSize
 
 
     protected fun ExpandBuff(wrapAround: Boolean) {
@@ -104,22 +98,23 @@ class SimpleCharStream
     @Throws(java.io.IOException::class)
     protected fun FillBuff() {
         if (maxNextCharInd == available) {
-            if (available == bufsize) {
-                if (tokenBegin > 2048) {
-                    maxNextCharInd = 0
-                    bufpos = maxNextCharInd
-                    available = tokenBegin
-                } else if (tokenBegin < 0) {
-                    maxNextCharInd = 0
-                    bufpos = maxNextCharInd
-                } else
-                    ExpandBuff(false)
-            } else if (available > tokenBegin)
-                available = bufsize
-            else if (tokenBegin - available < 2048)
-                ExpandBuff(true)
-            else
-                available = tokenBegin
+            when {
+                available == bufsize -> when {
+                    tokenBegin > 2048 -> {
+                        maxNextCharInd = 0
+                        bufpos = maxNextCharInd
+                        available = tokenBegin
+                    }
+                    tokenBegin < 0 -> {
+                        maxNextCharInd = 0
+                        bufpos = maxNextCharInd
+                    }
+                    else -> ExpandBuff(false)
+                }
+                available > tokenBegin -> available = bufsize
+                tokenBegin - available < 2048 -> ExpandBuff(true)
+                else -> available = tokenBegin
+            }
         }
 
         val i: Int
@@ -127,14 +122,14 @@ class SimpleCharStream
             if ((run { i = inputStream.read(buffer!!, maxNextCharInd, available - maxNextCharInd); i }) == -1) {
                 inputStream.close()
                 throw java.io.IOException()
-            } else
+            } else {
                 maxNextCharInd += i
+            }
             return
         } catch (e: java.io.IOException) {
             --bufpos
             backup(0)
-            if (tokenBegin == -1)
-                tokenBegin = bufpos
+            if (tokenBegin == -1) tokenBegin = bufpos
             throw e
         }
 
@@ -146,7 +141,6 @@ class SimpleCharStream
         tokenBegin = -1
         val c = readChar()
         tokenBegin = bufpos
-
         return c
     }
 
@@ -158,10 +152,7 @@ class SimpleCharStream
             line += (run { column = 1; column })
         } else if (prevCharIsCR) {
             prevCharIsCR = false
-            if (c == '\n') {
-                prevCharIsLF = true
-            } else
-                line += (run { column = 1; column })
+            if (c == '\n') prevCharIsLF = true else line += (run { column = 1; column })
         }
 
         when (c) {
@@ -171,8 +162,7 @@ class SimpleCharStream
                 column--
                 column += tabSize - column % tabSize
             }
-            else -> {
-            }
+            else -> Unit
         }
 
         bufline!![bufpos] = line
@@ -184,18 +174,12 @@ class SimpleCharStream
     fun readChar(): Char {
         if (inBuf > 0) {
             --inBuf
-
-            if (++bufpos == bufsize)
-                bufpos = 0
-
+            if (++bufpos == bufsize) bufpos = 0
             return buffer!![bufpos]
         }
 
-        if (++bufpos >= maxNextCharInd)
-            FillBuff()
-
+        if (++bufpos >= maxNextCharInd) FillBuff()
         val c = buffer!![bufpos]
-
         UpdateLineColumn(c)
         return c
     }
@@ -208,11 +192,11 @@ class SimpleCharStream
     //fun getColumn(): Int {
     //    return bufcolumn!![bufpos]
     //}
-//
+    //
     ///**
     // * @see .getEndLine
     // */
-//
+    //
     //@Deprecated(" ")
     //fun getLine(): Int {
     //    return bufline!![bufpos]
@@ -273,12 +257,10 @@ class SimpleCharStream
         startline,
         startcolumn,
         buffersize
-    ) {
-    }
+    )
 
     /** Constructor.  */
-    @JvmOverloads
-    constructor(
+    @JvmOverloads constructor(
         dstream: java.io.InputStream, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) : this(java.io.InputStreamReader(dstream), startline, startcolumn, buffersize) {

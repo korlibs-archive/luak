@@ -58,17 +58,12 @@ class LuajContext
     useLuaJCCompiler: Boolean = "true" == System.getProperty("org.luaj.luajc")
 ) : SimpleScriptContext(), ScriptContext {
     init {
-        if (useLuaJCCompiler) {
-            throw RuntimeException("Can't use useLuaJCCompiler")
-        }
+        if (useLuaJCCompiler) throw RuntimeException("Can't use useLuaJCCompiler")
     }
 
     /** Globals for this context instance.  */
     @JvmField
-    val globals: Globals = if (createDebugGlobals)
-        JsePlatform.debugGlobals()
-    else
-        JsePlatform.standardGlobals()
+    val globals: Globals = if (createDebugGlobals) JsePlatform.debugGlobals() else JsePlatform.standardGlobals()
 
     /** The initial value of globals.STDIN  */
     private val stdin: InputStream = globals.STDIN
@@ -78,10 +73,7 @@ class LuajContext
     private val stderr: PrintStream = globals.STDERR
 
     override fun setErrorWriter(writer: Writer?) {
-        globals.STDERR = if (writer != null)
-            PrintStream(WriterOutputStream(writer))
-        else
-            stderr
+        globals.STDERR = if (writer != null) PrintStream(WriterOutputStream(writer)) else stderr
     }
 
     override fun setReader(reader: Reader?) {
@@ -89,44 +81,19 @@ class LuajContext
     }
 
     override fun setWriter(writer: Writer?) {
-        globals.STDOUT = if (writer != null)
-            PrintStream(WriterOutputStream(writer), true)
-        else
-            stdout
+        globals.STDOUT = if (writer != null) PrintStream(WriterOutputStream(writer), true) else stdout
     }
 
     internal class WriterOutputStream(val w: Writer) : OutputStream() {
-        @Throws(IOException::class)
-        override fun write(b: Int) {
-            w.write(String(byteArrayOf(b.toByte())))
-        }
-
-        @Throws(IOException::class)
-        override fun write(b: ByteArray, o: Int, l: Int) {
-            w.write(String(b, o, l))
-        }
-
-        @Throws(IOException::class)
-        override fun write(b: ByteArray) {
-            w.write(String(b))
-        }
-
-        @Throws(IOException::class)
-        override fun close() {
-            w.close()
-        }
-
-        @Throws(IOException::class)
-        override fun flush() {
-            w.flush()
-        }
+        override fun write(b: Int) = w.write(String(byteArrayOf(b.toByte())))
+        override fun write(b: ByteArray, o: Int, l: Int) = w.write(String(b, o, l))
+        override fun write(b: ByteArray) = w.write(String(b))
+        override fun close() = w.close()
+        override fun flush() = w.flush()
     }
 
     internal class ReaderInputStream(val r: Reader) : InputStream() {
-        @Throws(IOException::class)
-        override fun read(): Int {
-            return r.read()
-        }
+        override fun read(): Int = r.read()
     }
 }
 /** Construct a LuajContext with its own globals which may

@@ -60,10 +60,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
         put("THREADING", null)
     }
 
-    @Throws(ScriptException::class)
-    override fun compile(script: String): CompiledScript {
-        return compile(StringReader(script))
-    }
+    override fun compile(script: String): CompiledScript = compile(StringReader(script))
 
     @Throws(ScriptException::class)
     override fun compile(script: Reader): CompiledScript {
@@ -84,75 +81,32 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
     }
 
-    @Throws(ScriptException::class)
-    override fun eval(reader: Reader, bindings: Bindings): Any? {
-        return (compile(reader) as LuajCompiledScript).eval(ctx.globals, bindings)
-    }
+    override fun eval(reader: Reader, bindings: Bindings): Any? = (compile(reader) as LuajCompiledScript).eval(ctx.globals, bindings)
+    override fun eval(script: String, bindings: Bindings): Any? = eval(StringReader(script), bindings)
+    override fun getScriptContext(nn: Bindings): ScriptContext = throw IllegalStateException("LuajScriptEngine should not be allocating contexts.")
+    override fun createBindings(): Bindings = SimpleBindings()
+    override fun eval(script: String, context: ScriptContext): Any = eval(StringReader(script), context)
+    override fun eval(reader: Reader, context: ScriptContext): Any = compile(reader).eval(context)
+    override fun getFactory(): ScriptEngineFactory = myFactory
 
-    @Throws(ScriptException::class)
-    override fun eval(script: String, bindings: Bindings): Any? {
-        return eval(StringReader(script), bindings)
-    }
-
-    override fun getScriptContext(nn: Bindings): ScriptContext {
-        throw IllegalStateException("LuajScriptEngine should not be allocating contexts.")
-    }
-
-    override fun createBindings(): Bindings {
-        return SimpleBindings()
-    }
-
-    @Throws(ScriptException::class)
-    override fun eval(script: String, context: ScriptContext): Any {
-        return eval(StringReader(script), context)
-    }
-
-    @Throws(ScriptException::class)
-    override fun eval(reader: Reader, context: ScriptContext): Any {
-        return compile(reader).eval(context)
-    }
-
-    override fun getFactory(): ScriptEngineFactory {
-        return myFactory
-    }
-
-
-    internal inner class LuajCompiledScript(val function: LuaFunction, val compiling_globals: Globals) :
-        CompiledScript() {
-
-        override fun getEngine(): ScriptEngine {
-            return this@LuaScriptEngine
-        }
-
-        @Throws(ScriptException::class)
-        override fun eval(): Any? {
-            return eval(getContext())
-        }
-
-        @Throws(ScriptException::class)
-        override fun eval(bindings: Bindings): Any? {
-            return eval((getContext() as LuajContext).globals, bindings)
-        }
-
-        @Throws(ScriptException::class)
-        override fun eval(context: ScriptContext): Any? {
-            return eval((context as LuajContext).globals, context.getBindings(ScriptContext.ENGINE_SCOPE))
-        }
-
-        @Throws(ScriptException::class)
+    internal inner class LuajCompiledScript(val function: LuaFunction, val compiling_globals: Globals) : CompiledScript() {
+        override fun getEngine(): ScriptEngine = this@LuaScriptEngine
+        override fun eval(): Any? = eval(getContext())
+        override fun eval(bindings: Bindings): Any? = eval((getContext() as LuajContext).globals, bindings)
+        override fun eval(context: ScriptContext): Any? = eval((context as LuajContext).globals, context.getBindings(ScriptContext.ENGINE_SCOPE))
         fun eval(g: Globals, b: Bindings): Any? {
             g.setmetatable(BindingsMetatable(b))
             var f = function
-            if (f.isclosure())
-                f = LuaClosure(f.checkclosure()!!.p, g)
-            else {
-                try {
-                    f = f.javaClass.newInstance()
-                } catch (e: Exception) {
-                    throw ScriptException(e)
+            when {
+                f.isclosure() -> f = LuaClosure(f.checkclosure()!!.p, g)
+                else -> {
+                    try {
+                        f = f.javaClass.newInstance()
+                    } catch (e: Exception) {
+                        throw ScriptException(e)
+                    }
+                    f.initupvalue1(g)
                 }
-
-                f.initupvalue1(g)
             }
             return toJava(f.invoke(LuaValue.NONE))
         }
@@ -166,19 +120,20 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
         @Throws(IOException::class)
         override fun read(): Int {
-            if (n > 0)
-                return buf[--n]
+            if (n > 0) return buf[--n]
             val c = r.read()
-            if (c < 0x80)
-                return c
+            if (c < 0x80) return c
             n = 0
-            if (c < 0x800) {
-                buf[n++] = 0x80 or (c and 0x3f)
-                return 0xC0 or (c shr 6 and 0x1f)
-            } else {
-                buf[n++] = 0x80 or (c and 0x3f)
-                buf[n++] = 0x80 or (c shr 6 and 0x3f)
-                return 0xE0 or (c shr 12 and 0x0f)
+            return when {
+                c < 0x800 -> {
+                    buf[n++] = 0x80 or (c and 0x3f)
+                    0xC0 or (c shr 6 and 0x1f)
+                }
+                else -> {
+                    buf[n++] = 0x80 or (c and 0x3f)
+                    buf[n++] = 0x80 or (c shr 6 and 0x3f)
+                    0xE0 or (c shr 12 and 0x0f)
+                }
             }
         }
     }
@@ -187,22 +142,15 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
         init {
             this.rawset(LuaValue.INDEX, object : TwoArgFunction() {
-                override fun call(table: LuaValue, key: LuaValue): LuaValue {
-                    return if (key.isstring())
-                        toLua(bindings[key.tojstring()])
-                    else
-                        this.rawget(key)
-                }
+                override fun call(table: LuaValue, key: LuaValue): LuaValue =
+                    if (key.isstring()) toLua(bindings[key.tojstring()]) else this.rawget(key)
             })
             this.rawset(LuaValue.NEWINDEX, object : ThreeArgFunction() {
                 override fun call(table: LuaValue, key: LuaValue, value: LuaValue): LuaValue {
                     if (key.isstring()) {
                         val k = key.tojstring()
                         val v = toJava(value)
-                        if (v == null)
-                            bindings.remove(k)
-                        else
-                            bindings[k] = v
+                        if (v == null) bindings.remove(k) else bindings[k] = v
                     } else {
                         this.rawset(key, value)
                     }
@@ -213,7 +161,6 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
     }
 
     companion object {
-
         private val __ENGINE_VERSION__ = Lua._VERSION
         private val __NAME__ = "Luaj"
         private val __SHORT_NAME__ = "Luaj"
@@ -225,36 +172,21 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
         private val myFactory = LuaScriptEngineFactory()
 
         private fun toLua(javaValue: Any?): LuaValue {
-            return if (javaValue == null)
-                LuaValue.NIL
-            else javaValue as? LuaValue ?: CoerceJavaToLua.coerce(javaValue)
+            return if (javaValue == null) LuaValue.NIL else javaValue as? LuaValue ?: CoerceJavaToLua.coerce(javaValue)
         }
 
-        private fun toJava(luajValue: LuaValue): Any? {
-            when (luajValue.type()) {
-                LuaValue.TNIL -> return null
-                LuaValue.TSTRING -> return luajValue.tojstring()
-                LuaValue.TUSERDATA -> return luajValue.checkuserdata(Any::class.java)
-                LuaValue.TNUMBER -> return if (luajValue.isinttype())
-                    luajValue.toint()
-                else
-                    luajValue.todouble()
-                else -> return luajValue
-            }
+        private fun toJava(luajValue: LuaValue): Any? = when (luajValue.type()) {
+            LuaValue.TNIL -> null
+            LuaValue.TSTRING -> luajValue.tojstring()
+            LuaValue.TUSERDATA -> luajValue.checkuserdata(Any::class.java)
+            LuaValue.TNUMBER -> if (luajValue.isinttype()) luajValue.toint() else luajValue.todouble()
+            else -> luajValue
         }
 
-        private fun toJava(v: Varargs): Any? {
-            val n = v.narg()
-            when (n) {
-                0 -> return null
-                1 -> return toJava(v.arg1())
-                else -> {
-                    val o = arrayOfNulls<Any>(n)
-                    for (i in 0 until n)
-                        o[i] = toJava(v.arg(i + 1))
-                    return o
-                }
-            }
+        private fun toJava(v: Varargs): Any? = when (val n = v.narg()) {
+            0 -> null
+            1 -> toJava(v.arg1())
+            else -> Array(n) { toJava(v.arg(it + 1)) }
         }
     }
 

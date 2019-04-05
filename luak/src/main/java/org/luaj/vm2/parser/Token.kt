@@ -6,7 +6,7 @@ package org.luaj.vm2.parser
  * Describes the input token stream.
  */
 
-class Token : java.io.Serializable {
+class Token {
 
     /**
      * An integer that describes the kind of this token.  This numbering
@@ -94,14 +94,6 @@ class Token : java.io.Serializable {
     }
 
     companion object {
-
-        /**
-         * The version identifier for this Serializable class.
-         * Increment only if the *serialized* form of the
-         * class changes.
-         */
-        private const val serialVersionUID = 1L
-
         /**
          * Returns a new Token object, by default. However, if you want, you
          * can create and return subclass objects based on the value of ofKind.
