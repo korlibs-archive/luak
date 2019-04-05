@@ -24,6 +24,7 @@ package org.luaj.vm2.lib;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.jetbrains.annotations.Nullable;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaError;
@@ -123,7 +124,7 @@ public class BaseLib extends TwoArgFunction implements ResourceFinder {
 	 * 
 	 * Tries to open the file as a resource, which can work for JSE and JME. 
 	 */
-	public InputStream findResource(String filename) {
+	@Nullable public InputStream findResource(String filename) {
 		return getClass().getResourceAsStream(filename.startsWith("/")? filename: "/"+filename);
 	}
 
