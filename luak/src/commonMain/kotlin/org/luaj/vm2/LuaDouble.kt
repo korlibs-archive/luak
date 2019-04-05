@@ -21,8 +21,9 @@
  */
 package org.luaj.vm2
 
-import org.luaj.vm2.lib.MathLib
-import kotlin.math.floor
+import org.luaj.vm2.lib.*
+import kotlin.jvm.*
+import kotlin.math.*
 
 /**
  * Extension of [LuaNumber] which can hold a Java double as its value.
@@ -231,7 +232,7 @@ private constructor(
          * @see .dmod_d
          */
         @JvmStatic fun dmod(lhs: Double, rhs: Double): LuaValue =
-            if (rhs != 0.0) valueOf(lhs - rhs * Math.floor(lhs / rhs)) else NAN
+            if (rhs != 0.0) valueOf(lhs - rhs * kotlin.math.floor(lhs / rhs)) else NAN
 
         /** Take modulo for double numbers according to lua math, and return a double result.
          * @param lhs Left-hand-side of the modulo.

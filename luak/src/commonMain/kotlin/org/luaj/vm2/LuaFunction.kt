@@ -21,6 +21,9 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.korio.lang.*
+import kotlin.jvm.*
+import kotlin.math.*
 
 /**
  * Base class for functions implemented in Java.
@@ -39,53 +42,28 @@ package org.luaj.vm2
  */
 abstract class LuaFunction : LuaValue() {
 
-    override fun type(): Int {
-        return LuaValue.TFUNCTION
-    }
-
-    override fun typename(): String {
-        return "function"
-    }
-
-    override fun isfunction(): Boolean {
-        return true
-    }
-
-    override fun checkfunction(): LuaFunction? {
-        return this
-    }
-
-    override fun optfunction(defval: LuaFunction?): LuaFunction? {
-        return this
-    }
-
-    override fun getmetatable(): LuaValue? {
-        return s_metatable
-    }
-
-    override fun tojstring(): String {
-        return "function: " + classnamestub()
-    }
-
-    override fun strvalue(): LuaString? {
-        return LuaValue.valueOf(tojstring())
-    }
+    override fun type(): Int = LuaValue.TFUNCTION
+    override fun typename(): String = "function"
+    override fun isfunction(): Boolean = true
+    override fun checkfunction(): LuaFunction? = this
+    override fun optfunction(defval: LuaFunction?): LuaFunction? = this
+    override fun getmetatable(): LuaValue? = s_metatable
+    override fun tojstring(): String = "function: " + classnamestub()
+    override fun strvalue(): LuaString? = LuaValue.valueOf(tojstring())
 
     /** Return the last part of the class name, to be used as a function name in tojstring and elsewhere.
      * @return String naming the last part of the class name after the last dot (.) or dollar sign ($).
      */
     fun classnamestub(): String {
-        val s = javaClass.name
-        return s.substring(Math.max(s.lastIndexOf('.'), s.lastIndexOf('$')) + 1)
+        val s = this::class.portableSimpleName
+        return s.substring(max(s.lastIndexOf('.'), s.lastIndexOf('$')) + 1)
     }
 
     /** Return a human-readable name for this function.  Returns the last part of the class name by default.
      * Is overridden by LuaClosure to return the source file and line, and by LibFunctions to return the name.
      * @return common name for this function.
      */
-    open fun name(): String {
-        return classnamestub()
-    }
+    open fun name(): String = classnamestub()
 
     companion object {
 

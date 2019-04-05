@@ -2,6 +2,7 @@ apply plugin: com.soywiz.korlibs.KorlibsPlugin
 
 korlibs {
     exposeVersion()
+    dependencyMulti("com.soywiz:korio:$korioVersion")
 }
 
 
@@ -9,6 +10,7 @@ dependencies {
     //jvmJavaMainApi "junit:junit:4.12"
     //jvmJavaTestImplementation jvmJavaMainApi
     commonTestImplementation "org.jetbrains.kotlin:kotlin-test"
+    
 }
 
 jvmTest {

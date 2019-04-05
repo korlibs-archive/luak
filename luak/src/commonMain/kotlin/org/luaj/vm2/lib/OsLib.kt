@@ -364,7 +364,7 @@ open class OsLib : TwoArgFunction() {
      * @param filename
      * @throws IOException if it fails
      */
-    @Throws(IOException::class)
+
     protected open fun remove(filename: String?) {
         throw IOException("not implemented")
     }
@@ -377,7 +377,7 @@ open class OsLib : TwoArgFunction() {
      * @param newname new file name
      * @throws IOException if it fails
      */
-    @Throws(IOException::class)
+
     protected open fun rename(oldname: String?, newname: String?) {
         throw IOException("not implemented")
     }

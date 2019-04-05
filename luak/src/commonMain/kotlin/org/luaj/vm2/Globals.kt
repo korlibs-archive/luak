@@ -21,16 +21,12 @@
  */
 package org.luaj.vm2
 
-import java.io.IOException
-import java.io.InputStream
-import java.io.PrintStream
-import java.io.Reader
-
 import org.luaj.vm2.lib.BaseLib
 import org.luaj.vm2.lib.DebugLib
 import org.luaj.vm2.lib.IoLib
 import org.luaj.vm2.lib.PackageLib
 import org.luaj.vm2.lib.ResourceFinder
+import kotlin.jvm.*
 
 /**
  * Global environment used by luaj.  Contains global variables referenced by executing lua.
@@ -266,7 +262,7 @@ open class Globals : LuaTable() {
      * @param chunkname Name that will be used within the chunk as the source.
      * @param mode String containing 'b' or 't' or both to control loading as binary or text or either.
      */
-    @Throws(IOException::class)
+
     fun loadPrototype(`is`: InputStream, chunkname: String, mode: String): Prototype {
         var `is` = `is`
         if (mode.indexOf('b') >= 0) {

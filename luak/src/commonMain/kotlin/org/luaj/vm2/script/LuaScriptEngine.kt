@@ -118,7 +118,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
         private val buf = IntArray(2)
         private var n: Int = 0
 
-        @Throws(IOException::class)
+
         override fun read(): Int {
             if (n > 0) return buf[--n]
             val c = r.read()

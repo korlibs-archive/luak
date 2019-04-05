@@ -87,12 +87,12 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
      * @return Prototype representing the lua chunk for this source.
      * @throws IOException
      */
-    @Throws(IOException::class)
+
     override fun compile(stream: InputStream, chunkname: String): Prototype {
         return CompileState().luaY_parser(stream, chunkname)
     }
 
-    @Throws(IOException::class)
+
     override fun load(prototype: Prototype, chunkname: String, env: LuaValue): LuaFunction {
         return LuaClosure(prototype, env)
     }
@@ -102,7 +102,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
         " Use Globals.load(InputString, String, String) instead, \n" +
                 "\t  or LuaC.compile(InputStream, String) and construct LuaClosure directly."
     )
-    @Throws(IOException::class)
+
     fun load(stream: InputStream, chunkname: String, globals: Globals): LuaValue {
         return LuaClosure(compile(stream, chunkname), globals)
     }
@@ -113,7 +113,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
         private val strings = HashMap<LuaString, LuaString>()
 
         /** Parse the input  */
-        @Throws(IOException::class)
+
         fun luaY_parser(z: InputStream, name: String): Prototype {
             val lexstate = LexState(this, z)
             val funcstate = FuncState()

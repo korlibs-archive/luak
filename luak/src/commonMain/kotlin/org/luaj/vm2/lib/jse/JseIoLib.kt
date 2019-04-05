@@ -75,22 +75,22 @@ import java.io.RandomAccessFile
  */
 class JseIoLib : IoLib() {
 
-    @Throws(IOException::class)
+
     override fun wrapStdin(): IoLib.File {
         return StdinFile()
     }
 
-    @Throws(IOException::class)
+
     override fun wrapStdout(): IoLib.File {
         return StdoutFile(IoLib.FTYPE_STDOUT)
     }
 
-    @Throws(IOException::class)
+
     override fun wrapStderr(): IoLib.File {
         return StdoutFile(IoLib.FTYPE_STDERR)
     }
 
-    @Throws(IOException::class)
+
     override fun openFile(
         filename: String?,
         readMode: Boolean,
@@ -108,7 +108,7 @@ class JseIoLib : IoLib() {
         return FileImpl(f)
     }
 
-    @Throws(IOException::class)
+
     override fun openProgram(prog: String?, mode: String?): IoLib.File {
         val p = Runtime.getRuntime().exec(prog)
         return if ("w" == mode)
@@ -117,7 +117,7 @@ class JseIoLib : IoLib() {
             FileImpl(p.inputStream)
     }
 
-    @Throws(IOException::class)
+
     override fun tmpFile(): IoLib.File {
         val f = java.io.File.createTempFile(".luaj", "bin")
         f.deleteOnExit()
@@ -154,18 +154,18 @@ class JseIoLib : IoLib() {
             return file == null
         }
 
-        @Throws(IOException::class)
+
         override fun close() {
             closed = true
             file?.close()
         }
 
-        @Throws(IOException::class)
+
         override fun flush() {
             os?.flush()
         }
 
-        @Throws(IOException::class)
+
         override fun write(s: LuaString?) {
             if (os != null)
                 os.write(s!!.m_bytes, s.m_offset, s.m_length)
@@ -181,7 +181,7 @@ class JseIoLib : IoLib() {
             return closed
         }
 
-        @Throws(IOException::class)
+
         override fun seek(option: String?, pos: Int): Int {
             if (file != null) {
                 if ("set" == option) {
@@ -202,13 +202,13 @@ class JseIoLib : IoLib() {
         }
 
         // get length remaining to read
-        @Throws(IOException::class)
+
         override fun remaining(): Int {
             return if (file != null) (file.length() - file.filePointer).toInt() else -1
         }
 
         // peek ahead one character
-        @Throws(IOException::class)
+
         override fun peek(): Int {
             if (`is` != null) {
                 `is`.mark(1)
@@ -226,7 +226,7 @@ class JseIoLib : IoLib() {
         }
 
         // return char if read, -1 if eof, throw IOException on other exception
-        @Throws(IOException::class)
+
         override fun read(): Int {
             if (`is` != null)
                 return `is`.read()
@@ -238,7 +238,7 @@ class JseIoLib : IoLib() {
         }
 
         // return number of bytes read if positive, -1 if eof, throws IOException
-        @Throws(IOException::class)
+
         override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
             if (file != null) {
                 return file.read(bytes, offset, length)
@@ -263,12 +263,12 @@ class JseIoLib : IoLib() {
             return "file (" + this.hashCode() + ")"
         }
 
-        @Throws(IOException::class)
+
         override fun write(string: LuaString?) {
             printStream.write(string!!.m_bytes, string.m_offset, string.m_length)
         }
 
-        @Throws(IOException::class)
+
         override fun flush() {
             printStream.flush()
         }
@@ -277,7 +277,7 @@ class JseIoLib : IoLib() {
             return true
         }
 
-        @Throws(IOException::class)
+
         override fun close() {
             // do not close std files.
         }
@@ -286,14 +286,14 @@ class JseIoLib : IoLib() {
             return false
         }
 
-        @Throws(IOException::class)
+
         override fun seek(option: String?, bytecount: Int): Int {
             return 0
         }
 
         override fun setvbuf(mode: String?, size: Int) {}
 
-        @Throws(IOException::class)
+
         override fun remaining(): Int {
             return 0
         }
@@ -308,7 +308,7 @@ class JseIoLib : IoLib() {
             return 0
         }
 
-        @Throws(IOException::class)
+
         override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
             return 0
         }
@@ -320,11 +320,11 @@ class JseIoLib : IoLib() {
             return "file (" + this.hashCode() + ")"
         }
 
-        @Throws(IOException::class)
+
         override fun write(string: LuaString?) {
         }
 
-        @Throws(IOException::class)
+
         override fun flush() {
         }
 
@@ -332,7 +332,7 @@ class JseIoLib : IoLib() {
             return true
         }
 
-        @Throws(IOException::class)
+
         override fun close() {
             // do not close std files.
         }
@@ -341,14 +341,14 @@ class JseIoLib : IoLib() {
             return false
         }
 
-        @Throws(IOException::class)
+
         override fun seek(option: String?, bytecount: Int): Int {
             return 0
         }
 
         override fun setvbuf(mode: String?, size: Int) {}
 
-        @Throws(IOException::class)
+
         override fun remaining(): Int {
             return 0
         }
@@ -366,7 +366,7 @@ class JseIoLib : IoLib() {
             return globals!!.STDIN.read()
         }
 
-        @Throws(IOException::class)
+
         override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
             return globals!!.STDIN.read(bytes, offset, length)
         }

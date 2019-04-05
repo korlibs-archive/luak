@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+
 
 /**
  * RuntimeException that is thrown and caught in response to a lua error.

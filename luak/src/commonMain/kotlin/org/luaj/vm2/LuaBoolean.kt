@@ -21,6 +21,8 @@
  */
 package org.luaj.vm2
 
+import kotlin.jvm.*
+
 /**
  * Extension of [LuaValue] which can hold a Java boolean as its value.
  *

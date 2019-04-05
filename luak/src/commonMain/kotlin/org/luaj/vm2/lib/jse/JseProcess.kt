@@ -46,7 +46,7 @@ class JseProcess private constructor(
      * @throws IOException If the system process could not be created.
      * @see Process
      */
-    @Throws(IOException::class)
+
     constructor(
         cmd: Array<String>,
         stdin: InputStream,
@@ -64,7 +64,7 @@ class JseProcess private constructor(
      * @throws IOException If the system process could not be created.
      * @see Process
      */
-    @Throws(IOException::class)
+
     constructor(
         cmd: String,
         stdin: InputStream?,

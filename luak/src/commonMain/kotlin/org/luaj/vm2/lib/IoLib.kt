@@ -93,24 +93,24 @@ abstract class IoLib : TwoArgFunction() {
     protected var globals: Globals? = null
 
     abstract inner class File : LuaValue() {
-        @Throws(IOException::class)
+
         abstract fun write(string: LuaString?)
 
-        @Throws(IOException::class)
+
         abstract fun flush()
 
         abstract fun isstdfile(): Boolean
-        @Throws(IOException::class)
+
         abstract fun close()
 
         abstract fun isclosed(): Boolean
         // returns new position
-        @Throws(IOException::class)
+
         abstract fun seek(option: String?, bytecount: Int): Int
 
         abstract fun setvbuf(mode: String?, size: Int)
         // get length remaining to read
-        @Throws(IOException::class)
+
         abstract fun remaining(): Int
 
         // peek ahead one character
@@ -122,7 +122,7 @@ abstract class IoLib : TwoArgFunction() {
         abstract fun read(): Int
 
         // return number of bytes read if positive, false if eof, throw IOException on other exception
-        @Throws(IOException::class)
+
         abstract fun read(bytes: ByteArray, offset: Int, length: Int): Int
 
         // delegate method access to file methods table
@@ -150,7 +150,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File
      * @throws IOException
      */
-    @Throws(IOException::class)
+
     protected abstract fun wrapStdin(): File
 
     /**
@@ -158,7 +158,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File
      * @throws IOException
      */
-    @Throws(IOException::class)
+
     protected abstract fun wrapStdout(): File
 
     /**
@@ -166,7 +166,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File
      * @throws IOException
      */
-    @Throws(IOException::class)
+
     protected abstract fun wrapStderr(): File
 
     /**
@@ -179,7 +179,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File object if successful
      * @throws IOException if could not be opened
      */
-    @Throws(IOException::class)
+
     protected abstract fun openFile(
         filename: String?,
         readMode: Boolean,
@@ -193,7 +193,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File object if successful
      * @throws IOException if could not be opened
      */
-    @Throws(IOException::class)
+
     protected abstract fun tmpFile(): File
 
     /**
@@ -203,7 +203,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File to read to or write from
      * @throws IOException if an i/o exception occurs
      */
-    @Throws(IOException::class)
+
     protected abstract fun openProgram(prog: String?, mode: String?): File
 
     override fun call(modname: LuaValue, env: LuaValue): LuaValue {
@@ -294,7 +294,7 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	io.flush() -> bool
-    @Throws(IOException::class)
+
     fun _io_flush(): Varargs {
         checkopen(output())
         outfile!!.flush()
@@ -302,13 +302,13 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	io.tmpfile() -> file
-    @Throws(IOException::class)
+
     fun _io_tmpfile(): Varargs {
         return tmpFile()
     }
 
     //	io.close([file]) -> void
-    @Throws(IOException::class)
+
     fun _io_close(file: LuaValue): Varargs {
         val f = if (file.isnil()) output() else checkfile(file)
         checkopen(f)
@@ -347,13 +347,13 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     // io.popen(prog, [mode]) -> file
-    @Throws(IOException::class)
+
     fun _io_popen(prog: String?, mode: String?): Varargs {
         return openProgram(prog, mode)
     }
 
     //	io.open(filename, [mode]) -> file | nil,err
-    @Throws(IOException::class)
+
     fun _io_open(filename: String?, mode: String?): Varargs {
         return rawopenfile(FTYPE_NAMED, filename, mode)
     }
@@ -366,27 +366,27 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	io.read(...) -> (...)
-    @Throws(IOException::class)
+
     fun _io_read(args: Varargs): Varargs {
         checkopen(input())
         return ioread(infile, args)
     }
 
     //	io.write(...) -> void
-    @Throws(IOException::class)
+
     fun _io_write(args: Varargs): Varargs {
         checkopen(output())
         return iowrite(outfile, args)
     }
 
     // file:close() -> void
-    @Throws(IOException::class)
+
     fun _file_close(file: LuaValue): Varargs {
         return ioclose(checkfile(file))
     }
 
     // file:flush() -> void
-    @Throws(IOException::class)
+
     fun _file_flush(file: LuaValue): Varargs {
         checkfile(file).flush()
         return LuaValue.TRUE
@@ -404,19 +404,19 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	file:read(...) -> (...)
-    @Throws(IOException::class)
+
     fun _file_read(file: LuaValue, subargs: Varargs): Varargs {
         return ioread(checkfile(file), subargs)
     }
 
     //  file:seek([whence][,offset]) -> pos | nil,error
-    @Throws(IOException::class)
+
     fun _file_seek(file: LuaValue, whence: String?, offset: Int): Varargs {
         return LuaValue.valueOf(checkfile(file).seek(whence, offset))
     }
 
     //	file:write(...) -> void
-    @Throws(IOException::class)
+
     fun _file_write(file: LuaValue, subargs: Varargs): Varargs {
         return iowrite(checkfile(file), subargs)
     }
@@ -431,7 +431,7 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	lines iterator(s,var) -> var'
-    @Throws(IOException::class)
+
     fun _lines_iter(file: LuaValue): Varargs {
         return freadline(checkfile(file))
     }
@@ -463,7 +463,7 @@ abstract class IoLib : TwoArgFunction() {
 
     }
 
-    @Throws(IOException::class)
+
     private fun ioread(f: File?, args: Varargs): Varargs {
         var i: Int
         val n = args.narg()
@@ -508,7 +508,7 @@ abstract class IoLib : TwoArgFunction() {
         return if (i == 0) LuaValue.NIL else LuaValue.varargsOf(v as Array<LuaValue>, 0, i)
     }
 
-    @Throws(IOException::class)
+
     private fun rawopenfile(filetype: Int, filename: String?, mode: String?): File {
         when (filetype) {
             FTYPE_STDIN -> return wrapStdin()
@@ -567,7 +567,7 @@ abstract class IoLib : TwoArgFunction() {
 
         val FILE_NAMES = arrayOf("close", "flush", "lines", "read", "seek", "setvbuf", "write")
 
-        @Throws(IOException::class)
+
         @JvmStatic private fun ioclose(f: File): Varargs {
             if (f.isstdfile())
                 return errorresult("cannot close standard file")
@@ -590,7 +590,7 @@ abstract class IoLib : TwoArgFunction() {
             return LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf(errortext))
         }
 
-        @Throws(IOException::class)
+
         @JvmStatic private fun iowrite(f: File?, args: Varargs): Varargs {
             var i = 1
             val n = args.narg()
@@ -622,14 +622,14 @@ abstract class IoLib : TwoArgFunction() {
 
         // ------------- file reading utilitied ------------------
 
-        @Throws(IOException::class)
+
         @JvmStatic fun freadbytes(f: File, count: Int): LuaValue {
             val b = ByteArray(count)
             val r: Int
             return if ((run { r = f.read(b, 0, b.size); r }) < 0) LuaValue.NIL else LuaString.valueUsing(b, 0, r)
         }
 
-        @Throws(IOException::class)
+
         @JvmStatic fun freaduntil(f: File?, lineonly: Boolean): LuaValue {
             val baos = ByteArrayOutputStream()
             var c: Int
@@ -657,12 +657,12 @@ abstract class IoLib : TwoArgFunction() {
                 LuaString.valueUsing(baos.toByteArray())
         }
 
-        @Throws(IOException::class)
+
         @JvmStatic fun freadline(f: File?): LuaValue {
             return freaduntil(f, true)
         }
 
-        @Throws(IOException::class)
+
         @JvmStatic fun freadall(f: File): LuaValue {
             val n = f.remaining()
             return if (n >= 0) {
@@ -672,7 +672,7 @@ abstract class IoLib : TwoArgFunction() {
             }
         }
 
-        @Throws(IOException::class)
+
         @JvmStatic fun freadnumber(f: File?): LuaValue {
             val baos = ByteArrayOutputStream()
             freadchars(f!!, " \t\r\n", null)
@@ -689,7 +689,7 @@ abstract class IoLib : TwoArgFunction() {
             return if (s.length > 0) LuaValue.valueOf(s.toDouble()) else LuaValue.NIL
         }
 
-        @Throws(IOException::class)
+
         @JvmStatic private fun freadchars(f: File, chars: String, baos: ByteArrayOutputStream?) {
             var c: Int
             while (true) {
