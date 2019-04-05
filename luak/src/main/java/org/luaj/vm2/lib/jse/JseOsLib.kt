@@ -89,7 +89,7 @@ class JseOsLib : OsLib() {
     override fun execute(command: String?): Varargs {
         var exitValue: Int
         try {
-            exitValue = JseProcess(command, null, globals!!.STDOUT, globals!!.STDERR).waitFor()
+            exitValue = JseProcess(command!!, null, globals?.STDOUT, globals?.STDERR).waitFor()
         } catch (ioe: IOException) {
             exitValue = EXEC_IOEXCEPTION
         } catch (e: InterruptedException) {

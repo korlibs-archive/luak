@@ -46,7 +46,7 @@ import org.luaj.vm2.LuaValue;
  * @see CoerceJavaToLua
  * @see CoerceLuaToJava
  */
-class JavaClass extends JavaInstance implements CoerceJavaToLua.Coercion {
+public class JavaClass extends JavaInstance implements CoerceJavaToLua.Coercion {
 
 	static final Map classes = Collections.synchronizedMap(new HashMap());
 

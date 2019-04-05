@@ -75,7 +75,7 @@ import org.luaj.vm2.lib.VarArgFunction;
  * 
  * @see LibFunction
  * @see org.luaj.vm2.lib.jse.JsePlatform
- * @see org.luaj.vm2.lib.jme.JmePlatform
+ * //@see org.luaj.vm2.lib.jme.JmePlatform
  * @see LuaC
  * @see CoerceJavaToLua
  * @see CoerceLuaToJava
