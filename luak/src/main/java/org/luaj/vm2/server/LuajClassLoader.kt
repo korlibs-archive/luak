@@ -23,7 +23,6 @@ package org.luaj.vm2.server
 
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.util.HashMap
 
 /**
  * Class loader that can be used to launch a lua script in a Java VM that has a

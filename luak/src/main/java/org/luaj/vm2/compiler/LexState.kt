@@ -23,7 +23,6 @@ package org.luaj.vm2.compiler
 
 import java.io.IOException
 import java.io.InputStream
-import java.util.Hashtable
 
 import org.luaj.vm2.LocVars
 import org.luaj.vm2.Lua
@@ -1968,7 +1967,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
             RESERVED_LOCAL_VAR_FOR_STATE,
             RESERVED_LOCAL_VAR_FOR_STEP
         )
-        private val RESERVED_LOCAL_VAR_KEYWORDS_TABLE = Hashtable<String, Boolean>()
+        private val RESERVED_LOCAL_VAR_KEYWORDS_TABLE = HashMap<String, Boolean>()
 
         init {
             for (i in RESERVED_LOCAL_VAR_KEYWORDS.indices)
@@ -2130,12 +2129,12 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
         internal val FIRST_RESERVED = TK_AND
         internal val NUM_RESERVED = TK_WHILE + 1 - FIRST_RESERVED
 
-        internal val RESERVED = Hashtable<LuaString, Int>()
+        internal val RESERVED = HashMap<LuaString, Int>()
 
         init {
             for (i in 0 until NUM_RESERVED) {
-                val ts = LuaValue.valueOf(luaX_tokens[i]) as LuaString
-                RESERVED.put(ts, FIRST_RESERVED + i)
+                val ts = LuaValue.valueOf(luaX_tokens[i])
+                RESERVED[ts] = FIRST_RESERVED + i
             }
         }
 

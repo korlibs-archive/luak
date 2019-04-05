@@ -24,7 +24,6 @@ package org.luaj.vm2.lib.jse
 import org.luaj.vm2.LuaValue
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
-import java.util.*
 
 /**
  * LuaValue that represents a Java class.
@@ -126,7 +125,7 @@ class JavaClass internal constructor(c: Class<*>) : JavaInstance(c), CoerceJavaT
 
     companion object {
 
-        @JvmField internal val classes: MutableMap<Class<*>, JavaClass> = Collections.synchronizedMap(HashMap())
+        @JvmField internal val classes: MutableMap<Class<*>, JavaClass> = HashMap()
 
         @JvmField internal val NEW: LuaValue = LuaValue.valueOf("new")
 

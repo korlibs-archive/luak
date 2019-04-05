@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.script
 
-import java.util.Arrays
-
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineFactory
 
@@ -34,15 +32,9 @@ import javax.script.ScriptEngineFactory
  */
 class LuaScriptEngineFactory : ScriptEngineFactory {
 
-    private val extensions: List<String>
-    private val mimeTypes: List<String>
-    private val names: List<String>
-
-    init {
-        extensions = Arrays.asList(*EXTENSIONS)
-        mimeTypes = Arrays.asList(*MIMETYPES)
-        names = Arrays.asList(*NAMES)
-    }
+    private val extensions: List<String> = EXTENSIONS.toList()
+    private val mimeTypes: List<String> = MIMETYPES.toList()
+    private val names: List<String> = NAMES.toList()
 
     override fun getEngineName(): String {
         return scriptEngine.get(ScriptEngine.ENGINE).toString()

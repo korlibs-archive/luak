@@ -23,7 +23,6 @@ package org.luaj.vm2.compiler
 
 import java.io.IOException
 import java.io.InputStream
-import java.util.Hashtable
 
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaClosure
@@ -111,7 +110,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
     class CompileState {
         @JvmField
         var nCcalls = 0
-        private val strings = Hashtable<LuaString, LuaString>()
+        private val strings = HashMap<LuaString, LuaString>()
 
         /** Parse the input  */
         @Throws(IOException::class)

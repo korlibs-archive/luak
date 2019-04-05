@@ -22,10 +22,7 @@
 package org.luaj.vm2.lib.jse
 
 import java.lang.reflect.Array
-import java.util.Collections
-import java.util.HashMap
 
-import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 
@@ -66,7 +63,7 @@ object CoerceLuaToJava {
     internal var SCORE_WRONG_TYPE = 0x100
     internal var SCORE_UNCOERCIBLE = 0x10000
 
-    internal val COERCIONS: MutableMap<Class<*>, Coercion> = Collections.synchronizedMap(HashMap())
+    internal val COERCIONS: MutableMap<Class<*>, Coercion> = HashMap()
 
     internal interface Coercion {
         fun score(value: LuaValue): Int

@@ -23,7 +23,6 @@ package org.luaj.vm2.lib.jse
 
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-import java.util.Collections
 
 import org.luaj.vm2.LuaError
 import org.luaj.vm2.LuaFunction
@@ -146,7 +145,7 @@ internal class JavaMethod private constructor(val method: Method) :
     companion object {
 
         @JvmField
-        val methods: MutableMap<Method, JavaMethod> = Collections.synchronizedMap<Method, JavaMethod>(HashMap())
+        val methods: MutableMap<Method, JavaMethod> = HashMap()
 
         @JvmStatic fun forMethod(m: Method): JavaMethod {
             return methods[m] ?: return JavaMethod(m).also { methods[m] = it }
