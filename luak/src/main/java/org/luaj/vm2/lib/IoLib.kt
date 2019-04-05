@@ -686,7 +686,7 @@ abstract class IoLib : TwoArgFunction() {
             // freadchars(f,"+-",baos);
             //freadchars(f,"0123456789",baos);
             val s = baos.toString()
-            return if (s.length > 0) LuaValue.valueOf(java.lang.Double.parseDouble(s)) else LuaValue.NIL
+            return if (s.length > 0) LuaValue.valueOf(s.toDouble()) else LuaValue.NIL
         }
 
         @Throws(IOException::class)

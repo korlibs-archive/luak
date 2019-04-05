@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.ast
 
-import java.util.ArrayList
-
 class FuncName(name: String) : SyntaxElement() {
     // example: a.b.c.d:e
 

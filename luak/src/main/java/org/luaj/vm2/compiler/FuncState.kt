@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.compiler
 
-import java.util.Hashtable
-
 import org.luaj.vm2.LocVars
 import org.luaj.vm2.Lua
 import org.luaj.vm2.LuaDouble
@@ -38,7 +36,7 @@ import org.luaj.vm2.compiler.LexState.expdesc
 class FuncState constructor() : Constants() {
 
     @JvmField var f: Prototype? = null  /* current function header */
-    @JvmField var h: Hashtable<LuaValue, Int>? = null  /* table to find (and reuse) elements in `k' */
+    @JvmField var h: HashMap<LuaValue, Int>? = null  /* table to find (and reuse) elements in `k' */
     @JvmField var prev: FuncState? = null  /* enclosing function */
     @JvmField var ls: LexState? = null  /* lexical state */
     @JvmField var L: LuaC.CompileState? = null  /* compiler being invoked */
@@ -475,12 +473,12 @@ class FuncState constructor() : Constants() {
 
     fun addk(v: LuaValue?): Int {
         if (this.h == null) {
-            this.h = Hashtable<LuaValue, Int>()
+            this.h = HashMap<LuaValue, Int>()
         } else if (this.h!!.containsKey(v)) {
             return (h!![v] as Int).toInt()
         }
         val idx = this.nk
-        this.h!![v] = idx
+        this.h!![v!!] = idx
         val f = this.f
         if (f!!.k == null || nk + 1 >= f.k.size)
             f.k = Constants.realloc(f.k, nk * 2 + 1)
@@ -870,7 +868,7 @@ class FuncState constructor() : Constants() {
                 r = null
             }
         }
-        if (java.lang.Double.isNaN(r!!.todouble()))
+        if (r!!.todouble().isNaN())
             return false /* do not attempt to produce NaN */
         e1.u.setNval(r)
         return true

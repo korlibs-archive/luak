@@ -22,6 +22,7 @@
 package org.luaj.vm2
 
 import org.luaj.vm2.lib.MathLib
+import kotlin.math.floor
 
 /**
  * Extension of [LuaNumber] which can hold a Java double as its value.
@@ -67,7 +68,7 @@ private constructor(
 ) : LuaNumber() {
 
     override fun hashCode(): Int {
-        val l = java.lang.Double.doubleToLongBits(v + 1)
+        val l = (v + 1).toRawBits()
         return (l shr 32).toInt() + l.toInt()
     }
 
@@ -356,12 +357,10 @@ private constructor(
 		*/
         val l = v.toLong()
         if (l.toDouble() == v)
-            return java.lang.Long.toString(l)
-        if (java.lang.Double.isNaN(v))
+            return l.toString()
+        if (v.isNaN())
             return JSTR_NAN
-        return if (java.lang.Double.isInfinite(v)) if (v < 0) JSTR_NEGINF else JSTR_POSINF else java.lang.Float.toString(
-            v.toFloat()
-        )
+        return if ((v).isInfinite()) if (v < 0) JSTR_NEGINF else JSTR_POSINF else v.toFloat().toString()
     }
 
     override fun strvalue(): LuaString? {
@@ -421,19 +420,19 @@ private constructor(
     }
 
     override fun isvalidkey(): Boolean {
-        return !java.lang.Double.isNaN(v)
+        return !(v.isNaN())
     }
 
     companion object {
 
         /** Constant LuaDouble representing NaN (not a number)  */
-        @JvmField val NAN = LuaDouble(java.lang.Double.NaN)
+        @JvmField val NAN = LuaDouble(Double.NaN)
 
         /** Constant LuaDouble representing positive infinity  */
-        @JvmField val POSINF = LuaDouble(java.lang.Double.POSITIVE_INFINITY)
+        @JvmField val POSINF = LuaDouble(Double.POSITIVE_INFINITY)
 
         /** Constant LuaDouble representing negative infinity  */
-        @JvmField val NEGINF = LuaDouble(java.lang.Double.NEGATIVE_INFINITY)
+        @JvmField val NEGINF = LuaDouble(Double.NEGATIVE_INFINITY)
 
         /** Constant String representation for NaN (not a number), "nan"  */
         @JvmField val JSTR_NAN = "nan"
@@ -469,7 +468,12 @@ private constructor(
          * @see .ddiv
          */
         @JvmStatic fun ddiv_d(lhs: Double, rhs: Double): Double {
-            return if (rhs != 0.0) lhs / rhs else if (lhs > 0) java.lang.Double.POSITIVE_INFINITY else if (lhs == 0.0) java.lang.Double.NaN else java.lang.Double.NEGATIVE_INFINITY
+            return when {
+                rhs != 0.0 -> lhs / rhs
+                lhs > 0 -> Double.POSITIVE_INFINITY
+                lhs == 0.0 -> Double.NaN
+                else -> Double.NEGATIVE_INFINITY
+            }
         }
 
         /** Take modulo double numbers according to lua math, and return a [LuaValue] result.
@@ -491,7 +495,10 @@ private constructor(
          * @see .dmod
          */
         @JvmStatic fun dmod_d(lhs: Double, rhs: Double): Double {
-            return if (rhs != 0.0) lhs - rhs * Math.floor(lhs / rhs) else java.lang.Double.NaN
+            return when {
+                rhs != 0.0 -> lhs - rhs * kotlin.math.floor(lhs / rhs)
+                else -> Double.NaN
+            }
         }
     }
 }

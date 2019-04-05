@@ -3,7 +3,6 @@ package org.luaj.vm2.parser
 
 import org.luaj.vm2.*
 import org.luaj.vm2.ast.*
-import java.util.*
 
 class LuaParser : LuaParserConstants {
 

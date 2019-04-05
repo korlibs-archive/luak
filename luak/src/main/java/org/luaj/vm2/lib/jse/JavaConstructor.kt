@@ -23,8 +23,6 @@ package org.luaj.vm2.lib.jse
 
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
-import java.util.Collections
-import java.util.HashMap
 
 import org.luaj.vm2.LuaError
 import org.luaj.vm2.LuaValue
@@ -98,7 +96,7 @@ internal class JavaConstructor private constructor(val constructor: Constructor<
 
     companion object {
 
-        @JvmField val constructors: MutableMap<Constructor<*>, JavaConstructor> = Collections.synchronizedMap(HashMap())
+        @JvmField val constructors: MutableMap<Constructor<*>, JavaConstructor> = HashMap()
 
         @JvmStatic fun forConstructor(c: Constructor<*>): JavaConstructor {
             return constructors[c] ?: return JavaConstructor(c).also { constructors[c] = it }

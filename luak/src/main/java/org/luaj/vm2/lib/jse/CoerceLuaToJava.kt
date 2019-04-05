@@ -96,7 +96,7 @@ object CoerceLuaToJava {
         }
 
         override fun coerce(value: LuaValue): Any {
-            return if (value.toboolean()) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
+            return value.toboolean()
         }
     }
 
@@ -302,7 +302,7 @@ object CoerceLuaToJava {
         override fun coerce(value: LuaValue): Any? {
             when (value.type()) {
                 LuaValue.TNUMBER -> return if (value.isint()) value.toint() else value.todouble()
-                LuaValue.TBOOLEAN -> return if (value.toboolean()) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
+                LuaValue.TBOOLEAN -> return value.toboolean()
                 LuaValue.TSTRING -> return value.tojstring()
                 LuaValue.TUSERDATA -> return value.optuserdata(targetType, null)
                 LuaValue.TNIL -> return null

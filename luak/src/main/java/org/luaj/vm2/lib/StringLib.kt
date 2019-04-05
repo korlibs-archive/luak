@@ -361,7 +361,7 @@ class StringLib : TwoArgFunction() {
                     'o' -> radix = 8
                     else -> radix = 10
                 }
-                digits = java.lang.Long.toString(number, radix)
+                digits = number.toString(radix)
                 if (conversion == 'X'.toInt())
                     digits = digits.toUpperCase()
             }

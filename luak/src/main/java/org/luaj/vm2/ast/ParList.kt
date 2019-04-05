@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.ast
 
-import java.util.ArrayList
-
 class ParList(
     @JvmField val names: List<Name>?,
     @JvmField val isvararg: Boolean

@@ -22,7 +22,6 @@
 package org.luaj.vm2
 
 import java.lang.ref.WeakReference
-import java.util.Vector
 
 /**
  * Subclass of [LuaValue] for representing lua tables.
@@ -805,17 +804,15 @@ open class LuaTable : LuaValue, Metatable {
      * @return array of keys in the table
      */
     fun keys(): Array<LuaValue> {
-        val l = Vector<LuaValue>()
+        val l = ArrayList<LuaValue>()
         var k = LuaValue.NIL
         while (true) {
             val n = next(k)
             if ((run { k = n.arg1(); k }).isnil())
                 break
-            l.addElement(k)
+            l.add(k)
         }
-        val a = arrayOfNulls<LuaValue>(l.size)
-        l.copyInto(a)
-        return a as Array<LuaValue>
+        return l.toTypedArray()
     }
 
     // equality w/ metatable processing

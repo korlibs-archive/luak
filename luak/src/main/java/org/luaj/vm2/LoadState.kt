@@ -411,7 +411,7 @@ private constructor(
                 }
             }
 
-            return LuaValue.valueOf(java.lang.Double.longBitsToDouble(bits))
+            return LuaValue.valueOf(Double.fromBits(bits))
         }
 
         /**

@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.ast
 
-import java.util.ArrayList
-
 class Block : Stat() {
     @JvmField
     var stats: MutableList<Stat> = ArrayList()

@@ -273,7 +273,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
         else if (str.indexOf('x') >= 0 || str.indexOf('X') >= 0)
             seminfo.r = strx2number(str, seminfo)
         else
-            seminfo.r = LuaValue.valueOf(java.lang.Double.parseDouble(str.trim { it <= ' ' }))
+            seminfo.r = LuaValue.valueOf((str.trim { it <= ' ' }).toDouble())
         return true
     }
 
@@ -1972,7 +1972,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
 
         init {
             for (i in RESERVED_LOCAL_VAR_KEYWORDS.indices)
-                RESERVED_LOCAL_VAR_KEYWORDS_TABLE[RESERVED_LOCAL_VAR_KEYWORDS[i]] = java.lang.Boolean.TRUE
+                RESERVED_LOCAL_VAR_KEYWORDS_TABLE[RESERVED_LOCAL_VAR_KEYWORDS[i]] = true
         }
 
         private val EOZ = -1

@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.lib.jse
 
-import java.util.HashMap
-
 import org.luaj.vm2.LuaDouble
 import org.luaj.vm2.LuaInteger
 import org.luaj.vm2.LuaString

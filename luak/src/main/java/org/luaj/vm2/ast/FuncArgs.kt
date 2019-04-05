@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.ast
 
-import java.util.ArrayList
-
 import org.luaj.vm2.LuaString
 
 class FuncArgs : SyntaxElement {

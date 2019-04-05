@@ -154,13 +154,13 @@ private constructor(
     // unary operators
     override fun neg(): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) super.neg() else LuaValue.valueOf(-d)
+        return if ((d).isNaN()) super.neg() else LuaValue.valueOf(-d)
     }
 
     // basic binary arithmetic
     override fun add(rhs: LuaValue): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) arithmt(LuaValue.ADD, rhs) else rhs.add(d)
+        return if ((d).isNaN()) arithmt(LuaValue.ADD, rhs) else rhs.add(d)
     }
 
     override fun add(rhs: Double): LuaValue {
@@ -173,7 +173,7 @@ private constructor(
 
     override fun sub(rhs: LuaValue): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) arithmt(LuaValue.SUB, rhs) else rhs.subFrom(d)
+        return if ((d).isNaN()) arithmt(LuaValue.SUB, rhs) else rhs.subFrom(d)
     }
 
     override fun sub(rhs: Double): LuaValue {
@@ -190,7 +190,7 @@ private constructor(
 
     override fun mul(rhs: LuaValue): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) arithmt(LuaValue.MUL, rhs) else rhs.mul(d)
+        return if ((d).isNaN()) arithmt(LuaValue.MUL, rhs) else rhs.mul(d)
     }
 
     override fun mul(rhs: Double): LuaValue {
@@ -203,7 +203,7 @@ private constructor(
 
     override fun pow(rhs: LuaValue): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) arithmt(LuaValue.POW, rhs) else rhs.powWith(d)
+        return if ((d).isNaN()) arithmt(LuaValue.POW, rhs) else rhs.powWith(d)
     }
 
     override fun pow(rhs: Double): LuaValue {
@@ -224,7 +224,7 @@ private constructor(
 
     override fun div(rhs: LuaValue): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) arithmt(LuaValue.DIV, rhs) else rhs.divInto(d)
+        return if ((d).isNaN()) arithmt(LuaValue.DIV, rhs) else rhs.divInto(d)
     }
 
     override fun div(rhs: Double): LuaValue {
@@ -241,7 +241,7 @@ private constructor(
 
     override fun mod(rhs: LuaValue): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) arithmt(LuaValue.MOD, rhs) else rhs.modFrom(d)
+        return if ((d).isNaN()) arithmt(LuaValue.MOD, rhs) else rhs.modFrom(d)
     }
 
     override fun mod(rhs: Double): LuaValue {
@@ -370,7 +370,7 @@ private constructor(
     /** Check for number in arithmetic, or throw aritherror  */
     private fun checkarith(): Double {
         val d = scannumber()
-        if (java.lang.Double.isNaN(d))
+        if ((d).isNaN())
             aritherror()
         return d
     }
@@ -389,7 +389,7 @@ private constructor(
 
     override fun checkdouble(): Double {
         val d = scannumber()
-        if (java.lang.Double.isNaN(d))
+        if ((d).isNaN())
             argerror("number")
         return d
     }
@@ -400,19 +400,19 @@ private constructor(
 
     override fun checknumber(msg: String): LuaNumber {
         val d = scannumber()
-        if (java.lang.Double.isNaN(d))
+        if ((d).isNaN())
             LuaValue.error(msg)
         return LuaValue.valueOf(d)
     }
 
     override fun isnumber(): Boolean {
         val d = scannumber()
-        return !java.lang.Double.isNaN(d)
+        return !(d.isNaN())
     }
 
     override fun isint(): Boolean {
         val d = scannumber()
-        if (java.lang.Double.isNaN(d))
+        if (d.isNaN())
             return false
         val i = d.toInt()
         return i.toDouble() == d
@@ -420,7 +420,7 @@ private constructor(
 
     override fun islong(): Boolean {
         val d = scannumber()
-        if (java.lang.Double.isNaN(d))
+        if ((d.isNaN()))
             return false
         val l = d.toLong()
         return l.toDouble() == d
@@ -436,7 +436,7 @@ private constructor(
 
     override fun todouble(): Double {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) 0.0 else d
+        return if ((d.isNaN())) 0.0 else d
     }
 
     override fun tofloat(): Float {
@@ -677,7 +677,7 @@ private constructor(
      */
     override fun tonumber(): LuaValue {
         val d = scannumber()
-        return if (java.lang.Double.isNaN(d)) LuaValue.NIL else LuaValue.valueOf(d)
+        return if ((d.isNaN())) LuaValue.NIL else LuaValue.valueOf(d)
     }
 
     /**
@@ -688,7 +688,7 @@ private constructor(
      */
     fun tonumber(base: Int): LuaValue {
         val d = scannumber(base)
-        return if (java.lang.Double.isNaN(d)) LuaValue.NIL else LuaValue.valueOf(d)
+        return if ((d.isNaN())) LuaValue.NIL else LuaValue.valueOf(d)
     }
 
     /**
@@ -702,11 +702,11 @@ private constructor(
         while (i < j && m_bytes[i] == ' '.toByte()) ++i
         while (i < j && m_bytes[j - 1] == ' '.toByte()) --j
         if (i >= j)
-            return java.lang.Double.NaN
+            return Double.NaN
         if (m_bytes[i] == '0'.toByte() && i + 1 < j && (m_bytes[i + 1] == 'x'.toByte() || m_bytes[i + 1] == 'X'.toByte()))
             return scanlong(16, i + 2, j)
         val l = scanlong(10, i, j)
-        return if (java.lang.Double.isNaN(l)) scandouble(i, j) else l
+        return if ((l.isNaN())) scandouble(i, j) else l
     }
 
     /**
@@ -716,12 +716,12 @@ private constructor(
      */
     fun scannumber(base: Int): Double {
         if (base < 2 || base > 36)
-            return java.lang.Double.NaN
+            return Double.NaN
         var i = m_offset
         var j = m_offset + m_length
         while (i < j && m_bytes[i] == ' '.toByte()) ++i
         while (i < j && m_bytes[j - 1] == ' '.toByte()) --j
-        return if (i >= j) java.lang.Double.NaN else scanlong(base, i, j)
+        return if (i >= j) Double.NaN else scanlong(base, i, j)
     }
 
     /**
@@ -740,10 +740,10 @@ private constructor(
                 '0'.toInt()
             else if (m_bytes[i] >= 'A'.toByte() && m_bytes[i] <= 'Z'.toByte()) 'A'.toInt() - 10 else 'a'.toInt() - 10
             if (digit < 0 || digit >= base)
-                return java.lang.Double.NaN
+                return Double.NaN
             x = x * base + digit
             if (x < 0)
-                return java.lang.Double.NaN // overflow
+                return Double.NaN // overflow
         }
         return (if (neg) -x else x).toDouble()
     }
@@ -762,16 +762,16 @@ private constructor(
             when (m_bytes[i].toChar()) {
                 '-', '+', '.', 'e', 'E', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
                 }
-                else -> return java.lang.Double.NaN
+                else -> return Double.NaN
             }
         }
         val c = CharArray(end - start)
         for (i in start until end)
             c[i - start] = m_bytes[i].toChar()
         try {
-            return java.lang.Double.parseDouble(String(c))
+            return (String(c)).toDouble()
         } catch (e: Exception) {
-            return java.lang.Double.NaN
+            return Double.NaN
         }
 
     }

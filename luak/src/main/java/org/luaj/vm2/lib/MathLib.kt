@@ -21,12 +21,11 @@
  */
 package org.luaj.vm2.lib
 
-import java.util.Random
-
 import org.luaj.vm2.LuaDouble
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
+import kotlin.random.Random
 
 /**
  * Subclass of [LibFunction] which implements the lua standard `math`
@@ -216,7 +215,7 @@ open class MathLib : TwoArgFunction() {
     internal class ldexp : BinaryOp() {
         override fun call(x: Double, y: Double): Double {
             // This is the behavior on os-x, windows differs in rounding behavior.
-            return x * java.lang.Double.longBitsToDouble(y.toLong() + 1023 shl 52)
+            return x * Double.fromBits(y.toLong() + 1023 shl 52)
         }
     }
 
@@ -230,7 +229,7 @@ open class MathLib : TwoArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             val x = args.checkdouble(1)
             if (x == 0.0) return LuaValue.varargsOf(LuaValue.ZERO, LuaValue.ZERO)
-            val bits = java.lang.Double.doubleToLongBits(x)
+            val bits = (x).toRawBits()
             val m =
                 ((bits and (-1L shl 52).inv()) + (1L shl 52)) * if (bits >= 0) .5 / (1L shl 52) else -.5 / (1L shl 52)
             val e = (((bits shr 52).toInt() and 0x7ff) - 1022).toDouble()
@@ -274,7 +273,7 @@ open class MathLib : TwoArgFunction() {
     }
 
     internal class random : LibFunction() {
-        var random = Random()
+        var random: Random = Random.Default
         override fun call(): LuaValue {
             return LuaValue.valueOf(random.nextDouble())
         }

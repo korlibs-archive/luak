@@ -111,7 +111,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
 
     @Throws(IOException::class)
     internal fun dumpDouble(d: Double) {
-        val l = java.lang.Double.doubleToLongBits(d)
+        val l = (d).toRawBits()
         if (IS_LITTLE_ENDIAN) {
             dumpInt(l.toInt())
             dumpInt((l shr 32).toInt())

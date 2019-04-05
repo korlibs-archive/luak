@@ -24,7 +24,6 @@ package org.luaj.vm2.lib.jse
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.Collections
-import java.util.HashMap
 
 import org.luaj.vm2.LuaError
 import org.luaj.vm2.LuaFunction
