@@ -136,7 +136,7 @@ open class Globals : LuaTable() {
     @JvmField var finder: ResourceFinder? = null
 
     /** The currently running thread.  Should not be changed by non-library code.  */
-    @JvmField var running: LuaThread? = LuaThread(this)
+    @JvmField var running: LuaThread = LuaThread(this)
 
     /** The BaseLib instance loaded into this Globals  */
     @JvmField var baselib: BaseLib? = null
