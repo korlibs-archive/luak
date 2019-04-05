@@ -21,15 +21,14 @@
  */
 package org.luaj.vm2
 
-import junit.framework.TestCase
-
 import org.luaj.vm2.TypeTest.MyData
 import org.luaj.vm2.lib.StringLib
 import org.luaj.vm2.lib.ThreeArgFunction
 import org.luaj.vm2.lib.TwoArgFunction
 import org.luaj.vm2.lib.ZeroArgFunction
+import kotlin.test.*
 
-class MetatableTest : TestCase() {
+class MetatableTest {
 
     private val samplestring = "abcdef"
     private val sampleobject = Any()
@@ -46,16 +45,15 @@ class MetatableTest : TestCase() {
     private val closure = LuaClosure(Prototype(), LuaTable())
     private val userdata = LuaValue.userdataOf(sampleobject)
     private val userdatamt = LuaValue.userdataOf(sampledata, table)
-
-    @Throws(Exception::class)
-    override fun setUp() {
+    
+    init {
         // needed for metatable ops to work on strings
         StringLib()
     }
 
     @Throws(Exception::class)
-    override fun tearDown() {
-        super.tearDown()
+    @AfterTest
+    fun tearDown() {
         LuaBoolean.s_metatable = null
         LuaFunction.s_metatable = null
         LuaNil.s_metatable = null
@@ -64,111 +62,114 @@ class MetatableTest : TestCase() {
         LuaThread.s_metatable = null
     }
 
+    @Test
     fun testGetMetatable() {
-        TestCase.assertEquals(null, LuaValue.NIL.getmetatable())
-        TestCase.assertEquals(null, LuaValue.TRUE.getmetatable())
-        TestCase.assertEquals(null, LuaValue.ONE.getmetatable())
+        assertEquals(null, LuaValue.NIL.getmetatable())
+        assertEquals(null, LuaValue.TRUE.getmetatable())
+        assertEquals(null, LuaValue.ONE.getmetatable())
         //		assertEquals( null, string.getmetatable() );
-        TestCase.assertEquals(null, table.getmetatable())
-        TestCase.assertEquals(null, function.getmetatable())
-        TestCase.assertEquals(null, thread.getmetatable())
-        TestCase.assertEquals(null, closure.getmetatable())
-        TestCase.assertEquals(null, userdata.getmetatable())
-        TestCase.assertEquals(table, userdatamt.getmetatable())
+        assertEquals(null, table.getmetatable())
+        assertEquals(null, function.getmetatable())
+        assertEquals(null, thread.getmetatable())
+        assertEquals(null, closure.getmetatable())
+        assertEquals(null, userdata.getmetatable())
+        assertEquals(table, userdatamt.getmetatable())
     }
 
+    @Test
     fun testSetMetatable() {
         val mt = LuaValue.tableOf()
-        TestCase.assertEquals(null, table.getmetatable())
-        TestCase.assertEquals(null, userdata.getmetatable())
-        TestCase.assertEquals(table, userdatamt.getmetatable())
-        TestCase.assertEquals(table, table.setmetatable(mt))
-        TestCase.assertEquals(userdata, userdata.setmetatable(mt))
-        TestCase.assertEquals(userdatamt, userdatamt.setmetatable(mt))
-        TestCase.assertEquals(mt, table.getmetatable())
-        TestCase.assertEquals(mt, userdata.getmetatable())
-        TestCase.assertEquals(mt, userdatamt.getmetatable())
+        assertEquals(null, table.getmetatable())
+        assertEquals(null, userdata.getmetatable())
+        assertEquals(table, userdatamt.getmetatable())
+        assertEquals(table, table.setmetatable(mt))
+        assertEquals(userdata, userdata.setmetatable(mt))
+        assertEquals(userdatamt, userdatamt.setmetatable(mt))
+        assertEquals(mt, table.getmetatable())
+        assertEquals(mt, userdata.getmetatable())
+        assertEquals(mt, userdatamt.getmetatable())
 
         // these all get metatable behind-the-scenes
-        TestCase.assertEquals(null, LuaValue.NIL.getmetatable())
-        TestCase.assertEquals(null, LuaValue.TRUE.getmetatable())
-        TestCase.assertEquals(null, LuaValue.ONE.getmetatable())
+        assertEquals(null, LuaValue.NIL.getmetatable())
+        assertEquals(null, LuaValue.TRUE.getmetatable())
+        assertEquals(null, LuaValue.ONE.getmetatable())
         //		assertEquals( null, string.getmetatable() );
-        TestCase.assertEquals(null, function.getmetatable())
-        TestCase.assertEquals(null, thread.getmetatable())
-        TestCase.assertEquals(null, closure.getmetatable())
+        assertEquals(null, function.getmetatable())
+        assertEquals(null, thread.getmetatable())
+        assertEquals(null, closure.getmetatable())
         LuaNil.s_metatable = mt
-        TestCase.assertEquals(mt, LuaValue.NIL.getmetatable())
-        TestCase.assertEquals(null, LuaValue.TRUE.getmetatable())
-        TestCase.assertEquals(null, LuaValue.ONE.getmetatable())
+        assertEquals(mt, LuaValue.NIL.getmetatable())
+        assertEquals(null, LuaValue.TRUE.getmetatable())
+        assertEquals(null, LuaValue.ONE.getmetatable())
         //		assertEquals( null, string.getmetatable() );
-        TestCase.assertEquals(null, function.getmetatable())
-        TestCase.assertEquals(null, thread.getmetatable())
-        TestCase.assertEquals(null, closure.getmetatable())
+        assertEquals(null, function.getmetatable())
+        assertEquals(null, thread.getmetatable())
+        assertEquals(null, closure.getmetatable())
         LuaBoolean.s_metatable = mt
-        TestCase.assertEquals(mt, LuaValue.TRUE.getmetatable())
-        TestCase.assertEquals(null, LuaValue.ONE.getmetatable())
+        assertEquals(mt, LuaValue.TRUE.getmetatable())
+        assertEquals(null, LuaValue.ONE.getmetatable())
         //		assertEquals( null, string.getmetatable() );
-        TestCase.assertEquals(null, function.getmetatable())
-        TestCase.assertEquals(null, thread.getmetatable())
-        TestCase.assertEquals(null, closure.getmetatable())
+        assertEquals(null, function.getmetatable())
+        assertEquals(null, thread.getmetatable())
+        assertEquals(null, closure.getmetatable())
         LuaNumber.s_metatable = mt
-        TestCase.assertEquals(mt, LuaValue.ONE.getmetatable())
-        TestCase.assertEquals(mt, LuaValue.valueOf(1.25).getmetatable())
+        assertEquals(mt, LuaValue.ONE.getmetatable())
+        assertEquals(mt, LuaValue.valueOf(1.25).getmetatable())
         //		assertEquals( null, string.getmetatable() );
-        TestCase.assertEquals(null, function.getmetatable())
-        TestCase.assertEquals(null, thread.getmetatable())
-        TestCase.assertEquals(null, closure.getmetatable())
+        assertEquals(null, function.getmetatable())
+        assertEquals(null, thread.getmetatable())
+        assertEquals(null, closure.getmetatable())
         //		LuaString.s_metatable = mt;
         //		assertEquals( mt, string.getmetatable() );
-        TestCase.assertEquals(null, function.getmetatable())
-        TestCase.assertEquals(null, thread.getmetatable())
-        TestCase.assertEquals(null, closure.getmetatable())
+        assertEquals(null, function.getmetatable())
+        assertEquals(null, thread.getmetatable())
+        assertEquals(null, closure.getmetatable())
         LuaFunction.s_metatable = mt
-        TestCase.assertEquals(mt, function.getmetatable())
-        TestCase.assertEquals(null, thread.getmetatable())
+        assertEquals(mt, function.getmetatable())
+        assertEquals(null, thread.getmetatable())
         LuaThread.s_metatable = mt
-        TestCase.assertEquals(mt, thread.getmetatable())
+        assertEquals(mt, thread.getmetatable())
     }
 
+    @Test
     fun testMetatableIndex() {
-        TestCase.assertEquals(table, table.setmetatable(null))
-        TestCase.assertEquals(userdata, userdata.setmetatable(null))
-        TestCase.assertEquals(userdatamt, userdatamt.setmetatable(null))
-        TestCase.assertEquals(LuaValue.NIL, table.get(1))
-        TestCase.assertEquals(LuaValue.NIL, userdata.get(1))
-        TestCase.assertEquals(LuaValue.NIL, userdatamt.get(1))
+        assertEquals(table, table.setmetatable(null))
+        assertEquals(userdata, userdata.setmetatable(null))
+        assertEquals(userdatamt, userdatamt.setmetatable(null))
+        assertEquals(LuaValue.NIL, table.get(1))
+        assertEquals(LuaValue.NIL, userdata.get(1))
+        assertEquals(LuaValue.NIL, userdatamt.get(1))
 
         // empty metatable
         val mt = LuaValue.tableOf()
-        TestCase.assertEquals(table, table.setmetatable(mt))
-        TestCase.assertEquals(userdata, userdata.setmetatable(mt))
+        assertEquals(table, table.setmetatable(mt))
+        assertEquals(userdata, userdata.setmetatable(mt))
         LuaBoolean.s_metatable = mt
         LuaFunction.s_metatable = mt
         LuaNil.s_metatable = mt
         LuaNumber.s_metatable = mt
         //		LuaString.s_metatable = mt;
         LuaThread.s_metatable = mt
-        TestCase.assertEquals(mt, table.getmetatable())
-        TestCase.assertEquals(mt, userdata.getmetatable())
-        TestCase.assertEquals(mt, LuaValue.NIL.getmetatable())
-        TestCase.assertEquals(mt, LuaValue.TRUE.getmetatable())
-        TestCase.assertEquals(mt, LuaValue.ONE.getmetatable())
+        assertEquals(mt, table.getmetatable())
+        assertEquals(mt, userdata.getmetatable())
+        assertEquals(mt, LuaValue.NIL.getmetatable())
+        assertEquals(mt, LuaValue.TRUE.getmetatable())
+        assertEquals(mt, LuaValue.ONE.getmetatable())
         // 		assertEquals( StringLib.instance, string.getmetatable() );
-        TestCase.assertEquals(mt, function.getmetatable())
-        TestCase.assertEquals(mt, thread.getmetatable())
+        assertEquals(mt, function.getmetatable())
+        assertEquals(mt, thread.getmetatable())
 
         // plain metatable
         val abc = LuaValue.valueOf("abc")
         mt.set(LuaValue.INDEX, LuaValue.listOf(arrayOf<LuaValue>(abc)))
-        TestCase.assertEquals(abc, table.get(1))
-        TestCase.assertEquals(abc, userdata.get(1))
-        TestCase.assertEquals(abc, LuaValue.NIL.get(1))
-        TestCase.assertEquals(abc, LuaValue.TRUE.get(1))
-        TestCase.assertEquals(abc, LuaValue.ONE.get(1))
+        assertEquals(abc, table.get(1))
+        assertEquals(abc, userdata.get(1))
+        assertEquals(abc, LuaValue.NIL.get(1))
+        assertEquals(abc, LuaValue.TRUE.get(1))
+        assertEquals(abc, LuaValue.ONE.get(1))
         // 		assertEquals( abc, string.get(1) );
-        TestCase.assertEquals(abc, function.get(1))
-        TestCase.assertEquals(abc, thread.get(1))
+        assertEquals(abc, function.get(1))
+        assertEquals(abc, thread.get(1))
 
         // plain metatable
         mt.set(LuaValue.INDEX, object : TwoArgFunction() {
@@ -177,22 +178,23 @@ class MetatableTest : TestCase() {
             }
 
         })
-        TestCase.assertEquals("table[1]=xyz", table.get(1).tojstring())
-        TestCase.assertEquals("userdata[1]=xyz", userdata.get(1).tojstring())
-        TestCase.assertEquals("nil[1]=xyz", LuaValue.NIL.get(1).tojstring())
-        TestCase.assertEquals("boolean[1]=xyz", LuaValue.TRUE.get(1).tojstring())
-        TestCase.assertEquals("number[1]=xyz", LuaValue.ONE.get(1).tojstring())
+        assertEquals("table[1]=xyz", table.get(1).tojstring())
+        assertEquals("userdata[1]=xyz", userdata.get(1).tojstring())
+        assertEquals("nil[1]=xyz", LuaValue.NIL.get(1).tojstring())
+        assertEquals("boolean[1]=xyz", LuaValue.TRUE.get(1).tojstring())
+        assertEquals("number[1]=xyz", LuaValue.ONE.get(1).tojstring())
         //	assertEquals( "string[1]=xyz",   string.get(1).tojstring() );
-        TestCase.assertEquals("function[1]=xyz", function.get(1).tojstring())
-        TestCase.assertEquals("thread[1]=xyz", thread.get(1).tojstring())
+        assertEquals("function[1]=xyz", function.get(1).tojstring())
+        assertEquals("thread[1]=xyz", thread.get(1).tojstring())
     }
 
 
+    @Test
     fun testMetatableNewIndex() {
         // empty metatable
         val mt = LuaValue.tableOf()
-        TestCase.assertEquals(table, table.setmetatable(mt))
-        TestCase.assertEquals(userdata, userdata.setmetatable(mt))
+        assertEquals(table, table.setmetatable(mt))
+        assertEquals(userdata, userdata.setmetatable(mt))
         LuaBoolean.s_metatable = mt
         LuaFunction.s_metatable = mt
         LuaNil.s_metatable = mt
@@ -212,14 +214,14 @@ class MetatableTest : TestCase() {
         // 		string.set(7,abc);
         function.set(8, abc)
         thread.set(9, abc)
-        TestCase.assertEquals(abc, fallback.get(2))
-        TestCase.assertEquals(abc, fallback.get(3))
-        TestCase.assertEquals(abc, fallback.get(4))
-        TestCase.assertEquals(abc, fallback.get(5))
-        TestCase.assertEquals(abc, fallback.get(6))
+        assertEquals(abc, fallback.get(2))
+        assertEquals(abc, fallback.get(3))
+        assertEquals(abc, fallback.get(4))
+        assertEquals(abc, fallback.get(5))
+        assertEquals(abc, fallback.get(6))
         // 		assertEquals( abc, StringLib.instance.get(7) );
-        TestCase.assertEquals(abc, fallback.get(8))
-        TestCase.assertEquals(abc, fallback.get(9))
+        assertEquals(abc, fallback.get(8))
+        assertEquals(abc, fallback.get(9))
 
         // metatable with function call
         mt.set(LuaValue.NEWINDEX, object : ThreeArgFunction() {
@@ -238,14 +240,14 @@ class MetatableTest : TestCase() {
         function.set(18, abc)
         thread.set(19, abc)
         val via = LuaValue.valueOf("via-func-abc")
-        TestCase.assertEquals(via, fallback.get(12))
-        TestCase.assertEquals(via, fallback.get(13))
-        TestCase.assertEquals(via, fallback.get(14))
-        TestCase.assertEquals(via, fallback.get(15))
-        TestCase.assertEquals(via, fallback.get(16))
+        assertEquals(via, fallback.get(12))
+        assertEquals(via, fallback.get(13))
+        assertEquals(via, fallback.get(14))
+        assertEquals(via, fallback.get(15))
+        assertEquals(via, fallback.get(16))
         //		assertEquals( via, StringLib.instance.get(17) );
-        TestCase.assertEquals(via, fallback.get(18))
-        TestCase.assertEquals(via, fallback.get(19))
+        assertEquals(via, fallback.get(18))
+        assertEquals(via, fallback.get(19))
     }
 
 
@@ -254,20 +256,20 @@ class MetatableTest : TestCase() {
         aa: LuaValue, bb: LuaValue, cc: LuaValue, dd: LuaValue, ee: LuaValue, ff: LuaValue, gg: LuaValue,
         ra: LuaValue, rb: LuaValue, rc: LuaValue, rd: LuaValue, re: LuaValue, rf: LuaValue, rg: LuaValue
     ) {
-        TestCase.assertEquals(aa, t.get("aa"))
-        TestCase.assertEquals(bb, t.get("bb"))
-        TestCase.assertEquals(cc, t.get("cc"))
-        TestCase.assertEquals(dd, t.get("dd"))
-        TestCase.assertEquals(ee, t.get("ee"))
-        TestCase.assertEquals(ff, t.get("ff"))
-        TestCase.assertEquals(gg, t.get("gg"))
-        TestCase.assertEquals(ra, t.rawget("aa"))
-        TestCase.assertEquals(rb, t.rawget("bb"))
-        TestCase.assertEquals(rc, t.rawget("cc"))
-        TestCase.assertEquals(rd, t.rawget("dd"))
-        TestCase.assertEquals(re, t.rawget("ee"))
-        TestCase.assertEquals(rf, t.rawget("ff"))
-        TestCase.assertEquals(rg, t.rawget("gg"))
+        assertEquals(aa, t.get("aa"))
+        assertEquals(bb, t.get("bb"))
+        assertEquals(cc, t.get("cc"))
+        assertEquals(dd, t.get("dd"))
+        assertEquals(ee, t.get("ee"))
+        assertEquals(ff, t.get("ff"))
+        assertEquals(gg, t.get("gg"))
+        assertEquals(ra, t.rawget("aa"))
+        assertEquals(rb, t.rawget("bb"))
+        assertEquals(rc, t.rawget("cc"))
+        assertEquals(rd, t.rawget("dd"))
+        assertEquals(re, t.rawget("ee"))
+        assertEquals(rf, t.rawget("ff"))
+        assertEquals(rg, t.rawget("gg"))
     }
 
     private fun makeTable(key1: String, val1: String, key2: String, val2: String): LuaValue {
@@ -281,6 +283,7 @@ class MetatableTest : TestCase() {
         )
     }
 
+    @Test
     fun testRawsetMetatableSet() {
         // set up tables
         val m = makeTable("aa", "aaa", "bb", "bbb")

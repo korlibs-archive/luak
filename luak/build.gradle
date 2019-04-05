@@ -1,9 +1,4 @@
-/*
 apply plugin: com.soywiz.korlibs.KorlibsPlugin
-
-kotlin {
-    def jvmJava = targetFromPreset(presets.jvmWithJava, 'jvmJava')
-}
 
 korlibs {
     exposeVersion()
@@ -11,12 +6,23 @@ korlibs {
 
 
 dependencies {
-    jvmJavaMainApi "junit:junit:4.12"
+    //jvmJavaMainApi "junit:junit:4.12"
     //jvmJavaTestImplementation jvmJavaMainApi
+    commonTestImplementation "org.jetbrains.kotlin:kotlin-test"
 }
-*/
 
+jvmTest {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+/*
 apply plugin: "kotlin"
+
+kotlin {
+    def jvmJava = targetFromPreset(presets.jvmWithJava, 'jvmJava')
+}
 
 repositories {
     mavenLocal()
@@ -29,9 +35,10 @@ dependencies {
     testImplementation "junit:junit:4.12"
     api "org.jetbrains.kotlin:kotlin-stdlib"
 }
-
 test {
     testLogging {
         exceptionFormat = 'full'
     }
 }
+*/
+

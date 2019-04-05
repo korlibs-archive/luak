@@ -31,42 +31,14 @@ import javax.script.ScriptEngineFactory
  * instances of LuaScriptEngine to handl lua scripts.
  */
 class LuaScriptEngineFactory : ScriptEngineFactory {
-
-    private val extensions: List<String> = EXTENSIONS.toList()
-    private val mimeTypes: List<String> = MIMETYPES.toList()
-    private val names: List<String> = NAMES.toList()
-
-    override fun getEngineName(): String {
-        return scriptEngine.get(ScriptEngine.ENGINE).toString()
-    }
-
-    override fun getEngineVersion(): String {
-        return scriptEngine.get(ScriptEngine.ENGINE_VERSION).toString()
-    }
-
-    override fun getExtensions(): List<String> {
-        return extensions
-    }
-
-    override fun getMimeTypes(): List<String> {
-        return mimeTypes
-    }
-
-    override fun getNames(): List<String> {
-        return names
-    }
-
-    override fun getLanguageName(): String {
-        return scriptEngine.get(ScriptEngine.LANGUAGE).toString()
-    }
-
-    override fun getLanguageVersion(): String {
-        return scriptEngine.get(ScriptEngine.LANGUAGE_VERSION).toString()
-    }
-
-    override fun getParameter(key: String): Any {
-        return scriptEngine.get(key).toString()
-    }
+    override fun getEngineName(): String = scriptEngine.get(ScriptEngine.ENGINE).toString()
+    override fun getEngineVersion(): String = scriptEngine.get(ScriptEngine.ENGINE_VERSION).toString()
+    override fun getExtensions(): List<String> = EXTENSIONS
+    override fun getMimeTypes(): List<String> = MIMETYPES
+    override fun getNames(): List<String> = NAMES
+    override fun getLanguageName(): String = scriptEngine.get(ScriptEngine.LANGUAGE).toString()
+    override fun getLanguageVersion(): String = scriptEngine.get(ScriptEngine.LANGUAGE_VERSION).toString()
+    override fun getParameter(key: String): Any = scriptEngine.get(key).toString()
 
     override fun getMethodCallSyntax(obj: String, m: String, vararg args: String): String {
         val sb = StringBuffer()
@@ -82,9 +54,7 @@ class LuaScriptEngineFactory : ScriptEngineFactory {
         return sb.toString()
     }
 
-    override fun getOutputStatement(toDisplay: String): String {
-        return "print($toDisplay)"
-    }
+    override fun getOutputStatement(toDisplay: String): String = "print($toDisplay)"
 
     override fun getProgram(vararg statements: String): String {
         val sb = StringBuffer()
@@ -98,16 +68,11 @@ class LuaScriptEngineFactory : ScriptEngineFactory {
         return sb.toString()
     }
 
-    override fun getScriptEngine(): ScriptEngine {
-        return LuaScriptEngine()
-    }
+    override fun getScriptEngine(): ScriptEngine = LuaScriptEngine()
 
     companion object {
-
-        private val EXTENSIONS = arrayOf("lua", ".lua")
-
-        private val MIMETYPES = arrayOf("text/lua", "application/lua")
-
-        private val NAMES = arrayOf("lua", "luaj")
+        private val EXTENSIONS = listOf("lua", ".lua")
+        private val MIMETYPES = listOf("text/lua", "application/lua")
+        private val NAMES = listOf("lua", "luaj")
     }
 }
