@@ -1,19 +1,13 @@
 package org.luaj.vm2
 
-import junit.framework.TestCase
-
 import org.luaj.vm2.lib.jse.JsePlatform
+import kotlin.test.*
 
-class MathLibTest : TestCase() {
+class MathLibTest {
 
     private val j2se: LuaValue = JsePlatform.standardGlobals().get("math")
     //private LuaValue j2me = JmePlatform.standardGlobals().get("math");
-    private var supportedOnJ2me: Boolean = false
-
-    @Throws(Exception::class)
-    override fun setUp() {
-        supportedOnJ2me = true
-    }
+    private var supportedOnJ2me: Boolean = true
 
     //public void testMathDPow() {
     //	assertEquals( 1, j2mepow(2, 0), 0 );
@@ -42,24 +36,29 @@ class MathLibTest : TestCase() {
     //	return j2me.get("pow").call(LuaValue.valueOf(x),LuaValue.valueOf(y)).todouble();
     //}
 
+    @Test
     fun testAbs() {
         tryMathOp("abs", 23.45)
         tryMathOp("abs", -23.45)
     }
 
+    @Test
     fun testCos() {
         tryTrigOps("cos")
     }
 
+    @Test
     fun testCosh() {
         supportedOnJ2me = false
         tryTrigOps("cosh")
     }
 
+    @Test
     fun testDeg() {
         tryTrigOps("deg")
     }
 
+    @Test
     fun testExp() {
         //supportedOnJ2me = false;
         tryMathOp("exp", 0.0)
@@ -73,6 +72,7 @@ class MathLibTest : TestCase() {
         tryMathOp("exp", -9.0)
     }
 
+    @Test
     fun testLog() {
         supportedOnJ2me = false
         tryMathOp("log", 0.1)
@@ -85,6 +85,7 @@ class MathLibTest : TestCase() {
         tryMathOp("log", -9.0)
     }
 
+    @Test
     fun testRad() {
         tryMathOp("rad", 0.0)
         tryMathOp("rad", 0.1)
@@ -101,15 +102,18 @@ class MathLibTest : TestCase() {
         tryMathOp("rad", -100.0)
     }
 
+    @Test
     fun testSin() {
         tryTrigOps("sin")
     }
 
+    @Test
     fun testSinh() {
         supportedOnJ2me = false
         tryTrigOps("sinh")
     }
 
+    @Test
     fun testSqrt() {
         tryMathOp("sqrt", 0.0)
         tryMathOp("sqrt", 0.1)
@@ -120,24 +124,29 @@ class MathLibTest : TestCase() {
         tryMathOp("sqrt", 100.0)
     }
 
+    @Test
     fun testTan() {
         tryTrigOps("tan")
     }
 
+    @Test
     fun testTanh() {
         supportedOnJ2me = false
         tryTrigOps("tanh")
     }
 
+    @Test
     fun testAtan2() {
         supportedOnJ2me = false
         tryDoubleOps("atan2", false)
     }
 
+    @Test
     fun testFmod() {
         tryDoubleOps("fmod", false)
     }
 
+    @Test
     fun testPow() {
         tryDoubleOps("pow", true)
     }

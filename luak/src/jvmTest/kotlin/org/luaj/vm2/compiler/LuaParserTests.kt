@@ -1,18 +1,12 @@
 package org.luaj.vm2.compiler
 
-import junit.framework.TestCase
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.Reader
-
-import org.luaj.vm2.LuaValue
-import org.luaj.vm2.parser.LuaParser
+import org.luaj.vm2.*
+import org.luaj.vm2.parser.*
+import java.io.*
+import kotlin.test.*
 
 class LuaParserTests : CompilerUnitTests() {
-
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
+    init {
         LuaValue.valueOf(true)
     }
 
@@ -23,7 +17,7 @@ class LuaParserTests : CompilerUnitTests() {
             val parser = LuaParser(r)
             parser.Chunk()
         } catch (e: Exception) {
-            TestCase.fail(e.message)
+            fail(e.message)
             e.printStackTrace()
         }
 

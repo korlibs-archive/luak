@@ -21,11 +21,8 @@
  */
 package org.luaj.vm2
 
-import org.luaj.vm2.TypeTest.MyData
-import org.luaj.vm2.lib.StringLib
-import org.luaj.vm2.lib.ThreeArgFunction
-import org.luaj.vm2.lib.TwoArgFunction
-import org.luaj.vm2.lib.ZeroArgFunction
+import org.luaj.vm2.TypeTest.*
+import org.luaj.vm2.lib.*
 import kotlin.test.*
 
 class MetatableTest {
@@ -45,7 +42,7 @@ class MetatableTest {
     private val closure = LuaClosure(Prototype(), LuaTable())
     private val userdata = LuaValue.userdataOf(sampleobject)
     private val userdatamt = LuaValue.userdataOf(sampledata, table)
-    
+
     init {
         // needed for metatable ops to work on strings
         StringLib()

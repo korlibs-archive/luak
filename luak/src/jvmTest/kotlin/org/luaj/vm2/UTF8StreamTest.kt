@@ -21,21 +21,20 @@
  */
 package org.luaj.vm2
 
-import junit.framework.TestCase
+import org.luaj.vm2.lib.jse.*
+import kotlin.test.*
 
-import org.luaj.vm2.lib.jse.JsePlatform
-
-class UTF8StreamTest : TestCase() {
-
+class UTF8StreamTest {
+    @Test
     fun testUtf8CharsInStream() {
         val script = ("x = \"98\u00b0: today's temp!\"\n"
-                + "print('x = ', x)\n"
-                + "return x")
+            + "print('x = ', x)\n"
+            + "return x")
         val globals = JsePlatform.standardGlobals()
         val chunk = globals.load(script)
         val result = chunk.call()
         val str = result.tojstring()
-        TestCase.assertEquals("98\u00b0: today's temp!", str)
+        assertEquals("98\u00b0: today's temp!", str)
     }
 
 }

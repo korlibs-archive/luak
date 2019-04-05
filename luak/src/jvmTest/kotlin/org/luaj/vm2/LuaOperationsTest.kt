@@ -21,17 +21,13 @@
  */
 package org.luaj.vm2
 
-import java.io.Reader
-import java.io.StringReader
-import java.lang.reflect.InvocationTargetException
+import org.luaj.vm2.TypeTest.*
+import org.luaj.vm2.lib.*
+import java.io.*
+import java.lang.reflect.*
+import kotlin.test.*
 
-import junit.framework.TestCase
-
-import org.luaj.vm2.TypeTest.MyData
-import org.luaj.vm2.compiler.LuaC
-import org.luaj.vm2.lib.ZeroArgFunction
-
-class LuaOperationsTest : TestCase() {
+class LuaOperationsTest {
 
     private val sampleint = 77
     private val samplelong = 123400000000L
@@ -69,13 +65,13 @@ class LuaOperationsTest : TestCase() {
     private fun throwsLuaError(methodName: String, obj: Any) {
         try {
             LuaValue::class.java.getMethod(methodName).invoke(obj)
-            TestCase.fail("failed to throw LuaError as required")
+            fail("failed to throw LuaError as required")
         } catch (e: InvocationTargetException) {
             if (e.targetException !is LuaError)
-                TestCase.fail("not a LuaError: " + e.targetException)
+                fail("not a LuaError: " + e.targetException)
             return  // pass
         } catch (e: Exception) {
-            TestCase.fail("bad exception: $e")
+            fail("bad exception: $e")
         }
 
     }
@@ -83,17 +79,18 @@ class LuaOperationsTest : TestCase() {
     private fun throwsLuaError(methodName: String, obj: Any, arg: Any) {
         try {
             LuaValue::class.java.getMethod(methodName, LuaValue::class.java).invoke(obj, arg)
-            TestCase.fail("failed to throw LuaError as required")
+            fail("failed to throw LuaError as required")
         } catch (e: InvocationTargetException) {
             if (e.targetException !is LuaError)
-                TestCase.fail("not a LuaError: " + e.targetException)
+                fail("not a LuaError: " + e.targetException)
             return  // pass
         } catch (e: Exception) {
-            TestCase.fail("bad exception: $e")
+            fail("bad exception: $e")
         }
 
     }
 
+    @Test
     fun testLen() {
         throwsLuaError("len", somenil)
         throwsLuaError("len", sometrue)
@@ -102,11 +99,11 @@ class LuaOperationsTest : TestCase() {
         throwsLuaError("len", intint)
         throwsLuaError("len", longdouble)
         throwsLuaError("len", doubledouble)
-        TestCase.assertEquals(LuaInteger.valueOf(samplestringstring.length), stringstring.len())
-        TestCase.assertEquals(LuaInteger.valueOf(samplestringint.length), stringint.len())
-        TestCase.assertEquals(LuaInteger.valueOf(samplestringlong.length), stringlong.len())
-        TestCase.assertEquals(LuaInteger.valueOf(samplestringdouble.length), stringdouble.len())
-        TestCase.assertEquals(LuaInteger.valueOf(2), table.len())
+        assertEquals(LuaInteger.valueOf(samplestringstring.length), stringstring.len())
+        assertEquals(LuaInteger.valueOf(samplestringint.length), stringint.len())
+        assertEquals(LuaInteger.valueOf(samplestringlong.length), stringlong.len())
+        assertEquals(LuaInteger.valueOf(samplestringdouble.length), stringdouble.len())
+        assertEquals(LuaInteger.valueOf(2), table.len())
         throwsLuaError("len", somefunc)
         throwsLuaError("len", thread)
         throwsLuaError("len", someclosure)
@@ -114,6 +111,7 @@ class LuaOperationsTest : TestCase() {
         throwsLuaError("len", userdatacls)
     }
 
+    @Test
     fun testLength() {
         throwsLuaError("length", somenil)
         throwsLuaError("length", sometrue)
@@ -122,11 +120,11 @@ class LuaOperationsTest : TestCase() {
         throwsLuaError("length", intint)
         throwsLuaError("length", longdouble)
         throwsLuaError("length", doubledouble)
-        TestCase.assertEquals(samplestringstring.length, stringstring.length())
-        TestCase.assertEquals(samplestringint.length, stringint.length())
-        TestCase.assertEquals(samplestringlong.length, stringlong.length())
-        TestCase.assertEquals(samplestringdouble.length, stringdouble.length())
-        TestCase.assertEquals(2, table.length())
+        assertEquals(samplestringstring.length, stringstring.length())
+        assertEquals(samplestringint.length, stringint.length())
+        assertEquals(samplestringlong.length, stringlong.length())
+        assertEquals(samplestringdouble.length, stringdouble.length())
+        assertEquals(2, table.length())
         throwsLuaError("length", somefunc)
         throwsLuaError("length", thread)
         throwsLuaError("length", someclosure)
@@ -142,12 +140,13 @@ class LuaOperationsTest : TestCase() {
         } catch (e: Exception) {
             // TODO Auto-generated catch block
             e.printStackTrace()
-            TestCase.fail(e.toString())
+            fail(e.toString())
             return null
         }
 
     }
 
+    @Test
     fun testFunctionClosureThreadEnv() {
 
         // set up suitable environments for execution
@@ -174,7 +173,7 @@ class LuaOperationsTest : TestCase() {
                     return globals.get("a")
                 }
             }
-            TestCase.assertEquals(aaa, f.call())
+            assertEquals(aaa, f.call())
         }
 
         // closure tests
@@ -183,10 +182,10 @@ class LuaOperationsTest : TestCase() {
             var c = LuaClosure(p!!, globals)
 
             // Test that a clusure with a custom enviroment uses that environment.
-            TestCase.assertEquals(aaa, c.call())
+            assertEquals(aaa, c.call())
             c = LuaClosure(p, newenv)
-            TestCase.assertEquals(newenv, c.upValues[0]!!.value)
-            TestCase.assertEquals(eee, c.call())
+            assertEquals(newenv, c.upValues[0]!!.value)
+            assertEquals(eee, c.call())
         }
     }
 }

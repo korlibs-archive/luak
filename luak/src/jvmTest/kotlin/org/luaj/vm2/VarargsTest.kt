@@ -21,13 +21,14 @@
  */
 package org.luaj.vm2
 
-import junit.framework.TestCase
+import kotlin.test.*
 
 /**
  * Tests of basic unary and binary operators on main value types.
  */
-class VarargsTest : TestCase() {
+class VarargsTest {
 
+    @Test
     fun testSanity() {
         expectEquals(A_G, A_G)
         expectEquals(A_G_alt, A_G_alt)
@@ -46,6 +47,7 @@ class VarargsTest : TestCase() {
         expectEquals(NIL, NIL)
     }
 
+    @Test
     fun testNegativeIndices() {
         expectNegSubargsError(A_G)
         expectNegSubargsError(A_G_alt)
@@ -66,6 +68,7 @@ class VarargsTest : TestCase() {
         expectNegSubargsError(NIL)
     }
 
+    @Test
     fun testVarargsSubargs() {
         standardTestsA_G(A_G)
         standardTestsA_G(A_G_alt)
@@ -78,6 +81,7 @@ class VarargsTest : TestCase() {
         standardTestsNone(NONE)
     }
 
+    @Test
     fun testVarargsMore() {
         var a_g: Varargs
         a_g = LuaValue.varargsOf(arrayOf(A), LuaValue.varargsOf(arrayOf(B, C, D, E, F, G)))
@@ -94,6 +98,7 @@ class VarargsTest : TestCase() {
         standardTestsA_G(a_g)
     }
 
+    @Test
     fun testPairVarargsMore() {
         val a_g = Varargs.PairVarargs(
             A,
@@ -114,6 +119,7 @@ class VarargsTest : TestCase() {
         standardTestsA_G(a_g)
     }
 
+    @Test
     fun testArrayPartMore() {
         var a_g: Varargs
         a_g = Varargs.ArrayPartVarargs(Z_H_array, 1, 1, Varargs.ArrayPartVarargs(Z_H_array, 2, 6))
@@ -162,14 +168,14 @@ class VarargsTest : TestCase() {
         internal var NONE: Varargs = LuaValue.NONE
 
         internal fun expectEquals(x: Varargs, y: Varargs) {
-            TestCase.assertEquals(x.narg(), y.narg())
-            TestCase.assertEquals(x.arg1(), y.arg1())
-            TestCase.assertEquals(x.arg(0), y.arg(0))
-            TestCase.assertEquals(x.arg(-1), y.arg(-1))
-            TestCase.assertEquals(x.arg(2), y.arg(2))
-            TestCase.assertEquals(x.arg(3), y.arg(3))
+            assertEquals(x.narg(), y.narg())
+            assertEquals(x.arg1(), y.arg1())
+            assertEquals(x.arg(0), y.arg(0))
+            assertEquals(x.arg(-1), y.arg(-1))
+            assertEquals(x.arg(2), y.arg(2))
+            assertEquals(x.arg(3), y.arg(3))
             for (i in 4 until x.narg() + 2)
-                TestCase.assertEquals(x.arg(i), y.arg(i))
+                assertEquals(x.arg(i), y.arg(i))
         }
 
         internal fun standardTestsA_G(a_g: Varargs) {
@@ -228,16 +234,16 @@ class VarargsTest : TestCase() {
             val expected_msg = "bad argument #1: start must be > 0"
             try {
                 v.subargs(0)
-                TestCase.fail("Failed to throw exception for index 0")
+                fail("Failed to throw exception for index 0")
             } catch (e: LuaError) {
-                TestCase.assertEquals(expected_msg, e.message)
+                assertEquals(expected_msg, e.message)
             }
 
             try {
                 v.subargs(-1)
-                TestCase.fail("Failed to throw exception for index -1")
+                fail("Failed to throw exception for index -1")
             } catch (e: LuaError) {
-                TestCase.assertEquals(expected_msg, e.message)
+                assertEquals(expected_msg, e.message)
             }
 
         }

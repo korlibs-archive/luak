@@ -21,27 +21,24 @@
  */
 package org.luaj.vm2
 
-import java.io.InputStream
-import java.io.Reader
-
-import junit.framework.TestCase
-import org.junit.Ignore
-
-import org.luaj.vm2.lib.jse.JsePlatform
-import org.luaj.vm2.server.Launcher
-import org.luaj.vm2.server.LuajClassLoader
+import org.luaj.vm2.lib.jse.*
+import org.luaj.vm2.server.*
+import java.io.*
+import kotlin.test.*
 
 // Tests using class loading orders that have caused problems for some use cases.
-class LoadOrderTest : TestCase() {
+class LoadOrderTest {
 
+    @Test
     fun testLoadGlobalsFirst() {
         val g = JsePlatform.standardGlobals()
-        TestCase.assertNotNull(g)
+        assertNotNull(g)
     }
 
+    @Test
     fun testLoadStringFirst() {
         val BAR = LuaString.valueOf("bar")
-        TestCase.assertNotNull(BAR)
+        assertNotNull(BAR)
     }
 
     class TestLauncherLoadStringFirst : Launcher {
@@ -72,7 +69,7 @@ class LoadOrderTest : TestCase() {
         val launcher = LuajClassLoader
             .NewLauncher(TestLauncherLoadStringFirst::class.java)
         val results = launcher.launch("foo", null)
-        TestCase.assertNotNull(results)
+        assertNotNull(results)
         */
     }
 

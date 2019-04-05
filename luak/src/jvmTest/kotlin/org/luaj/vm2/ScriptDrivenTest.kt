@@ -21,24 +21,14 @@
  */
 package org.luaj.vm2
 
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.PrintStream
-import java.net.MalformedURLException
-import java.net.URL
-
-import junit.framework.TestCase
-
-import org.luaj.vm2.lib.ResourceFinder
-import org.luaj.vm2.lib.jse.JseProcess
+import org.luaj.vm2.lib.*
+import org.luaj.vm2.lib.jse.*
+import java.io.*
+import java.net.*
+import kotlin.test.*
 
 abstract class ScriptDrivenTest protected constructor(private val platform: PlatformType, private val subdir: String) :
-    TestCase(), ResourceFinder {
+    ResourceFinder {
     protected lateinit var globals: Globals
 
     enum class PlatformType {
@@ -47,6 +37,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
 
     init {
         initGlobals()
+        globals.finder = this
     }
 
     private fun initGlobals() {
@@ -60,16 +51,8 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
         }
     }
 
-
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-        initGlobals()
-        globals.finder = this
-    }
-
     // ResourceFinder implementation.
-    override fun findResource(filename: String): InputStream {
+    override fun findResource(filename: String): InputStream? {
         var `is`: InputStream? = findInPlainFile(filename)
         if (`is` != null) return `is`
         `is` = findInPlainFileAsResource("", filename)
@@ -81,10 +64,10 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
         `is` = findInZipFileAsResource("", filename)
         if (`is` != null) return `is`
         `is` = findInZipFileAsResource("/", filename)
-        return `is`!!
+        return `is`
     }
 
-    private fun findInPlainFileAsResource(prefix: String, filename: String): InputStream {
+    private fun findInPlainFileAsResource(prefix: String, filename: String): InputStream? {
         return javaClass.getResourceAsStream(prefix + subdir + filename)
     }
 
@@ -157,7 +140,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
                 actualOutput = actualOutput.replace("\r\n".toRegex(), "\n")
                 expectedOutput = expectedOutput.replace("\r\n".toRegex(), "\n")
 
-                TestCase.assertEquals(expectedOutput, actualOutput)
+                assertEquals(expectedOutput, actualOutput)
             } finally {
                 globals.STDOUT = oldps
                 ps.close()
@@ -172,17 +155,16 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
 
     @Throws(IOException::class)
     protected fun loadScript(name: String, globals: Globals): LuaValue {
-        val script = this.findResource("$name.lua")
-        if (script == null)
-            TestCase.fail("Could not load script for test case: $name")
-        try {
+        val script = this.findResource("$name.lua") ?: throw AssertionError("Could not load script for test case: $name")
+
+        return try {
             when (this.platform) {
-                ScriptDrivenTest.PlatformType.LUAJIT -> return if (nocompile) {
+                ScriptDrivenTest.PlatformType.LUAJIT -> if (nocompile) {
                     Class.forName(name).newInstance() as LuaValue
                 } else {
                     globals.load(script, name, "bt", globals)
                 }
-                else -> return globals.load(script, "@$name.lua", "bt", globals)
+                else -> globals.load(script, "@$name.lua", "bt", globals)
             }
         } catch (e: Exception) {
             e.printStackTrace()

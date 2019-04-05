@@ -1,87 +1,85 @@
 package org.luaj.vm2.lib.jse
 
-import junit.framework.TestCase
+import org.luaj.vm2.*
+import kotlin.test.*
 
-import org.luaj.vm2.Globals
-import org.luaj.vm2.LuaValue
+class LuajavaAccessibleMembersTest {
 
-class LuajavaAccessibleMembersTest : TestCase() {
-
-    private var globals: Globals? = null
-
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-        globals = JsePlatform.standardGlobals()
-    }
+    private var globals: Globals = JsePlatform.standardGlobals()
 
     private fun invokeScript(script: String): String {
         try {
             val c = globals!!.load(script, "script")
             return c.call().tojstring()
         } catch (e: Exception) {
-            TestCase.fail("exception: $e")
+            fail("exception: $e")
             return "failed"
         }
 
     }
 
+    @Test
     fun testAccessFromPrivateClassImplementedMethod() {
-        TestCase.assertEquals(
+        assertEquals(
             "privateImpl-aaa-interface_method(bar)", invokeScript(
                 "b = luajava.newInstance('" + TestClass::class.java.name + "');" +
-                        "a = b:create_PrivateImpl('aaa');" +
-                        "return a:interface_method('bar');"
+                    "a = b:create_PrivateImpl('aaa');" +
+                    "return a:interface_method('bar');"
             )
         )
     }
 
+    @Test
     fun testAccessFromPrivateClassPublicMethod() {
-        TestCase.assertEquals(
+        assertEquals(
             "privateImpl-aaa-public_method", invokeScript(
                 "b = luajava.newInstance('" + TestClass::class.java.name + "');" +
-                        "a = b:create_PrivateImpl('aaa');" +
-                        "return a:public_method();"
+                    "a = b:create_PrivateImpl('aaa');" +
+                    "return a:public_method();"
             )
         )
     }
 
+    @Test
     fun testAccessFromPrivateClassGetPublicField() {
-        TestCase.assertEquals(
+        assertEquals(
             "aaa", invokeScript(
                 "b = luajava.newInstance('" + TestClass::class.java.name + "');" +
-                        "a = b:create_PrivateImpl('aaa');" +
-                        "return a.public_field;"
+                    "a = b:create_PrivateImpl('aaa');" +
+                    "return a.public_field;"
             )
         )
     }
 
+    @Test
     fun testAccessFromPrivateClassSetPublicField() {
-        TestCase.assertEquals(
+        assertEquals(
             "foo", invokeScript(
                 "b = luajava.newInstance('" + TestClass::class.java.name + "');" +
-                        "a = b:create_PrivateImpl('aaa');" +
-                        "a.public_field = 'foo';" +
-                        "return a.public_field;"
+                    "a = b:create_PrivateImpl('aaa');" +
+                    "a.public_field = 'foo';" +
+                    "return a.public_field;"
             )
         )
     }
 
+    @Test
     fun testAccessFromPrivateClassPublicConstructor() {
-        TestCase.assertEquals(
+        assertEquals(
             "privateImpl-constructor", invokeScript(
                 "b = luajava.newInstance('" + TestClass::class.java.name + "');" +
-                        "c = b:get_PrivateImplClass();" +
-                        "return luajava.new(c);"
+                    "c = b:get_PrivateImplClass();" +
+                    "return luajava.new(c);"
             )
         )
     }
 
+    @Test
     fun testAccessPublicEnum() {
-        TestCase.assertEquals(
+        assertEquals(
             "class org.luaj.vm2.lib.jse.TestClass\$SomeEnum", invokeScript(
                 "b = luajava.newInstance('" + TestClass::class.java.name + "');" +
-                        "return b.SomeEnum"
+                    "return b.SomeEnum"
             )
         )
     }

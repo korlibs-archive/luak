@@ -8,8 +8,5 @@ import org.luaj.vm2.lib.ZeroArgFunction
  *
  */
 class RequireSampleLoadRuntimeExcep : ZeroArgFunction() {
-
-    override fun call(): LuaValue {
-        throw RuntimeException("sample-load-runtime-exception")
-    }
+    override fun call(): LuaValue = throw RuntimeException("sample-load-runtime-exception")
 }

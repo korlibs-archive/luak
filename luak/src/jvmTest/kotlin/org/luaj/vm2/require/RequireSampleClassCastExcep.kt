@@ -7,8 +7,5 @@ import org.luaj.vm2.LuaValue
  *
  */
 class RequireSampleClassCastExcep {
-
-    fun call(): LuaValue {
-        return LuaValue.valueOf("require-sample-class-cast-excep")
-    }
+    fun call(): LuaValue = LuaValue.valueOf("require-sample-class-cast-excep")
 }

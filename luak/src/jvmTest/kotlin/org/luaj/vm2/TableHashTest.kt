@@ -21,32 +21,23 @@
  */
 package org.luaj.vm2
 
-import junit.framework.TestCase
-
-import org.luaj.vm2.LuaString
-import org.luaj.vm2.LuaTable
-import org.luaj.vm2.LuaValue
-import org.luaj.vm2.lib.TwoArgFunction
+import org.luaj.vm2.lib.*
+import kotlin.test.*
 
 /**
  * Tests for tables used as lists.
  */
-class TableHashTest : TestCase() {
+class TableHashTest {
+    protected fun new_Table(): LuaTable = LuaTable()
+    protected fun new_Table(n: Int, m: Int): LuaTable = LuaTable(n, m)
 
-    protected fun new_Table(): LuaTable {
-        return LuaTable()
-    }
-
-    protected fun new_Table(n: Int, m: Int): LuaTable {
-        return LuaTable(n, m)
-    }
-
+    @Test
     fun testSetRemove() {
         val t = new_Table()
 
-        TestCase.assertEquals(0, t.hashLength)
-        TestCase.assertEquals(0, t.length())
-        TestCase.assertEquals(0, t.keyCount())
+        assertEquals(0, t.hashLength)
+        assertEquals(0, t.length())
+        assertEquals(0, t.keyCount())
 
         val keys = arrayOf(
             "abc",
@@ -70,216 +61,220 @@ class TableHashTest : TestCase() {
         )
         val capacities = intArrayOf(0, 2, 2, 4, 4, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16, 16, 16, 32, 32, 32)
         for (i in keys.indices) {
-            TestCase.assertEquals(capacities[i], t.hashLength)
+            assertEquals(capacities[i], t.hashLength)
             val si = "Test Value! $i"
-            t.set(keys[i], si)
-            TestCase.assertEquals(0, t.length())
-            TestCase.assertEquals(i + 1, t.keyCount())
+            t[keys[i]] = si
+            assertEquals(0, t.length())
+            assertEquals(i + 1, t.keyCount())
         }
-        TestCase.assertEquals(capacities[keys.size], t.hashLength)
+        assertEquals(capacities[keys.size], t.hashLength)
         for (i in keys.indices) {
             val vi = LuaString.valueOf("Test Value! $i")
-            TestCase.assertEquals(vi, t.get(keys[i]))
-            TestCase.assertEquals(vi, t.get(LuaString.valueOf(keys[i])))
-            TestCase.assertEquals(vi, t.rawget(keys[i]))
-            TestCase.assertEquals(vi, t.rawget(keys[i]))
+            assertEquals(vi, t[keys[i]])
+            assertEquals(vi, t[LuaString.valueOf(keys[i])])
+            assertEquals(vi, t.rawget(keys[i]))
+            assertEquals(vi, t.rawget(keys[i]))
         }
 
         // replace with new values
         for (i in keys.indices) {
-            t.set(keys[i], LuaString.valueOf("Replacement Value! $i"))
-            TestCase.assertEquals(0, t.length())
-            TestCase.assertEquals(keys.size, t.keyCount())
-            TestCase.assertEquals(capacities[keys.size], t.hashLength)
+            t[keys[i]] = LuaString.valueOf("Replacement Value! $i")
+            assertEquals(0, t.length())
+            assertEquals(keys.size, t.keyCount())
+            assertEquals(capacities[keys.size], t.hashLength)
         }
         for (i in keys.indices) {
             val vi = LuaString.valueOf("Replacement Value! $i")
-            TestCase.assertEquals(vi, t.get(keys[i]))
+            assertEquals(vi, t[keys[i]])
         }
 
         // remove
         for (i in keys.indices) {
-            t.set(keys[i], LuaValue.NIL)
-            TestCase.assertEquals(0, t.length())
-            TestCase.assertEquals(keys.size - i - 1, t.keyCount())
+            t[keys[i]] = LuaValue.NIL
+            assertEquals(0, t.length())
+            assertEquals(keys.size - i - 1, t.keyCount())
             if (i < keys.size - 1)
-                TestCase.assertEquals(capacities[keys.size], t.hashLength)
+                assertEquals(capacities[keys.size], t.hashLength)
             else
-                TestCase.assertTrue(0 <= t.hashLength)
+                assertTrue(0 <= t.hashLength)
         }
         for (i in keys.indices) {
-            TestCase.assertEquals(LuaValue.NIL, t.get(keys[i]))
+            assertEquals(LuaValue.NIL, t[keys[i]])
         }
     }
 
+    @Test
     fun testIndexMetatag() {
         val t = new_Table()
         val mt = new_Table()
         val fb = new_Table()
 
         // set basic values
-        t.set("ppp", "abc")
-        t.set(123, "def")
-        mt.set(LuaValue.INDEX, fb)
-        fb.set("qqq", "ghi")
-        fb.set(456, "jkl")
+        t["ppp"] = "abc"
+        t[123] = "def"
+        mt[LuaValue.INDEX] = fb
+        fb["qqq"] = "ghi"
+        fb[456] = "jkl"
 
         // check before setting metatable
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("nil", t.get("qqq").tojstring())
-        TestCase.assertEquals("nil", t.get(456).tojstring())
-        TestCase.assertEquals("nil", fb.get("ppp").tojstring())
-        TestCase.assertEquals("nil", fb.get(123).tojstring())
-        TestCase.assertEquals("ghi", fb.get("qqq").tojstring())
-        TestCase.assertEquals("jkl", fb.get(456).tojstring())
-        TestCase.assertEquals("nil", mt.get("ppp").tojstring())
-        TestCase.assertEquals("nil", mt.get(123).tojstring())
-        TestCase.assertEquals("nil", mt.get("qqq").tojstring())
-        TestCase.assertEquals("nil", mt.get(456).tojstring())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("nil", t["qqq"].tojstring())
+        assertEquals("nil", t[456].tojstring())
+        assertEquals("nil", fb["ppp"].tojstring())
+        assertEquals("nil", fb[123].tojstring())
+        assertEquals("ghi", fb["qqq"].tojstring())
+        assertEquals("jkl", fb[456].tojstring())
+        assertEquals("nil", mt["ppp"].tojstring())
+        assertEquals("nil", mt[123].tojstring())
+        assertEquals("nil", mt["qqq"].tojstring())
+        assertEquals("nil", mt[456].tojstring())
 
         // check before setting metatable
         t.setmetatable(mt)
-        TestCase.assertEquals(mt, t.getmetatable())
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("ghi", t.get("qqq").tojstring())
-        TestCase.assertEquals("jkl", t.get(456).tojstring())
-        TestCase.assertEquals("nil", fb.get("ppp").tojstring())
-        TestCase.assertEquals("nil", fb.get(123).tojstring())
-        TestCase.assertEquals("ghi", fb.get("qqq").tojstring())
-        TestCase.assertEquals("jkl", fb.get(456).tojstring())
-        TestCase.assertEquals("nil", mt.get("ppp").tojstring())
-        TestCase.assertEquals("nil", mt.get(123).tojstring())
-        TestCase.assertEquals("nil", mt.get("qqq").tojstring())
-        TestCase.assertEquals("nil", mt.get(456).tojstring())
+        assertEquals(mt, t.getmetatable())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("ghi", t["qqq"].tojstring())
+        assertEquals("jkl", t[456].tojstring())
+        assertEquals("nil", fb["ppp"].tojstring())
+        assertEquals("nil", fb[123].tojstring())
+        assertEquals("ghi", fb["qqq"].tojstring())
+        assertEquals("jkl", fb[456].tojstring())
+        assertEquals("nil", mt["ppp"].tojstring())
+        assertEquals("nil", mt[123].tojstring())
+        assertEquals("nil", mt["qqq"].tojstring())
+        assertEquals("nil", mt[456].tojstring())
 
         // set metatable to metatable without values
         t.setmetatable(fb)
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("nil", t.get("qqq").tojstring())
-        TestCase.assertEquals("nil", t.get(456).tojstring())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("nil", t["qqq"].tojstring())
+        assertEquals("nil", t[456].tojstring())
 
         // set metatable to null
         t.setmetatable(null)
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("nil", t.get("qqq").tojstring())
-        TestCase.assertEquals("nil", t.get(456).tojstring())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("nil", t["qqq"].tojstring())
+        assertEquals("nil", t[456].tojstring())
     }
 
+    @Test
     fun testIndexFunction() {
         val t = new_Table()
         val mt = new_Table()
 
         val fb = object : TwoArgFunction() {
             override fun call(tbl: LuaValue, key: LuaValue): LuaValue {
-                TestCase.assertEquals(tbl, t)
+                assertEquals(tbl, t)
                 return LuaValue.valueOf("from mt: $key")
             }
         }
 
         // set basic values
-        t.set("ppp", "abc")
-        t.set(123, "def")
-        mt.set(LuaValue.INDEX, fb)
+        t["ppp"] = "abc"
+        t[123] = "def"
+        mt[LuaValue.INDEX] = fb
 
         // check before setting metatable
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("nil", t.get("qqq").tojstring())
-        TestCase.assertEquals("nil", t.get(456).tojstring())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("nil", t["qqq"].tojstring())
+        assertEquals("nil", t[456].tojstring())
 
 
         // check before setting metatable
         t.setmetatable(mt)
-        TestCase.assertEquals(mt, t.getmetatable())
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("from mt: qqq", t.get("qqq").tojstring())
-        TestCase.assertEquals("from mt: 456", t.get(456).tojstring())
+        assertEquals(mt, t.getmetatable())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("from mt: qqq", t["qqq"].tojstring())
+        assertEquals("from mt: 456", t[456].tojstring())
 
         // use raw set
         t.rawset("qqq", "alt-qqq")
         t.rawset(456, "alt-456")
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("alt-qqq", t.get("qqq").tojstring())
-        TestCase.assertEquals("alt-456", t.get(456).tojstring())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("alt-qqq", t["qqq"].tojstring())
+        assertEquals("alt-456", t[456].tojstring())
 
         // remove using raw set
         t.rawset("qqq", LuaValue.NIL)
         t.rawset(456, LuaValue.NIL)
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("from mt: qqq", t.get("qqq").tojstring())
-        TestCase.assertEquals("from mt: 456", t.get(456).tojstring())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("from mt: qqq", t["qqq"].tojstring())
+        assertEquals("from mt: 456", t[456].tojstring())
 
         // set metatable to null
         t.setmetatable(null)
-        TestCase.assertEquals("abc", t.get("ppp").tojstring())
-        TestCase.assertEquals("def", t.get(123).tojstring())
-        TestCase.assertEquals("nil", t.get("qqq").tojstring())
-        TestCase.assertEquals("nil", t.get(456).tojstring())
+        assertEquals("abc", t["ppp"].tojstring())
+        assertEquals("def", t[123].tojstring())
+        assertEquals("nil", t["qqq"].tojstring())
+        assertEquals("nil", t[456].tojstring())
     }
 
+    @Test
     fun testNext() {
         val t = new_Table()
-        TestCase.assertEquals(LuaValue.NIL, t.next(LuaValue.NIL))
+        assertEquals(LuaValue.NIL, t.next(LuaValue.NIL))
 
         // insert array elements
-        t.set(1, "one")
-        TestCase.assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
-        TestCase.assertEquals(LuaValue.NIL, t.next(LuaValue.ONE))
-        t.set(2, "two")
-        TestCase.assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
-        TestCase.assertEquals(LuaValue.valueOf(2), t.next(LuaValue.ONE).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("two"), t.next(LuaValue.ONE).arg(2))
-        TestCase.assertEquals(LuaValue.NIL, t.next(LuaValue.valueOf(2)))
+        t[1] = "one"
+        assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
+        assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
+        assertEquals(LuaValue.NIL, t.next(LuaValue.ONE))
+        t[2] = "two"
+        assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
+        assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
+        assertEquals(LuaValue.valueOf(2), t.next(LuaValue.ONE).arg(1))
+        assertEquals(LuaValue.valueOf("two"), t.next(LuaValue.ONE).arg(2))
+        assertEquals(LuaValue.NIL, t.next(LuaValue.valueOf(2)))
 
         // insert hash elements
-        t.set("aa", "aaa")
-        TestCase.assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
-        TestCase.assertEquals(LuaValue.valueOf(2), t.next(LuaValue.ONE).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("two"), t.next(LuaValue.ONE).arg(2))
-        TestCase.assertEquals(LuaValue.valueOf("aa"), t.next(LuaValue.valueOf(2)).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("aaa"), t.next(LuaValue.valueOf(2)).arg(2))
-        TestCase.assertEquals(LuaValue.NIL, t.next(LuaValue.valueOf("aa")))
-        t.set("bb", "bbb")
-        TestCase.assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
-        TestCase.assertEquals(LuaValue.valueOf(2), t.next(LuaValue.ONE).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("two"), t.next(LuaValue.ONE).arg(2))
-        TestCase.assertEquals(LuaValue.valueOf("aa"), t.next(LuaValue.valueOf(2)).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("aaa"), t.next(LuaValue.valueOf(2)).arg(2))
-        TestCase.assertEquals(LuaValue.valueOf("bb"), t.next(LuaValue.valueOf("aa")).arg(1))
-        TestCase.assertEquals(LuaValue.valueOf("bbb"), t.next(LuaValue.valueOf("aa")).arg(2))
-        TestCase.assertEquals(LuaValue.NIL, t.next(LuaValue.valueOf("bb")))
+        t["aa"] = "aaa"
+        assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
+        assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
+        assertEquals(LuaValue.valueOf(2), t.next(LuaValue.ONE).arg(1))
+        assertEquals(LuaValue.valueOf("two"), t.next(LuaValue.ONE).arg(2))
+        assertEquals(LuaValue.valueOf("aa"), t.next(LuaValue.valueOf(2)).arg(1))
+        assertEquals(LuaValue.valueOf("aaa"), t.next(LuaValue.valueOf(2)).arg(2))
+        assertEquals(LuaValue.NIL, t.next(LuaValue.valueOf("aa")))
+        t["bb"] = "bbb"
+        assertEquals(LuaValue.valueOf(1), t.next(LuaValue.NIL).arg(1))
+        assertEquals(LuaValue.valueOf("one"), t.next(LuaValue.NIL).arg(2))
+        assertEquals(LuaValue.valueOf(2), t.next(LuaValue.ONE).arg(1))
+        assertEquals(LuaValue.valueOf("two"), t.next(LuaValue.ONE).arg(2))
+        assertEquals(LuaValue.valueOf("aa"), t.next(LuaValue.valueOf(2)).arg(1))
+        assertEquals(LuaValue.valueOf("aaa"), t.next(LuaValue.valueOf(2)).arg(2))
+        assertEquals(LuaValue.valueOf("bb"), t.next(LuaValue.valueOf("aa")).arg(1))
+        assertEquals(LuaValue.valueOf("bbb"), t.next(LuaValue.valueOf("aa")).arg(2))
+        assertEquals(LuaValue.NIL, t.next(LuaValue.valueOf("bb")))
     }
 
+    @Test
     fun testLoopWithRemoval() {
         val t = new_Table()
 
-        t.set(LuaValue.valueOf(1), LuaValue.valueOf("1"))
-        t.set(LuaValue.valueOf(3), LuaValue.valueOf("3"))
-        t.set(LuaValue.valueOf(8), LuaValue.valueOf("4"))
-        t.set(LuaValue.valueOf(17), LuaValue.valueOf("5"))
-        t.set(LuaValue.valueOf(26), LuaValue.valueOf("6"))
-        t.set(LuaValue.valueOf(35), LuaValue.valueOf("7"))
-        t.set(LuaValue.valueOf(42), LuaValue.valueOf("8"))
-        t.set(LuaValue.valueOf(60), LuaValue.valueOf("10"))
-        t.set(LuaValue.valueOf(63), LuaValue.valueOf("11"))
+        t[LuaValue.valueOf(1)] = LuaValue.valueOf("1")
+        t[LuaValue.valueOf(3)] = LuaValue.valueOf("3")
+        t[LuaValue.valueOf(8)] = LuaValue.valueOf("4")
+        t[LuaValue.valueOf(17)] = LuaValue.valueOf("5")
+        t[LuaValue.valueOf(26)] = LuaValue.valueOf("6")
+        t[LuaValue.valueOf(35)] = LuaValue.valueOf("7")
+        t[LuaValue.valueOf(42)] = LuaValue.valueOf("8")
+        t[LuaValue.valueOf(60)] = LuaValue.valueOf("10")
+        t[LuaValue.valueOf(63)] = LuaValue.valueOf("11")
 
         var entry = t.next(LuaValue.NIL)
         while (!entry.isnil(1)) {
             val k = entry.arg1()
             val v = entry.arg(2)
             if (k.toint() and 1 == 0) {
-                t.set(k, LuaValue.NIL)
+                t[k] = LuaValue.NIL
             }
             entry = t.next(k)
         }
@@ -289,25 +284,26 @@ class TableHashTest : TestCase() {
         while (!entry.isnil(1)) {
             val k = entry.arg1()
             // Only odd keys should remain
-            TestCase.assertTrue(k.toint() and 1 == 1)
+            assertTrue(k.toint() and 1 == 1)
             numEntries++
             entry = t.next(k)
         }
-        TestCase.assertEquals(5, numEntries)
+        assertEquals(5, numEntries)
     }
 
+    @Test
     fun testLoopWithRemovalAndSet() {
         val t = new_Table()
 
-        t.set(LuaValue.valueOf(1), LuaValue.valueOf("1"))
-        t.set(LuaValue.valueOf(3), LuaValue.valueOf("3"))
-        t.set(LuaValue.valueOf(8), LuaValue.valueOf("4"))
-        t.set(LuaValue.valueOf(17), LuaValue.valueOf("5"))
-        t.set(LuaValue.valueOf(26), LuaValue.valueOf("6"))
-        t.set(LuaValue.valueOf(35), LuaValue.valueOf("7"))
-        t.set(LuaValue.valueOf(42), LuaValue.valueOf("8"))
-        t.set(LuaValue.valueOf(60), LuaValue.valueOf("10"))
-        t.set(LuaValue.valueOf(63), LuaValue.valueOf("11"))
+        t[LuaValue.valueOf(1)] = LuaValue.valueOf("1")
+        t[LuaValue.valueOf(3)] = LuaValue.valueOf("3")
+        t[LuaValue.valueOf(8)] = LuaValue.valueOf("4")
+        t[LuaValue.valueOf(17)] = LuaValue.valueOf("5")
+        t[LuaValue.valueOf(26)] = LuaValue.valueOf("6")
+        t[LuaValue.valueOf(35)] = LuaValue.valueOf("7")
+        t[LuaValue.valueOf(42)] = LuaValue.valueOf("8")
+        t[LuaValue.valueOf(60)] = LuaValue.valueOf("10")
+        t[LuaValue.valueOf(63)] = LuaValue.valueOf("11")
 
         var entry = t.next(LuaValue.NIL)
         var entry2 = entry
@@ -315,9 +311,9 @@ class TableHashTest : TestCase() {
             val k = entry.arg1()
             val v = entry.arg(2)
             if (k.toint() and 1 == 0) {
-                t.set(k, LuaValue.NIL)
+                t[k] = LuaValue.NIL
             } else {
-                t.set(k, v.tonumber())
+                t[k] = v.tonumber()
                 entry2 = t.next(entry2.arg1())
             }
             entry = t.next(k)
@@ -328,11 +324,11 @@ class TableHashTest : TestCase() {
         while (!entry.isnil(1)) {
             val k = entry.arg1()
             // Only odd keys should remain
-            TestCase.assertTrue(k.toint() and 1 == 1)
-            TestCase.assertTrue(entry.arg(2).type() == LuaValue.TNUMBER)
+            assertTrue(k.toint() and 1 == 1)
+            assertTrue(entry.arg(2).type() == LuaValue.TNUMBER)
             numEntries++
             entry = t.next(k)
         }
-        TestCase.assertEquals(5, numEntries)
+        assertEquals(5, numEntries)
     }
 }

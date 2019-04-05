@@ -21,24 +21,13 @@
  */
 package org.luaj.vm2
 
-import java.util.ArrayList
-import java.util.Vector
+import java.util.*
+import kotlin.test.*
 
-import junit.framework.TestCase
-
-open class TableTest : TestCase() {
-
-    protected open fun new_Table(): LuaTable {
-        return LuaTable()
-    }
-
-    protected open fun new_Table(n: Int, m: Int): LuaTable {
-        return LuaTable(n, m)
-    }
-
-    private fun keyCount(t: LuaTable): Int {
-        return keys(t).size
-    }
+open class TableTest {
+    protected open fun new_Table(): LuaTable = LuaTable()
+    protected open fun new_Table(n: Int, m: Int): LuaTable = LuaTable(n, m)
+    private fun keyCount(t: LuaTable): Int = keys(t).size
 
     private fun keys(t: LuaTable): Array<LuaValue> {
         val l = ArrayList<LuaValue>()
@@ -56,6 +45,7 @@ open class TableTest : TestCase() {
     }
 
 
+    @Test
     fun testInOrderIntegerKeyInsertion() {
         val t = new_Table()
 
@@ -65,17 +55,18 @@ open class TableTest : TestCase() {
 
         // Ensure all keys are still there.
         for (i in 1..32) {
-            TestCase.assertEquals("Test Value! $i", t.get(i).tojstring())
+            assertEquals("Test Value! $i", t.get(i).tojstring())
         }
 
         // Ensure capacities make sense
-        TestCase.assertEquals(0, t.hashLength)
+        assertEquals(0, t.hashLength)
 
-        TestCase.assertTrue(t.arrayLength >= 32)
-        TestCase.assertTrue(t.arrayLength <= 64)
+        assertTrue(t.arrayLength >= 32)
+        assertTrue(t.arrayLength <= 64)
 
     }
 
+    @Test
     fun testRekeyCount() {
         val t = new_Table()
 
@@ -88,14 +79,15 @@ open class TableTest : TestCase() {
         t.set(2, LuaInteger.valueOf(2))
 
         for (i in 1..5) {
-            TestCase.assertEquals(LuaInteger.valueOf(i), t.get(i))
+            assertEquals(LuaInteger.valueOf(i), t.get(i))
         }
 
-        TestCase.assertTrue(t.arrayLength >= 3)
-        TestCase.assertTrue(t.arrayLength <= 12)
-        TestCase.assertTrue(t.hashLength <= 3)
+        assertTrue(t.arrayLength >= 3)
+        assertTrue(t.arrayLength <= 12)
+        assertTrue(t.hashLength <= 3)
     }
 
+    @Test
     fun testOutOfOrderIntegerKeyInsertion() {
         val t = new_Table()
 
@@ -105,14 +97,15 @@ open class TableTest : TestCase() {
 
         // Ensure all keys are still there.
         for (i in 1..32) {
-            TestCase.assertEquals("Test Value! $i", t.get(i).tojstring())
+            assertEquals("Test Value! $i", t.get(i).tojstring())
         }
 
         // Ensure capacities make sense
-        TestCase.assertEquals(32, t.arrayLength)
-        TestCase.assertEquals(0, t.hashLength)
+        assertEquals(32, t.arrayLength)
+        assertEquals(0, t.hashLength)
     }
 
+    @Test
     fun testStringAndIntegerKeys() {
         val t = new_Table()
 
@@ -122,67 +115,70 @@ open class TableTest : TestCase() {
             t.set(str, LuaInteger.valueOf(i))
         }
 
-        TestCase.assertTrue(t.arrayLength >= 8) // 1, 2, ..., 9
-        TestCase.assertTrue(t.arrayLength <= 16)
-        TestCase.assertTrue(t.hashLength >= 11) // 0, "0", "1", ..., "9"
-        TestCase.assertTrue(t.hashLength <= 33)
+        assertTrue(t.arrayLength >= 8) // 1, 2, ..., 9
+        assertTrue(t.arrayLength <= 16)
+        assertTrue(t.hashLength >= 11) // 0, "0", "1", ..., "9"
+        assertTrue(t.hashLength <= 33)
 
         val keys = keys(t)
 
         var intKeys = 0
         var stringKeys = 0
 
-        TestCase.assertEquals(20, keys.size)
+        assertEquals(20, keys.size)
         for (i in keys.indices) {
             val k = keys[i]
 
             if (k is LuaInteger) {
                 val ik = k.toint()
-                TestCase.assertTrue(ik >= 0 && ik < 10)
+                assertTrue(ik >= 0 && ik < 10)
                 val mask = 1 shl ik
-                TestCase.assertTrue(intKeys and mask == 0)
+                assertEquals(0, intKeys and mask)
                 intKeys = intKeys or mask
             } else if (k is LuaString) {
                 val ik = Integer.parseInt(k.strvalue()!!.tojstring())
-                TestCase.assertEquals(ik.toString(), k.strvalue()!!.tojstring())
-                TestCase.assertTrue(ik >= 0 && ik < 10)
+                assertEquals(ik.toString(), k.strvalue()!!.tojstring())
+                assertTrue(ik >= 0 && ik < 10)
                 val mask = 1 shl ik
-                TestCase.assertTrue("Key \"$ik\" found more than once", stringKeys and mask == 0)
+                assertEquals(0, stringKeys and mask, "Key \"$ik\" found more than once")
                 stringKeys = stringKeys or mask
             } else {
-                TestCase.fail("Unexpected type of key found")
+                fail("Unexpected type of key found")
             }
         }
 
-        TestCase.assertEquals(0x03FF, intKeys)
-        TestCase.assertEquals(0x03FF, stringKeys)
+        assertEquals(0x03FF, intKeys)
+        assertEquals(0x03FF, stringKeys)
     }
 
+    @Test
     fun testBadInitialCapacity() {
         val t = new_Table(0, 1)
 
         t.set("test", LuaValue.valueOf("foo"))
         t.set("explode", LuaValue.valueOf("explode"))
-        TestCase.assertEquals(2, keyCount(t))
+        assertEquals(2, keyCount(t))
     }
 
+    @Test
     fun testRemove0() {
         val t = new_Table(2, 0)
 
         t.set(1, LuaValue.valueOf("foo"))
         t.set(2, LuaValue.valueOf("bah"))
-        TestCase.assertNotSame(LuaValue.NIL, t.get(1))
-        TestCase.assertNotSame(LuaValue.NIL, t.get(2))
-        TestCase.assertEquals(LuaValue.NIL, t.get(3))
+        assertNotSame(LuaValue.NIL, t.get(1))
+        assertNotSame(LuaValue.NIL, t.get(2))
+        assertEquals(LuaValue.NIL, t.get(3))
 
         t.set(1, LuaValue.NIL)
         t.set(2, LuaValue.NIL)
         t.set(3, LuaValue.NIL)
-        TestCase.assertEquals(LuaValue.NIL, t.get(1))
-        TestCase.assertEquals(LuaValue.NIL, t.get(2))
-        TestCase.assertEquals(LuaValue.NIL, t.get(3))
+        assertEquals(LuaValue.NIL, t.get(1))
+        assertEquals(LuaValue.NIL, t.get(2))
+        assertEquals(LuaValue.NIL, t.get(3))
     }
 
+    @Test
     fun testRemove1() {
         val t = new_Table(0, 1)
 
@@ -191,37 +187,39 @@ open class TableTest : TestCase() {
         t.set(42, LuaValue.NIL)
         t.set(new_Table(), LuaValue.NIL)
         t.set("test", LuaValue.NIL)
-        TestCase.assertEquals(0, keyCount(t))
+        assertEquals(0, keyCount(t))
 
         t.set(10, LuaInteger.valueOf(5))
         t.set(10, LuaValue.NIL)
-        TestCase.assertEquals(0, keyCount(t))
+        assertEquals(0, keyCount(t))
     }
 
+    @Test
     fun testRemove2() {
         val t = new_Table(0, 1)
 
         t.set("test", LuaValue.valueOf("foo"))
         t.set("string", LuaInteger.valueOf(10))
-        TestCase.assertEquals(2, keyCount(t))
+        assertEquals(2, keyCount(t))
 
         t.set("string", LuaValue.NIL)
         t.set("three", LuaValue.valueOf(3.14))
-        TestCase.assertEquals(2, keyCount(t))
+        assertEquals(2, keyCount(t))
 
         t.set("test", LuaValue.NIL)
-        TestCase.assertEquals(1, keyCount(t))
+        assertEquals(1, keyCount(t))
 
         t.set(10, LuaInteger.valueOf(5))
-        TestCase.assertEquals(2, keyCount(t))
+        assertEquals(2, keyCount(t))
 
         t.set(10, LuaValue.NIL)
-        TestCase.assertEquals(1, keyCount(t))
+        assertEquals(1, keyCount(t))
 
         t.set("three", LuaValue.NIL)
-        TestCase.assertEquals(0, keyCount(t))
+        assertEquals(0, keyCount(t))
     }
 
+    @Test
     fun testShrinkNonPowerOfTwoArray() {
         val t = new_Table(6, 2)
 
@@ -242,30 +240,32 @@ open class TableTest : TestCase() {
         t.set("cc", "ccc")
         t.set("dd", "ddd")
 
-        TestCase.assertEquals(4, t.arrayLength)
-        TestCase.assertTrue(t.hashLength < 10)
-        TestCase.assertEquals(5, t.hashEntries)
-        TestCase.assertEquals("one", t.get(1).tojstring())
-        TestCase.assertEquals("two", t.get(2).tojstring())
-        TestCase.assertEquals(LuaValue.NIL, t.get(3))
-        TestCase.assertEquals(LuaValue.NIL, t.get(4))
-        TestCase.assertEquals("five", t.get(5).tojstring())
-        TestCase.assertEquals(LuaValue.NIL, t.get(6))
-        TestCase.assertEquals("aaa", t.get("aa").tojstring())
-        TestCase.assertEquals("bbb", t.get("bb").tojstring())
-        TestCase.assertEquals("ccc", t.get("cc").tojstring())
-        TestCase.assertEquals("ddd", t.get("dd").tojstring())
+        assertEquals(4, t.arrayLength)
+        assertTrue(t.hashLength < 10)
+        assertEquals(5, t.hashEntries)
+        assertEquals("one", t.get(1).tojstring())
+        assertEquals("two", t.get(2).tojstring())
+        assertEquals(LuaValue.NIL, t.get(3))
+        assertEquals(LuaValue.NIL, t.get(4))
+        assertEquals("five", t.get(5).tojstring())
+        assertEquals(LuaValue.NIL, t.get(6))
+        assertEquals("aaa", t.get("aa").tojstring())
+        assertEquals("bbb", t.get("bb").tojstring())
+        assertEquals("ccc", t.get("cc").tojstring())
+        assertEquals("ddd", t.get("dd").tojstring())
     }
 
+    @Test
     fun testInOrderLuaLength() {
         val t = new_Table()
 
         for (i in 1..32) {
             t.set(i, LuaValue.valueOf("Test Value! $i"))
-            TestCase.assertEquals(i, t.length())
+            assertEquals(i, t.length())
         }
     }
 
+    @Test
     fun testOutOfOrderLuaLength() {
         val t = new_Table()
 
@@ -274,41 +274,44 @@ open class TableTest : TestCase() {
             for (i in j downTo 1) {
                 t.set(i, LuaValue.valueOf("Test Value! $i"))
             }
-            TestCase.assertEquals(j, t.length())
+            assertEquals(j, t.length())
             j += 8
         }
     }
 
+    @Test
     fun testStringKeysLuaLength() {
         val t = new_Table()
 
         for (i in 1..32) {
             t.set("str-$i", LuaValue.valueOf("String Key Test Value! $i"))
-            TestCase.assertEquals(0, t.length())
+            assertEquals(0, t.length())
         }
     }
 
+    @Test
     fun testMixedKeysLuaLength() {
         val t = new_Table()
 
         for (i in 1..32) {
             t.set("str-$i", LuaValue.valueOf("String Key Test Value! $i"))
             t.set(i, LuaValue.valueOf("Int Key Test Value! $i"))
-            TestCase.assertEquals(i, t.length())
+            assertEquals(i, t.length())
         }
     }
 
     private fun compareLists(t: LuaTable, v: Vector<*>) {
         val n = v.size
-        TestCase.assertEquals(v.size, t.length())
+        assertEquals(v.size, t.length())
         for (j in 0 until n) {
             var vj = v.elementAt(j)
             val tj = t.get(j + 1).tojstring()
             vj = (vj as LuaString).tojstring()
-            TestCase.assertEquals(vj, tj)
+            assertEquals(vj, tj)
         }
     }
 
+    @Test
     fun testInsertBeginningOfList() {
         val t = new_Table()
         val v = Vector<LuaValue>()
@@ -321,6 +324,7 @@ open class TableTest : TestCase() {
         }
     }
 
+    @Test
     fun testInsertEndOfList() {
         val t = new_Table()
         val v = Vector<LuaValue>()
@@ -333,6 +337,7 @@ open class TableTest : TestCase() {
         }
     }
 
+    @Test
     fun testInsertMiddleOfList() {
         val t = new_Table()
         val v = Vector<LuaValue>()
@@ -354,6 +359,7 @@ open class TableTest : TestCase() {
         }
     }
 
+    @Test
     fun testRemoveBeginningOfList() {
         val t = new_Table()
         val v = Vector<LuaValue>()
@@ -365,6 +371,7 @@ open class TableTest : TestCase() {
         }
     }
 
+    @Test
     fun testRemoveEndOfList() {
         val t = new_Table()
         val v = Vector<LuaValue>()
@@ -376,6 +383,7 @@ open class TableTest : TestCase() {
         }
     }
 
+    @Test
     fun testRemoveMiddleOfList() {
         val t = new_Table()
         val v = Vector<LuaValue>()
@@ -388,6 +396,7 @@ open class TableTest : TestCase() {
         }
     }
 
+    @Test
     fun testRemoveWhileIterating() {
         val t = LuaValue.tableOf(
             arrayOf<LuaValue>(
@@ -438,6 +447,6 @@ open class TableTest : TestCase() {
             actual.add(n.arg1().toString() + "=" + n.arg(2))
             n = t.next(n.arg1())
         }
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 }

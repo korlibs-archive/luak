@@ -23,50 +23,46 @@ package org.luaj.vm2
 
 import java.lang.reflect.InvocationTargetException
 
-import junit.framework.TestCase
-
 import org.luaj.vm2.lib.TwoArgFunction
+
+import kotlin.test.*
 
 /**
  * Tests of basic unary and binary operators on main value types.
  */
-class UnaryBinaryOperatorsTest : TestCase() {
+class UnaryBinaryOperatorsTest {
 
-    internal lateinit var dummy: LuaValue
+    internal val dummy: LuaValue = LuaValue.ZERO
 
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-        dummy = LuaValue.ZERO
-    }
-
+    @Test
     fun testEqualsBool() {
-        TestCase.assertEquals(LuaValue.FALSE, LuaValue.FALSE)
-        TestCase.assertEquals(LuaValue.TRUE, LuaValue.TRUE)
-        TestCase.assertTrue(LuaValue.FALSE == LuaValue.FALSE)
-        TestCase.assertTrue(LuaValue.TRUE == LuaValue.TRUE)
-        TestCase.assertTrue(LuaValue.FALSE != LuaValue.TRUE)
-        TestCase.assertTrue(LuaValue.TRUE != LuaValue.FALSE)
-        TestCase.assertTrue(LuaValue.FALSE.eq_b(LuaValue.FALSE))
-        TestCase.assertTrue(LuaValue.TRUE.eq_b(LuaValue.TRUE))
-        TestCase.assertFalse(LuaValue.FALSE.eq_b(LuaValue.TRUE))
-        TestCase.assertFalse(LuaValue.TRUE.eq_b(LuaValue.FALSE))
-        TestCase.assertEquals(LuaValue.TRUE, LuaValue.FALSE.eq(LuaValue.FALSE))
-        TestCase.assertEquals(LuaValue.TRUE, LuaValue.TRUE.eq(LuaValue.TRUE))
-        TestCase.assertEquals(LuaValue.FALSE, LuaValue.FALSE.eq(LuaValue.TRUE))
-        TestCase.assertEquals(LuaValue.FALSE, LuaValue.TRUE.eq(LuaValue.FALSE))
-        TestCase.assertFalse(LuaValue.FALSE.neq_b(LuaValue.FALSE))
-        TestCase.assertFalse(LuaValue.TRUE.neq_b(LuaValue.TRUE))
-        TestCase.assertTrue(LuaValue.FALSE.neq_b(LuaValue.TRUE))
-        TestCase.assertTrue(LuaValue.TRUE.neq_b(LuaValue.FALSE))
-        TestCase.assertEquals(LuaValue.FALSE, LuaValue.FALSE.neq(LuaValue.FALSE))
-        TestCase.assertEquals(LuaValue.FALSE, LuaValue.TRUE.neq(LuaValue.TRUE))
-        TestCase.assertEquals(LuaValue.TRUE, LuaValue.FALSE.neq(LuaValue.TRUE))
-        TestCase.assertEquals(LuaValue.TRUE, LuaValue.TRUE.neq(LuaValue.FALSE))
-        TestCase.assertTrue(LuaValue.TRUE.toboolean())
-        TestCase.assertFalse(LuaValue.FALSE.toboolean())
+        assertEquals(LuaValue.FALSE, LuaValue.FALSE)
+        assertEquals(LuaValue.TRUE, LuaValue.TRUE)
+        assertTrue(LuaValue.FALSE == LuaValue.FALSE)
+        assertTrue(LuaValue.TRUE == LuaValue.TRUE)
+        assertTrue(LuaValue.FALSE != LuaValue.TRUE)
+        assertTrue(LuaValue.TRUE != LuaValue.FALSE)
+        assertTrue(LuaValue.FALSE.eq_b(LuaValue.FALSE))
+        assertTrue(LuaValue.TRUE.eq_b(LuaValue.TRUE))
+        assertFalse(LuaValue.FALSE.eq_b(LuaValue.TRUE))
+        assertFalse(LuaValue.TRUE.eq_b(LuaValue.FALSE))
+        assertEquals(LuaValue.TRUE, LuaValue.FALSE.eq(LuaValue.FALSE))
+        assertEquals(LuaValue.TRUE, LuaValue.TRUE.eq(LuaValue.TRUE))
+        assertEquals(LuaValue.FALSE, LuaValue.FALSE.eq(LuaValue.TRUE))
+        assertEquals(LuaValue.FALSE, LuaValue.TRUE.eq(LuaValue.FALSE))
+        assertFalse(LuaValue.FALSE.neq_b(LuaValue.FALSE))
+        assertFalse(LuaValue.TRUE.neq_b(LuaValue.TRUE))
+        assertTrue(LuaValue.FALSE.neq_b(LuaValue.TRUE))
+        assertTrue(LuaValue.TRUE.neq_b(LuaValue.FALSE))
+        assertEquals(LuaValue.FALSE, LuaValue.FALSE.neq(LuaValue.FALSE))
+        assertEquals(LuaValue.FALSE, LuaValue.TRUE.neq(LuaValue.TRUE))
+        assertEquals(LuaValue.TRUE, LuaValue.FALSE.neq(LuaValue.TRUE))
+        assertEquals(LuaValue.TRUE, LuaValue.TRUE.neq(LuaValue.FALSE))
+        assertTrue(LuaValue.TRUE.toboolean())
+        assertFalse(LuaValue.FALSE.toboolean())
     }
 
+    @Test
     fun testNot() {
         val ia = LuaValue.valueOf(3)
         val da = LuaValue.valueOf(.25)
@@ -75,13 +71,14 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val bb = LuaValue.FALSE
 
         // like kinds
-        TestCase.assertEquals(LuaValue.FALSE, ia.not())
-        TestCase.assertEquals(LuaValue.FALSE, da.not())
-        TestCase.assertEquals(LuaValue.FALSE, sa.not())
-        TestCase.assertEquals(LuaValue.FALSE, ba.not())
-        TestCase.assertEquals(LuaValue.TRUE, bb.not())
+        assertEquals(LuaValue.FALSE, ia.not())
+        assertEquals(LuaValue.FALSE, da.not())
+        assertEquals(LuaValue.FALSE, sa.not())
+        assertEquals(LuaValue.FALSE, ba.not())
+        assertEquals(LuaValue.TRUE, bb.not())
     }
 
+    @Test
     fun testNeg() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(-4)
@@ -91,14 +88,15 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("-2.0")
 
         // like kinds
-        TestCase.assertEquals(-3.0, ia.neg().todouble())
-        TestCase.assertEquals(-.25, da.neg().todouble())
-        TestCase.assertEquals(-1.5, sa.neg().todouble())
-        TestCase.assertEquals(4.0, ib.neg().todouble())
-        TestCase.assertEquals(.5, db.neg().todouble())
-        TestCase.assertEquals(2.0, sb.neg().todouble())
+        assertEquals(-3.0, ia.neg().todouble())
+        assertEquals(-.25, da.neg().todouble())
+        assertEquals(-1.5, sa.neg().todouble())
+        assertEquals(4.0, ib.neg().todouble())
+        assertEquals(.5, db.neg().todouble())
+        assertEquals(2.0, sb.neg().todouble())
     }
 
+    @Test
     fun testDoublesBecomeInts() {
         // DoubleValue.valueOf should return int
         val ia = LuaInteger.valueOf(345)
@@ -109,27 +107,27 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sc = LuaValue.valueOf("-2.0")
         val sd = LuaValue.valueOf("-2")
 
-        TestCase.assertEquals(ia, da)
-        TestCase.assertTrue(ia is LuaInteger)
-        TestCase.assertTrue(da is LuaInteger)
-        TestCase.assertTrue(db is LuaDouble)
-        TestCase.assertEquals(ia.toint(), 345)
-        TestCase.assertEquals(da.toint(), 345)
-        TestCase.assertEquals(da.todouble(), 345.0)
-        TestCase.assertEquals(db.todouble(), 345.5)
+        assertEquals(ia, da)
+        assertTrue(ia is LuaInteger)
+        assertTrue(da is LuaInteger)
+        assertTrue(db is LuaDouble)
+        assertEquals(ia.toint(), 345)
+        assertEquals(da.toint(), 345)
+        assertEquals(da.todouble(), 345.0)
+        assertEquals(db.todouble(), 345.5)
 
-        TestCase.assertTrue(sa is LuaString)
-        TestCase.assertTrue(sb is LuaString)
-        TestCase.assertTrue(sc is LuaString)
-        TestCase.assertTrue(sd is LuaString)
-        TestCase.assertEquals(3.0, sa.todouble())
-        TestCase.assertEquals(3.0, sb.todouble())
-        TestCase.assertEquals(-2.0, sc.todouble())
-        TestCase.assertEquals(-2.0, sd.todouble())
+        assertTrue(sa is LuaString)
+        assertTrue(sb is LuaString)
+        assertTrue(sc is LuaString)
+        assertTrue(sd is LuaString)
+        assertEquals(3.0, sa.todouble())
+        assertEquals(3.0, sb.todouble())
+        assertEquals(-2.0, sc.todouble())
+        assertEquals(-2.0, sd.todouble())
 
     }
 
-
+    @Test
     fun testEqualsInt() {
         val ia = LuaInteger.valueOf(345)
         val ib = LuaInteger.valueOf(345)
@@ -139,22 +137,23 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sc = LuaString.valueOf("-345")
 
         // objects should be different
-        TestCase.assertNotSame(ia, ib)
-        TestCase.assertSame(sa, sb)
-        TestCase.assertNotSame(ia, ic)
-        TestCase.assertNotSame(sa, sc)
+        assertNotSame(ia, ib)
+        assertSame(sa, sb)
+        assertNotSame(ia, ic)
+        assertNotSame(sa, sc)
 
         // assert equals for same type
-        TestCase.assertEquals(ia, ib)
-        TestCase.assertEquals(sa, sb)
-        TestCase.assertFalse(ia == ic)
-        TestCase.assertFalse(sa == sc)
+        assertEquals(ia, ib)
+        assertEquals(sa, sb)
+        assertFalse(ia == ic)
+        assertFalse(sa == sc)
 
         // check object equality for different types
-        TestCase.assertNotSame(ia, sa)
-        TestCase.assertNotSame(sa, ia)
+        assertNotSame(ia as Any, sa as Any)
+        assertNotSame(sa as Any, ia as Any)
     }
 
+    @Test
     fun testEqualsDouble() {
         val da = LuaDouble.valueOf(345.5)
         val db = LuaDouble.valueOf(345.5)
@@ -164,22 +163,23 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sc = LuaString.valueOf("-345.5")
 
         // objects should be different
-        TestCase.assertNotSame(da, db)
-        TestCase.assertSame(sa, sb)
-        TestCase.assertNotSame(da, dc)
-        TestCase.assertNotSame(sa, sc)
+        assertNotSame(da, db)
+        assertSame(sa, sb)
+        assertNotSame(da, dc)
+        assertNotSame(sa, sc)
 
         // assert equals for same type
-        TestCase.assertEquals(da, db)
-        TestCase.assertEquals(sa, sb)
-        TestCase.assertFalse(da == dc)
-        TestCase.assertFalse(sa == sc)
+        assertEquals(da, db)
+        assertEquals(sa, sb)
+        assertFalse(da == dc)
+        assertFalse(sa == sc)
 
         // check object equality for different types
-        TestCase.assertNotSame(da, sa)
-        TestCase.assertNotSame(sa, da)
+        assertNotSame(da as Any, sa as Any)
+        assertNotSame(sa as Any, da as Any)
     }
 
+    @Test
     fun testEqInt() {
         val ia = LuaInteger.valueOf(345)
         val ib = LuaInteger.valueOf(345)
@@ -189,25 +189,26 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sc = LuaString.valueOf("-345")
 
         // check arithmetic equality among same types
-        TestCase.assertEquals(ia.eq(ib), LuaValue.TRUE)
-        TestCase.assertEquals(sa.eq(sb), LuaValue.TRUE)
-        TestCase.assertEquals(ia.eq(ic), LuaValue.FALSE)
-        TestCase.assertEquals(sa.eq(sc), LuaValue.FALSE)
+        assertEquals(ia.eq(ib), LuaValue.TRUE)
+        assertEquals(sa.eq(sb), LuaValue.TRUE)
+        assertEquals(ia.eq(ic), LuaValue.FALSE)
+        assertEquals(sa.eq(sc), LuaValue.FALSE)
 
         // check arithmetic equality among different types
-        TestCase.assertEquals(ia.eq(sa), LuaValue.FALSE)
-        TestCase.assertEquals(sa.eq(ia), LuaValue.FALSE)
+        assertEquals(ia.eq(sa), LuaValue.FALSE)
+        assertEquals(sa.eq(ia), LuaValue.FALSE)
 
         // equals with mismatched types
         val t = LuaTable()
-        TestCase.assertEquals(ia.eq(t), LuaValue.FALSE)
-        TestCase.assertEquals(t.eq(ia), LuaValue.FALSE)
-        TestCase.assertEquals(ia.eq(LuaValue.FALSE), LuaValue.FALSE)
-        TestCase.assertEquals(LuaValue.FALSE.eq(ia), LuaValue.FALSE)
-        TestCase.assertEquals(ia.eq(LuaValue.NIL), LuaValue.FALSE)
-        TestCase.assertEquals(LuaValue.NIL.eq(ia), LuaValue.FALSE)
+        assertEquals(ia.eq(t), LuaValue.FALSE)
+        assertEquals(t.eq(ia), LuaValue.FALSE)
+        assertEquals(ia.eq(LuaValue.FALSE), LuaValue.FALSE)
+        assertEquals(LuaValue.FALSE.eq(ia), LuaValue.FALSE)
+        assertEquals(ia.eq(LuaValue.NIL), LuaValue.FALSE)
+        assertEquals(LuaValue.NIL.eq(ia), LuaValue.FALSE)
     }
 
+    @Test
     fun testEqDouble() {
         val da = LuaDouble.valueOf(345.5)
         val db = LuaDouble.valueOf(345.5)
@@ -217,26 +218,26 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sc = LuaString.valueOf("-345.5")
 
         // check arithmetic equality among same types
-        TestCase.assertEquals(da.eq(db), LuaValue.TRUE)
-        TestCase.assertEquals(sa.eq(sb), LuaValue.TRUE)
-        TestCase.assertEquals(da.eq(dc), LuaValue.FALSE)
-        TestCase.assertEquals(sa.eq(sc), LuaValue.FALSE)
+        assertEquals(da.eq(db), LuaValue.TRUE)
+        assertEquals(sa.eq(sb), LuaValue.TRUE)
+        assertEquals(da.eq(dc), LuaValue.FALSE)
+        assertEquals(sa.eq(sc), LuaValue.FALSE)
 
         // check arithmetic equality among different types
-        TestCase.assertEquals(da.eq(sa), LuaValue.FALSE)
-        TestCase.assertEquals(sa.eq(da), LuaValue.FALSE)
+        assertEquals(da.eq(sa), LuaValue.FALSE)
+        assertEquals(sa.eq(da), LuaValue.FALSE)
 
         // equals with mismatched types
         val t = LuaTable()
-        TestCase.assertEquals(da.eq(t), LuaValue.FALSE)
-        TestCase.assertEquals(t.eq(da), LuaValue.FALSE)
-        TestCase.assertEquals(da.eq(LuaValue.FALSE), LuaValue.FALSE)
-        TestCase.assertEquals(LuaValue.FALSE.eq(da), LuaValue.FALSE)
-        TestCase.assertEquals(da.eq(LuaValue.NIL), LuaValue.FALSE)
-        TestCase.assertEquals(LuaValue.NIL.eq(da), LuaValue.FALSE)
+        assertEquals(da.eq(t), LuaValue.FALSE)
+        assertEquals(t.eq(da), LuaValue.FALSE)
+        assertEquals(da.eq(LuaValue.FALSE), LuaValue.FALSE)
+        assertEquals(LuaValue.FALSE.eq(da), LuaValue.FALSE)
+        assertEquals(da.eq(LuaValue.NIL), LuaValue.FALSE)
+        assertEquals(LuaValue.NIL.eq(da), LuaValue.FALSE)
     }
 
-
+    @Test
     fun testEqualsMetatag() {
         val tru = LuaValue.TRUE
         val fal = LuaValue.FALSE
@@ -255,8 +256,8 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val uda3 = LuaUserdata(uda.touserdata())
         val nilb = LuaValue.valueOf(LuaValue.NIL.toboolean())
         val oneb = LuaValue.valueOf(LuaValue.ONE.toboolean())
-        TestCase.assertEquals(LuaValue.FALSE, nilb)
-        TestCase.assertEquals(LuaValue.TRUE, oneb)
+        assertEquals(LuaValue.FALSE, nilb)
+        assertEquals(LuaValue.TRUE, oneb)
         val smt = LuaString.s_metatable
         try {
             // always return nil0
@@ -273,45 +274,45 @@ class UnaryBinaryOperatorsTest : TestCase() {
             uda3.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.EQ, RETURN_ONE)))
 
             // primitive types or same valu do not invoke metatag as per C implementation
-            TestCase.assertEquals(tru, tru.eq(tru))
-            TestCase.assertEquals(tru, one.eq(one))
-            TestCase.assertEquals(tru, abc.eq(abc))
-            TestCase.assertEquals(tru, tbl.eq(tbl))
-            TestCase.assertEquals(tru, uda.eq(uda))
-            TestCase.assertEquals(tru, uda.eq(udb))
-            TestCase.assertEquals(fal, tru.eq(fal))
-            TestCase.assertEquals(fal, fal.eq(tru))
-            TestCase.assertEquals(fal, zer.eq(one))
-            TestCase.assertEquals(fal, one.eq(zer))
-            TestCase.assertEquals(fal, pi.eq(ee))
-            TestCase.assertEquals(fal, ee.eq(pi))
-            TestCase.assertEquals(fal, pi.eq(one))
-            TestCase.assertEquals(fal, one.eq(pi))
-            TestCase.assertEquals(fal, abc.eq(def))
-            TestCase.assertEquals(fal, def.eq(abc))
+            assertEquals(tru, tru.eq(tru))
+            assertEquals(tru, one.eq(one))
+            assertEquals(tru, abc.eq(abc))
+            assertEquals(tru, tbl.eq(tbl))
+            assertEquals(tru, uda.eq(uda))
+            assertEquals(tru, uda.eq(udb))
+            assertEquals(fal, tru.eq(fal))
+            assertEquals(fal, fal.eq(tru))
+            assertEquals(fal, zer.eq(one))
+            assertEquals(fal, one.eq(zer))
+            assertEquals(fal, pi.eq(ee))
+            assertEquals(fal, ee.eq(pi))
+            assertEquals(fal, pi.eq(one))
+            assertEquals(fal, one.eq(pi))
+            assertEquals(fal, abc.eq(def))
+            assertEquals(fal, def.eq(abc))
             // different types.  not comparable
-            TestCase.assertEquals(fal, fal.eq(tbl))
-            TestCase.assertEquals(fal, tbl.eq(fal))
-            TestCase.assertEquals(fal, tbl.eq(one))
-            TestCase.assertEquals(fal, one.eq(tbl))
-            TestCase.assertEquals(fal, fal.eq(one))
-            TestCase.assertEquals(fal, one.eq(fal))
-            TestCase.assertEquals(fal, abc.eq(one))
-            TestCase.assertEquals(fal, one.eq(abc))
-            TestCase.assertEquals(fal, tbl.eq(uda))
-            TestCase.assertEquals(fal, uda.eq(tbl))
+            assertEquals(fal, fal.eq(tbl))
+            assertEquals(fal, tbl.eq(fal))
+            assertEquals(fal, tbl.eq(one))
+            assertEquals(fal, one.eq(tbl))
+            assertEquals(fal, fal.eq(one))
+            assertEquals(fal, one.eq(fal))
+            assertEquals(fal, abc.eq(one))
+            assertEquals(fal, one.eq(abc))
+            assertEquals(fal, tbl.eq(uda))
+            assertEquals(fal, uda.eq(tbl))
             // same type, same value, does not invoke metatag op
-            TestCase.assertEquals(tru, tbl.eq(tbl))
+            assertEquals(tru, tbl.eq(tbl))
             // same type, different value, same metatag op.  comparabile via metatag op
-            TestCase.assertEquals(nilb, tbl.eq(tbl2))
-            TestCase.assertEquals(nilb, tbl2.eq(tbl))
-            TestCase.assertEquals(nilb, uda.eq(uda2))
-            TestCase.assertEquals(nilb, uda2.eq(uda))
+            assertEquals(nilb, tbl.eq(tbl2))
+            assertEquals(nilb, tbl2.eq(tbl))
+            assertEquals(nilb, uda.eq(uda2))
+            assertEquals(nilb, uda2.eq(uda))
             // same type, different metatag ops.  not comparable
-            TestCase.assertEquals(fal, tbl.eq(tbl3))
-            TestCase.assertEquals(fal, tbl3.eq(tbl))
-            TestCase.assertEquals(fal, uda.eq(uda3))
-            TestCase.assertEquals(fal, uda3.eq(uda))
+            assertEquals(fal, tbl.eq(tbl3))
+            assertEquals(fal, tbl3.eq(tbl))
+            assertEquals(fal, uda.eq(uda3))
+            assertEquals(fal, uda3.eq(uda))
 
             // always use right argument
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.EQ, RETURN_ONE))
@@ -327,45 +328,45 @@ class UnaryBinaryOperatorsTest : TestCase() {
             uda3.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.EQ, RETURN_NIL)))
 
             // primitive types or same value do not invoke metatag as per C implementation
-            TestCase.assertEquals(tru, tru.eq(tru))
-            TestCase.assertEquals(tru, one.eq(one))
-            TestCase.assertEquals(tru, abc.eq(abc))
-            TestCase.assertEquals(tru, tbl.eq(tbl))
-            TestCase.assertEquals(tru, uda.eq(uda))
-            TestCase.assertEquals(tru, uda.eq(udb))
-            TestCase.assertEquals(fal, tru.eq(fal))
-            TestCase.assertEquals(fal, fal.eq(tru))
-            TestCase.assertEquals(fal, zer.eq(one))
-            TestCase.assertEquals(fal, one.eq(zer))
-            TestCase.assertEquals(fal, pi.eq(ee))
-            TestCase.assertEquals(fal, ee.eq(pi))
-            TestCase.assertEquals(fal, pi.eq(one))
-            TestCase.assertEquals(fal, one.eq(pi))
-            TestCase.assertEquals(fal, abc.eq(def))
-            TestCase.assertEquals(fal, def.eq(abc))
+            assertEquals(tru, tru.eq(tru))
+            assertEquals(tru, one.eq(one))
+            assertEquals(tru, abc.eq(abc))
+            assertEquals(tru, tbl.eq(tbl))
+            assertEquals(tru, uda.eq(uda))
+            assertEquals(tru, uda.eq(udb))
+            assertEquals(fal, tru.eq(fal))
+            assertEquals(fal, fal.eq(tru))
+            assertEquals(fal, zer.eq(one))
+            assertEquals(fal, one.eq(zer))
+            assertEquals(fal, pi.eq(ee))
+            assertEquals(fal, ee.eq(pi))
+            assertEquals(fal, pi.eq(one))
+            assertEquals(fal, one.eq(pi))
+            assertEquals(fal, abc.eq(def))
+            assertEquals(fal, def.eq(abc))
             // different types.  not comparable
-            TestCase.assertEquals(fal, fal.eq(tbl))
-            TestCase.assertEquals(fal, tbl.eq(fal))
-            TestCase.assertEquals(fal, tbl.eq(one))
-            TestCase.assertEquals(fal, one.eq(tbl))
-            TestCase.assertEquals(fal, fal.eq(one))
-            TestCase.assertEquals(fal, one.eq(fal))
-            TestCase.assertEquals(fal, abc.eq(one))
-            TestCase.assertEquals(fal, one.eq(abc))
-            TestCase.assertEquals(fal, tbl.eq(uda))
-            TestCase.assertEquals(fal, uda.eq(tbl))
+            assertEquals(fal, fal.eq(tbl))
+            assertEquals(fal, tbl.eq(fal))
+            assertEquals(fal, tbl.eq(one))
+            assertEquals(fal, one.eq(tbl))
+            assertEquals(fal, fal.eq(one))
+            assertEquals(fal, one.eq(fal))
+            assertEquals(fal, abc.eq(one))
+            assertEquals(fal, one.eq(abc))
+            assertEquals(fal, tbl.eq(uda))
+            assertEquals(fal, uda.eq(tbl))
             // same type, same value, does not invoke metatag op
-            TestCase.assertEquals(tru, tbl.eq(tbl))
+            assertEquals(tru, tbl.eq(tbl))
             // same type, different value, same metatag op.  comparabile via metatag op
-            TestCase.assertEquals(oneb, tbl.eq(tbl2))
-            TestCase.assertEquals(oneb, tbl2.eq(tbl))
-            TestCase.assertEquals(oneb, uda.eq(uda2))
-            TestCase.assertEquals(oneb, uda2.eq(uda))
+            assertEquals(oneb, tbl.eq(tbl2))
+            assertEquals(oneb, tbl2.eq(tbl))
+            assertEquals(oneb, uda.eq(uda2))
+            assertEquals(oneb, uda2.eq(uda))
             // same type, different metatag ops.  not comparable
-            TestCase.assertEquals(fal, tbl.eq(tbl3))
-            TestCase.assertEquals(fal, tbl3.eq(tbl))
-            TestCase.assertEquals(fal, uda.eq(uda3))
-            TestCase.assertEquals(fal, uda3.eq(uda))
+            assertEquals(fal, tbl.eq(tbl3))
+            assertEquals(fal, tbl3.eq(tbl))
+            assertEquals(fal, uda.eq(uda3))
+            assertEquals(fal, uda3.eq(uda))
 
         } finally {
             LuaBoolean.s_metatable = null
@@ -374,7 +375,7 @@ class UnaryBinaryOperatorsTest : TestCase() {
         }
     }
 
-
+    @Test
     fun testAdd() {
         val ia = LuaValue.valueOf(111)
         val ib = LuaValue.valueOf(44)
@@ -384,27 +385,28 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("7.25")
 
         // check types
-        TestCase.assertTrue(ia is LuaInteger)
-        TestCase.assertTrue(ib is LuaInteger)
-        TestCase.assertTrue(da is LuaDouble)
-        TestCase.assertTrue(db is LuaDouble)
-        TestCase.assertTrue(sa is LuaString)
-        TestCase.assertTrue(sb is LuaString)
+        assertTrue(ia is LuaInteger)
+        assertTrue(ib is LuaInteger)
+        assertTrue(da is LuaDouble)
+        assertTrue(db is LuaDouble)
+        assertTrue(sa is LuaString)
+        assertTrue(sb is LuaString)
 
         // like kinds
-        TestCase.assertEquals(155.0, ia.add(ib).todouble())
-        TestCase.assertEquals(58.75, da.add(db).todouble())
-        TestCase.assertEquals(29.375, sa.add(sb).todouble())
+        assertEquals(155.0, ia.add(ib).todouble())
+        assertEquals(58.75, da.add(db).todouble())
+        assertEquals(29.375, sa.add(sb).todouble())
 
         // unlike kinds
-        TestCase.assertEquals(166.25, ia.add(da).todouble())
-        TestCase.assertEquals(166.25, da.add(ia).todouble())
-        TestCase.assertEquals(133.125, ia.add(sa).todouble())
-        TestCase.assertEquals(133.125, sa.add(ia).todouble())
-        TestCase.assertEquals(77.375, da.add(sa).todouble())
-        TestCase.assertEquals(77.375, sa.add(da).todouble())
+        assertEquals(166.25, ia.add(da).todouble())
+        assertEquals(166.25, da.add(ia).todouble())
+        assertEquals(133.125, ia.add(sa).todouble())
+        assertEquals(133.125, sa.add(ia).todouble())
+        assertEquals(77.375, da.add(sa).todouble())
+        assertEquals(77.375, sa.add(da).todouble())
     }
 
+    @Test
     fun testSub() {
         val ia = LuaValue.valueOf(111)
         val ib = LuaValue.valueOf(44)
@@ -414,19 +416,20 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("7.25")
 
         // like kinds
-        TestCase.assertEquals(67.0, ia.sub(ib).todouble())
-        TestCase.assertEquals(51.75, da.sub(db).todouble())
-        TestCase.assertEquals(14.875, sa.sub(sb).todouble())
+        assertEquals(67.0, ia.sub(ib).todouble())
+        assertEquals(51.75, da.sub(db).todouble())
+        assertEquals(14.875, sa.sub(sb).todouble())
 
         // unlike kinds
-        TestCase.assertEquals(55.75, ia.sub(da).todouble())
-        TestCase.assertEquals(-55.75, da.sub(ia).todouble())
-        TestCase.assertEquals(88.875, ia.sub(sa).todouble())
-        TestCase.assertEquals(-88.875, sa.sub(ia).todouble())
-        TestCase.assertEquals(33.125, da.sub(sa).todouble())
-        TestCase.assertEquals(-33.125, sa.sub(da).todouble())
+        assertEquals(55.75, ia.sub(da).todouble())
+        assertEquals(-55.75, da.sub(ia).todouble())
+        assertEquals(88.875, ia.sub(sa).todouble())
+        assertEquals(-88.875, sa.sub(ia).todouble())
+        assertEquals(33.125, da.sub(sa).todouble())
+        assertEquals(-33.125, sa.sub(da).todouble())
     }
 
+    @Test
     fun testMul() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -436,19 +439,20 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("2.0")
 
         // like kinds
-        TestCase.assertEquals(12.0, ia.mul(ib).todouble())
-        TestCase.assertEquals(.125, da.mul(db).todouble())
-        TestCase.assertEquals(3.0, sa.mul(sb).todouble())
+        assertEquals(12.0, ia.mul(ib).todouble())
+        assertEquals(.125, da.mul(db).todouble())
+        assertEquals(3.0, sa.mul(sb).todouble())
 
         // unlike kinds
-        TestCase.assertEquals(.75, ia.mul(da).todouble())
-        TestCase.assertEquals(.75, da.mul(ia).todouble())
-        TestCase.assertEquals(4.5, ia.mul(sa).todouble())
-        TestCase.assertEquals(4.5, sa.mul(ia).todouble())
-        TestCase.assertEquals(.375, da.mul(sa).todouble())
-        TestCase.assertEquals(.375, sa.mul(da).todouble())
+        assertEquals(.75, ia.mul(da).todouble())
+        assertEquals(.75, da.mul(ia).todouble())
+        assertEquals(4.5, ia.mul(sa).todouble())
+        assertEquals(4.5, sa.mul(ia).todouble())
+        assertEquals(.375, da.mul(sa).todouble())
+        assertEquals(.375, sa.mul(da).todouble())
     }
 
+    @Test
     fun testDiv() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -458,19 +462,20 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("2.0")
 
         // like kinds
-        TestCase.assertEquals(3.0 / 4.0, ia.div(ib).todouble())
-        TestCase.assertEquals(.25 / .5, da.div(db).todouble())
-        TestCase.assertEquals(1.5 / 2.0, sa.div(sb).todouble())
+        assertEquals(3.0 / 4.0, ia.div(ib).todouble())
+        assertEquals(.25 / .5, da.div(db).todouble())
+        assertEquals(1.5 / 2.0, sa.div(sb).todouble())
 
         // unlike kinds
-        TestCase.assertEquals(3.0 / .25, ia.div(da).todouble())
-        TestCase.assertEquals(.25 / 3.0, da.div(ia).todouble())
-        TestCase.assertEquals(3.0 / 1.5, ia.div(sa).todouble())
-        TestCase.assertEquals(1.5 / 3.0, sa.div(ia).todouble())
-        TestCase.assertEquals(.25 / 1.5, da.div(sa).todouble())
-        TestCase.assertEquals(1.5 / .25, sa.div(da).todouble())
+        assertEquals(3.0 / .25, ia.div(da).todouble())
+        assertEquals(.25 / 3.0, da.div(ia).todouble())
+        assertEquals(3.0 / 1.5, ia.div(sa).todouble())
+        assertEquals(1.5 / 3.0, sa.div(ia).todouble())
+        assertEquals(.25 / 1.5, da.div(sa).todouble())
+        assertEquals(1.5 / .25, sa.div(da).todouble())
     }
 
+    @Test
     fun testPow() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -480,19 +485,20 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("2.0")
 
         // like kinds
-        TestCase.assertEquals(Math.pow(3.0, 4.0), ia.pow(ib).todouble())
-        TestCase.assertEquals(Math.pow(4.0, .5), da.pow(db).todouble())
-        TestCase.assertEquals(Math.pow(1.5, 2.0), sa.pow(sb).todouble())
+        assertEquals(Math.pow(3.0, 4.0), ia.pow(ib).todouble())
+        assertEquals(Math.pow(4.0, .5), da.pow(db).todouble())
+        assertEquals(Math.pow(1.5, 2.0), sa.pow(sb).todouble())
 
         // unlike kinds
-        TestCase.assertEquals(Math.pow(3.0, 4.0), ia.pow(da).todouble())
-        TestCase.assertEquals(Math.pow(4.0, 3.0), da.pow(ia).todouble())
-        TestCase.assertEquals(Math.pow(3.0, 1.5), ia.pow(sa).todouble())
-        TestCase.assertEquals(Math.pow(1.5, 3.0), sa.pow(ia).todouble())
-        TestCase.assertEquals(Math.pow(4.0, 1.5), da.pow(sa).todouble())
-        TestCase.assertEquals(Math.pow(1.5, 4.0), sa.pow(da).todouble())
+        assertEquals(Math.pow(3.0, 4.0), ia.pow(da).todouble())
+        assertEquals(Math.pow(4.0, 3.0), da.pow(ia).todouble())
+        assertEquals(Math.pow(3.0, 1.5), ia.pow(sa).todouble())
+        assertEquals(Math.pow(1.5, 3.0), sa.pow(ia).todouble())
+        assertEquals(Math.pow(4.0, 1.5), da.pow(sa).todouble())
+        assertEquals(Math.pow(1.5, 4.0), sa.pow(da).todouble())
     }
 
+    @Test
     fun testMod() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(-4)
@@ -502,19 +508,20 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("-2.0")
 
         // like kinds
-        TestCase.assertEquals(luaMod(3.0, -4.0), ia.mod(ib).todouble())
-        TestCase.assertEquals(luaMod(.25, -.5), da.mod(db).todouble())
-        TestCase.assertEquals(luaMod(1.5, -2.0), sa.mod(sb).todouble())
+        assertEquals(luaMod(3.0, -4.0), ia.mod(ib).todouble())
+        assertEquals(luaMod(.25, -.5), da.mod(db).todouble())
+        assertEquals(luaMod(1.5, -2.0), sa.mod(sb).todouble())
 
         // unlike kinds
-        TestCase.assertEquals(luaMod(3.0, .25), ia.mod(da).todouble())
-        TestCase.assertEquals(luaMod(.25, 3.0), da.mod(ia).todouble())
-        TestCase.assertEquals(luaMod(3.0, 1.5), ia.mod(sa).todouble())
-        TestCase.assertEquals(luaMod(1.5, 3.0), sa.mod(ia).todouble())
-        TestCase.assertEquals(luaMod(.25, 1.5), da.mod(sa).todouble())
-        TestCase.assertEquals(luaMod(1.5, .25), sa.mod(da).todouble())
+        assertEquals(luaMod(3.0, .25), ia.mod(da).todouble())
+        assertEquals(luaMod(.25, 3.0), da.mod(ia).todouble())
+        assertEquals(luaMod(3.0, 1.5), ia.mod(sa).todouble())
+        assertEquals(luaMod(1.5, 3.0), sa.mod(ia).todouble())
+        assertEquals(luaMod(.25, 1.5), da.mod(sa).todouble())
+        assertEquals(luaMod(1.5, .25), sa.mod(da).todouble())
     }
 
+    @Test
     fun testArithErrors() {
         val ia = LuaValue.valueOf(111)
         val ib = LuaValue.valueOf(44)
@@ -542,13 +549,14 @@ class UnaryBinaryOperatorsTest : TestCase() {
         } catch (ite: InvocationTargetException) {
             val actual = ite.targetException.message!!
             if (!actual.startsWith("attempt to perform arithmetic") || actual.indexOf(type) < 0)
-                TestCase.fail("(" + a.typename() + "," + op + "," + b.typename() + ") reported '" + actual + "'")
+                fail("(" + a.typename() + "," + op + "," + b.typename() + ") reported '" + actual + "'")
         } catch (e: Exception) {
-            TestCase.fail("(" + a.typename() + "," + op + "," + b.typename() + ") threw " + e)
+            fail("(" + a.typename() + "," + op + "," + b.typename() + ") threw " + e)
         }
 
     }
 
+    @Test
     fun testArithMetatag() {
         val tru = LuaValue.TRUE
         val fal = LuaValue.FALSE
@@ -557,232 +565,232 @@ class UnaryBinaryOperatorsTest : TestCase() {
         try {
             try {
                 tru.add(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.mul(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.div(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.pow(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.mod(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             // always use left argument
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.ADD, RETURN_LHS))
-            TestCase.assertEquals(tru, tru.add(fal))
-            TestCase.assertEquals(tru, tru.add(tbl))
-            TestCase.assertEquals(tbl, tbl.add(tru))
+            assertEquals(tru, tru.add(fal))
+            assertEquals(tru, tru.add(tbl))
+            assertEquals(tbl, tbl.add(tru))
             try {
                 tbl.add(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.SUB, RETURN_LHS))
-            TestCase.assertEquals(tru, tru.sub(fal))
-            TestCase.assertEquals(tru, tru.sub(tbl))
-            TestCase.assertEquals(tbl, tbl.sub(tru))
+            assertEquals(tru, tru.sub(fal))
+            assertEquals(tru, tru.sub(tbl))
+            assertEquals(tbl, tbl.sub(tru))
             try {
                 tbl.sub(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.add(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.MUL, RETURN_LHS))
-            TestCase.assertEquals(tru, tru.mul(fal))
-            TestCase.assertEquals(tru, tru.mul(tbl))
-            TestCase.assertEquals(tbl, tbl.mul(tru))
+            assertEquals(tru, tru.mul(fal))
+            assertEquals(tru, tru.mul(tbl))
+            assertEquals(tbl, tbl.mul(tru))
             try {
                 tbl.mul(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.DIV, RETURN_LHS))
-            TestCase.assertEquals(tru, tru.div(fal))
-            TestCase.assertEquals(tru, tru.div(tbl))
-            TestCase.assertEquals(tbl, tbl.div(tru))
+            assertEquals(tru, tru.div(fal))
+            assertEquals(tru, tru.div(tbl))
+            assertEquals(tbl, tbl.div(tru))
             try {
                 tbl.div(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.POW, RETURN_LHS))
-            TestCase.assertEquals(tru, tru.pow(fal))
-            TestCase.assertEquals(tru, tru.pow(tbl))
-            TestCase.assertEquals(tbl, tbl.pow(tru))
+            assertEquals(tru, tru.pow(fal))
+            assertEquals(tru, tru.pow(tbl))
+            assertEquals(tbl, tbl.pow(tru))
             try {
                 tbl.pow(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.MOD, RETURN_LHS))
-            TestCase.assertEquals(tru, tru.mod(fal))
-            TestCase.assertEquals(tru, tru.mod(tbl))
-            TestCase.assertEquals(tbl, tbl.mod(tru))
+            assertEquals(tru, tru.mod(fal))
+            assertEquals(tru, tru.mod(tbl))
+            assertEquals(tbl, tbl.mod(tru))
             try {
                 tbl.mod(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
 
             // always use right argument
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.ADD, RETURN_RHS))
-            TestCase.assertEquals(fal, tru.add(fal))
-            TestCase.assertEquals(tbl, tru.add(tbl))
-            TestCase.assertEquals(tru, tbl.add(tru))
+            assertEquals(fal, tru.add(fal))
+            assertEquals(tbl, tru.add(tbl))
+            assertEquals(tru, tbl.add(tru))
             try {
                 tbl.add(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.SUB, RETURN_RHS))
-            TestCase.assertEquals(fal, tru.sub(fal))
-            TestCase.assertEquals(tbl, tru.sub(tbl))
-            TestCase.assertEquals(tru, tbl.sub(tru))
+            assertEquals(fal, tru.sub(fal))
+            assertEquals(tbl, tru.sub(tbl))
+            assertEquals(tru, tbl.sub(tru))
             try {
                 tbl.sub(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.add(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.MUL, RETURN_RHS))
-            TestCase.assertEquals(fal, tru.mul(fal))
-            TestCase.assertEquals(tbl, tru.mul(tbl))
-            TestCase.assertEquals(tru, tbl.mul(tru))
+            assertEquals(fal, tru.mul(fal))
+            assertEquals(tbl, tru.mul(tbl))
+            assertEquals(tru, tbl.mul(tru))
             try {
                 tbl.mul(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.DIV, RETURN_RHS))
-            TestCase.assertEquals(fal, tru.div(fal))
-            TestCase.assertEquals(tbl, tru.div(tbl))
-            TestCase.assertEquals(tru, tbl.div(tru))
+            assertEquals(fal, tru.div(fal))
+            assertEquals(tbl, tru.div(tbl))
+            assertEquals(tru, tbl.div(tru))
             try {
                 tbl.div(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.POW, RETURN_RHS))
-            TestCase.assertEquals(fal, tru.pow(fal))
-            TestCase.assertEquals(tbl, tru.pow(tbl))
-            TestCase.assertEquals(tru, tbl.pow(tru))
+            assertEquals(fal, tru.pow(fal))
+            assertEquals(tbl, tru.pow(tbl))
+            assertEquals(tru, tbl.pow(tru))
             try {
                 tbl.pow(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.MOD, RETURN_RHS))
-            TestCase.assertEquals(fal, tru.mod(fal))
-            TestCase.assertEquals(tbl, tru.mod(tbl))
-            TestCase.assertEquals(tru, tbl.mod(tru))
+            assertEquals(fal, tru.mod(fal))
+            assertEquals(tbl, tru.mod(tbl))
+            assertEquals(tru, tbl.mod(tru))
             try {
                 tbl.mod(tbl2)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tru.sub(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
@@ -792,6 +800,7 @@ class UnaryBinaryOperatorsTest : TestCase() {
         }
     }
 
+    @Test
     fun testArithMetatagNumberTable() {
         val zero = LuaValue.ZERO
         val one = LuaValue.ONE
@@ -799,101 +808,102 @@ class UnaryBinaryOperatorsTest : TestCase() {
 
         try {
             tbl.add(zero)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         try {
             zero.add(tbl)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         tbl.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.ADD, RETURN_ONE)))
-        TestCase.assertEquals(one, tbl.add(zero))
-        TestCase.assertEquals(one, zero.add(tbl))
+        assertEquals(one, tbl.add(zero))
+        assertEquals(one, zero.add(tbl))
 
         try {
             tbl.sub(zero)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         try {
             zero.sub(tbl)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         tbl.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.SUB, RETURN_ONE)))
-        TestCase.assertEquals(one, tbl.sub(zero))
-        TestCase.assertEquals(one, zero.sub(tbl))
+        assertEquals(one, tbl.sub(zero))
+        assertEquals(one, zero.sub(tbl))
 
         try {
             tbl.mul(zero)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         try {
             zero.mul(tbl)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         tbl.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.MUL, RETURN_ONE)))
-        TestCase.assertEquals(one, tbl.mul(zero))
-        TestCase.assertEquals(one, zero.mul(tbl))
+        assertEquals(one, tbl.mul(zero))
+        assertEquals(one, zero.mul(tbl))
 
         try {
             tbl.div(zero)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         try {
             zero.div(tbl)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         tbl.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.DIV, RETURN_ONE)))
-        TestCase.assertEquals(one, tbl.div(zero))
-        TestCase.assertEquals(one, zero.div(tbl))
+        assertEquals(one, tbl.div(zero))
+        assertEquals(one, zero.div(tbl))
 
         try {
             tbl.pow(zero)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         try {
             zero.pow(tbl)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         tbl.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.POW, RETURN_ONE)))
-        TestCase.assertEquals(one, tbl.pow(zero))
-        TestCase.assertEquals(one, zero.pow(tbl))
+        assertEquals(one, tbl.pow(zero))
+        assertEquals(one, zero.pow(tbl))
 
         try {
             tbl.mod(zero)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         try {
             zero.mod(tbl)
-            TestCase.fail("did not throw error")
+            fail("did not throw error")
         } catch (le: LuaError) {
         }
 
         tbl.setmetatable(LuaValue.tableOf(arrayOf(LuaValue.MOD, RETURN_ONE)))
-        TestCase.assertEquals(one, tbl.mod(zero))
-        TestCase.assertEquals(one, zero.mod(tbl))
+        assertEquals(one, tbl.mod(zero))
+        assertEquals(one, zero.mod(tbl))
     }
 
+    @Test
     fun testCompareStrings() {
         // these are lexical compare!
         val sa = LuaValue.valueOf("-1.5")
@@ -901,24 +911,25 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sc = LuaValue.valueOf("1.5")
         val sd = LuaValue.valueOf("2.0")
 
-        TestCase.assertEquals(LuaValue.FALSE, sa.lt(sa))
-        TestCase.assertEquals(LuaValue.TRUE, sa.lt(sb))
-        TestCase.assertEquals(LuaValue.TRUE, sa.lt(sc))
-        TestCase.assertEquals(LuaValue.TRUE, sa.lt(sd))
-        TestCase.assertEquals(LuaValue.FALSE, sb.lt(sa))
-        TestCase.assertEquals(LuaValue.FALSE, sb.lt(sb))
-        TestCase.assertEquals(LuaValue.TRUE, sb.lt(sc))
-        TestCase.assertEquals(LuaValue.TRUE, sb.lt(sd))
-        TestCase.assertEquals(LuaValue.FALSE, sc.lt(sa))
-        TestCase.assertEquals(LuaValue.FALSE, sc.lt(sb))
-        TestCase.assertEquals(LuaValue.FALSE, sc.lt(sc))
-        TestCase.assertEquals(LuaValue.TRUE, sc.lt(sd))
-        TestCase.assertEquals(LuaValue.FALSE, sd.lt(sa))
-        TestCase.assertEquals(LuaValue.FALSE, sd.lt(sb))
-        TestCase.assertEquals(LuaValue.FALSE, sd.lt(sc))
-        TestCase.assertEquals(LuaValue.FALSE, sd.lt(sd))
+        assertEquals(LuaValue.FALSE, sa.lt(sa))
+        assertEquals(LuaValue.TRUE, sa.lt(sb))
+        assertEquals(LuaValue.TRUE, sa.lt(sc))
+        assertEquals(LuaValue.TRUE, sa.lt(sd))
+        assertEquals(LuaValue.FALSE, sb.lt(sa))
+        assertEquals(LuaValue.FALSE, sb.lt(sb))
+        assertEquals(LuaValue.TRUE, sb.lt(sc))
+        assertEquals(LuaValue.TRUE, sb.lt(sd))
+        assertEquals(LuaValue.FALSE, sc.lt(sa))
+        assertEquals(LuaValue.FALSE, sc.lt(sb))
+        assertEquals(LuaValue.FALSE, sc.lt(sc))
+        assertEquals(LuaValue.TRUE, sc.lt(sd))
+        assertEquals(LuaValue.FALSE, sd.lt(sa))
+        assertEquals(LuaValue.FALSE, sd.lt(sb))
+        assertEquals(LuaValue.FALSE, sd.lt(sc))
+        assertEquals(LuaValue.FALSE, sd.lt(sd))
     }
 
+    @Test
     fun testLt() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -926,18 +937,19 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val db = LuaValue.valueOf(.5)
 
         // like kinds
-        TestCase.assertEquals(3.0 < 4.0, ia.lt(ib).toboolean())
-        TestCase.assertEquals(.25 < .5, da.lt(db).toboolean())
-        TestCase.assertEquals(3.0 < 4.0, ia.lt_b(ib))
-        TestCase.assertEquals(.25 < .5, da.lt_b(db))
+        assertEquals(3.0 < 4.0, ia.lt(ib).toboolean())
+        assertEquals(.25 < .5, da.lt(db).toboolean())
+        assertEquals(3.0 < 4.0, ia.lt_b(ib))
+        assertEquals(.25 < .5, da.lt_b(db))
 
         // unlike kinds
-        TestCase.assertEquals(3.0 < .25, ia.lt(da).toboolean())
-        TestCase.assertEquals(.25 < 3.0, da.lt(ia).toboolean())
-        TestCase.assertEquals(3.0 < .25, ia.lt_b(da))
-        TestCase.assertEquals(.25 < 3.0, da.lt_b(ia))
+        assertEquals(3.0 < .25, ia.lt(da).toboolean())
+        assertEquals(.25 < 3.0, da.lt(ia).toboolean())
+        assertEquals(3.0 < .25, ia.lt_b(da))
+        assertEquals(.25 < 3.0, da.lt_b(ia))
     }
 
+    @Test
     fun testLtEq() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -945,18 +957,19 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val db = LuaValue.valueOf(.5)
 
         // like kinds
-        TestCase.assertEquals(3.0 <= 4.0, ia.lteq(ib).toboolean())
-        TestCase.assertEquals(.25 <= .5, da.lteq(db).toboolean())
-        TestCase.assertEquals(3.0 <= 4.0, ia.lteq_b(ib))
-        TestCase.assertEquals(.25 <= .5, da.lteq_b(db))
+        assertEquals(3.0 <= 4.0, ia.lteq(ib).toboolean())
+        assertEquals(.25 <= .5, da.lteq(db).toboolean())
+        assertEquals(3.0 <= 4.0, ia.lteq_b(ib))
+        assertEquals(.25 <= .5, da.lteq_b(db))
 
         // unlike kinds
-        TestCase.assertEquals(3.0 <= .25, ia.lteq(da).toboolean())
-        TestCase.assertEquals(.25 <= 3.0, da.lteq(ia).toboolean())
-        TestCase.assertEquals(3.0 <= .25, ia.lteq_b(da))
-        TestCase.assertEquals(.25 <= 3.0, da.lteq_b(ia))
+        assertEquals(3.0 <= .25, ia.lteq(da).toboolean())
+        assertEquals(.25 <= 3.0, da.lteq(ia).toboolean())
+        assertEquals(3.0 <= .25, ia.lteq_b(da))
+        assertEquals(.25 <= 3.0, da.lteq_b(ia))
     }
 
+    @Test
     fun testGt() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -964,18 +977,19 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val db = LuaValue.valueOf(.5)
 
         // like kinds
-        TestCase.assertEquals(3.0 > 4.0, ia.gt(ib).toboolean())
-        TestCase.assertEquals(.25 > .5, da.gt(db).toboolean())
-        TestCase.assertEquals(3.0 > 4.0, ia.gt_b(ib))
-        TestCase.assertEquals(.25 > .5, da.gt_b(db))
+        assertEquals(3.0 > 4.0, ia.gt(ib).toboolean())
+        assertEquals(.25 > .5, da.gt(db).toboolean())
+        assertEquals(3.0 > 4.0, ia.gt_b(ib))
+        assertEquals(.25 > .5, da.gt_b(db))
 
         // unlike kinds
-        TestCase.assertEquals(3.0 > .25, ia.gt(da).toboolean())
-        TestCase.assertEquals(.25 > 3.0, da.gt(ia).toboolean())
-        TestCase.assertEquals(3.0 > .25, ia.gt_b(da))
-        TestCase.assertEquals(.25 > 3.0, da.gt_b(ia))
+        assertEquals(3.0 > .25, ia.gt(da).toboolean())
+        assertEquals(.25 > 3.0, da.gt(ia).toboolean())
+        assertEquals(3.0 > .25, ia.gt_b(da))
+        assertEquals(.25 > 3.0, da.gt_b(ia))
     }
 
+    @Test
     fun testGtEq() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -983,18 +997,19 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val db = LuaValue.valueOf(.5)
 
         // like kinds
-        TestCase.assertEquals(3.0 >= 4.0, ia.gteq(ib).toboolean())
-        TestCase.assertEquals(.25 >= .5, da.gteq(db).toboolean())
-        TestCase.assertEquals(3.0 >= 4.0, ia.gteq_b(ib))
-        TestCase.assertEquals(.25 >= .5, da.gteq_b(db))
+        assertEquals(3.0 >= 4.0, ia.gteq(ib).toboolean())
+        assertEquals(.25 >= .5, da.gteq(db).toboolean())
+        assertEquals(3.0 >= 4.0, ia.gteq_b(ib))
+        assertEquals(.25 >= .5, da.gteq_b(db))
 
         // unlike kinds
-        TestCase.assertEquals(3.0 >= .25, ia.gteq(da).toboolean())
-        TestCase.assertEquals(.25 >= 3.0, da.gteq(ia).toboolean())
-        TestCase.assertEquals(3.0 >= .25, ia.gteq_b(da))
-        TestCase.assertEquals(.25 >= 3.0, da.gteq_b(ia))
+        assertEquals(3.0 >= .25, ia.gteq(da).toboolean())
+        assertEquals(.25 >= 3.0, da.gteq(ia).toboolean())
+        assertEquals(3.0 >= .25, ia.gteq_b(da))
+        assertEquals(.25 >= 3.0, da.gteq_b(ia))
     }
 
+    @Test
     fun testNotEq() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -1004,29 +1019,29 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val sb = LuaValue.valueOf("2.0")
 
         // like kinds
-        TestCase.assertEquals(3.0 != 4.0, ia.neq(ib).toboolean())
-        TestCase.assertEquals(.25 != .5, da.neq(db).toboolean())
-        TestCase.assertEquals(1.5 != 2.0, sa.neq(sb).toboolean())
-        TestCase.assertEquals(3.0 != 4.0, ia.neq_b(ib))
-        TestCase.assertEquals(.25 != .5, da.neq_b(db))
-        TestCase.assertEquals(1.5 != 2.0, sa.neq_b(sb))
+        assertEquals(3.0 != 4.0, ia.neq(ib).toboolean())
+        assertEquals(.25 != .5, da.neq(db).toboolean())
+        assertEquals(1.5 != 2.0, sa.neq(sb).toboolean())
+        assertEquals(3.0 != 4.0, ia.neq_b(ib))
+        assertEquals(.25 != .5, da.neq_b(db))
+        assertEquals(1.5 != 2.0, sa.neq_b(sb))
 
         // unlike kinds
-        TestCase.assertEquals(3.0 != .25, ia.neq(da).toboolean())
-        TestCase.assertEquals(.25 != 3.0, da.neq(ia).toboolean())
-        TestCase.assertEquals(3.0 != 1.5, ia.neq(sa).toboolean())
-        TestCase.assertEquals(1.5 != 3.0, sa.neq(ia).toboolean())
-        TestCase.assertEquals(.25 != 1.5, da.neq(sa).toboolean())
-        TestCase.assertEquals(1.5 != .25, sa.neq(da).toboolean())
-        TestCase.assertEquals(3.0 != .25, ia.neq_b(da))
-        TestCase.assertEquals(.25 != 3.0, da.neq_b(ia))
-        TestCase.assertEquals(3.0 != 1.5, ia.neq_b(sa))
-        TestCase.assertEquals(1.5 != 3.0, sa.neq_b(ia))
-        TestCase.assertEquals(.25 != 1.5, da.neq_b(sa))
-        TestCase.assertEquals(1.5 != .25, sa.neq_b(da))
+        assertEquals(3.0 != .25, ia.neq(da).toboolean())
+        assertEquals(.25 != 3.0, da.neq(ia).toboolean())
+        assertEquals(3.0 != 1.5, ia.neq(sa).toboolean())
+        assertEquals(1.5 != 3.0, sa.neq(ia).toboolean())
+        assertEquals(.25 != 1.5, da.neq(sa).toboolean())
+        assertEquals(1.5 != .25, sa.neq(da).toboolean())
+        assertEquals(3.0 != .25, ia.neq_b(da))
+        assertEquals(.25 != 3.0, da.neq_b(ia))
+        assertEquals(3.0 != 1.5, ia.neq_b(sa))
+        assertEquals(1.5 != 3.0, sa.neq_b(ia))
+        assertEquals(.25 != 1.5, da.neq_b(sa))
+        assertEquals(1.5 != .25, sa.neq_b(da))
     }
 
-
+    @Test
     fun testCompareErrors() {
         val ia = LuaValue.valueOf(111)
         val ib = LuaValue.valueOf(44)
@@ -1054,13 +1069,14 @@ class UnaryBinaryOperatorsTest : TestCase() {
         } catch (ite: InvocationTargetException) {
             val actual = ite.targetException.message!!
             if (!actual.startsWith("attempt to compare") || actual.indexOf(type) < 0)
-                TestCase.fail("(" + a.typename() + "," + op + "," + b.typename() + ") reported '" + actual + "'")
+                fail("(" + a.typename() + "," + op + "," + b.typename() + ") reported '" + actual + "'")
         } catch (e: Exception) {
-            TestCase.fail("(" + a.typename() + "," + op + "," + b.typename() + ") threw " + e)
+            fail("(" + a.typename() + "," + op + "," + b.typename() + ") threw " + e)
         }
 
     }
 
+    @Test
     fun testCompareMetatag() {
         val tru = LuaValue.TRUE
         val fal = LuaValue.FALSE
@@ -1073,42 +1089,43 @@ class UnaryBinaryOperatorsTest : TestCase() {
             LuaBoolean.s_metatable = mt
             tbl.setmetatable(mt)
             tbl2.setmetatable(mt)
-            TestCase.assertEquals(tru, tru.lt(fal))
-            TestCase.assertEquals(fal, fal.lt(tru))
-            TestCase.assertEquals(tbl, tbl.lt(tbl2))
-            TestCase.assertEquals(tbl2, tbl2.lt(tbl))
-            TestCase.assertEquals(tbl, tbl.lt(tbl3))
-            TestCase.assertEquals(tbl3, tbl3.lt(tbl))
-            TestCase.assertEquals(fal, tru.lteq(fal))
-            TestCase.assertEquals(tru, fal.lteq(tru))
-            TestCase.assertEquals(tbl2, tbl.lteq(tbl2))
-            TestCase.assertEquals(tbl, tbl2.lteq(tbl))
-            TestCase.assertEquals(tbl3, tbl.lteq(tbl3))
-            TestCase.assertEquals(tbl, tbl3.lteq(tbl))
+            assertEquals(tru, tru.lt(fal))
+            assertEquals(fal, fal.lt(tru))
+            assertEquals(tbl, tbl.lt(tbl2))
+            assertEquals(tbl2, tbl2.lt(tbl))
+            assertEquals(tbl, tbl.lt(tbl3))
+            assertEquals(tbl3, tbl3.lt(tbl))
+            assertEquals(fal, tru.lteq(fal))
+            assertEquals(tru, fal.lteq(tru))
+            assertEquals(tbl2, tbl.lteq(tbl2))
+            assertEquals(tbl, tbl2.lteq(tbl))
+            assertEquals(tbl3, tbl.lteq(tbl3))
+            assertEquals(tbl, tbl3.lteq(tbl))
 
             // always use right argument
             mt = LuaValue.tableOf(arrayOf(LuaValue.LT, RETURN_RHS, LuaValue.LE, RETURN_LHS))
             LuaBoolean.s_metatable = mt
             tbl.setmetatable(mt)
             tbl2.setmetatable(mt)
-            TestCase.assertEquals(fal, tru.lt(fal))
-            TestCase.assertEquals(tru, fal.lt(tru))
-            TestCase.assertEquals(tbl2, tbl.lt(tbl2))
-            TestCase.assertEquals(tbl, tbl2.lt(tbl))
-            TestCase.assertEquals(tbl3, tbl.lt(tbl3))
-            TestCase.assertEquals(tbl, tbl3.lt(tbl))
-            TestCase.assertEquals(tru, tru.lteq(fal))
-            TestCase.assertEquals(fal, fal.lteq(tru))
-            TestCase.assertEquals(tbl, tbl.lteq(tbl2))
-            TestCase.assertEquals(tbl2, tbl2.lteq(tbl))
-            TestCase.assertEquals(tbl, tbl.lteq(tbl3))
-            TestCase.assertEquals(tbl3, tbl3.lteq(tbl))
+            assertEquals(fal, tru.lt(fal))
+            assertEquals(tru, fal.lt(tru))
+            assertEquals(tbl2, tbl.lt(tbl2))
+            assertEquals(tbl, tbl2.lt(tbl))
+            assertEquals(tbl3, tbl.lt(tbl3))
+            assertEquals(tbl, tbl3.lt(tbl))
+            assertEquals(tru, tru.lteq(fal))
+            assertEquals(fal, fal.lteq(tru))
+            assertEquals(tbl, tbl.lteq(tbl2))
+            assertEquals(tbl2, tbl2.lteq(tbl))
+            assertEquals(tbl, tbl.lteq(tbl3))
+            assertEquals(tbl3, tbl3.lteq(tbl))
 
         } finally {
             LuaBoolean.s_metatable = null
         }
     }
 
+    @Test
     fun testAnd() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -1120,26 +1137,26 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val bb = LuaValue.FALSE
 
         // like kinds
-        TestCase.assertSame(ib, ia.and(ib))
-        TestCase.assertSame(db, da.and(db))
-        TestCase.assertSame(sb, sa.and(sb))
+        assertSame(ib, ia.and(ib))
+        assertSame(db, da.and(db))
+        assertSame(sb, sa.and(sb))
 
         // unlike kinds
-        TestCase.assertSame(da, ia.and(da))
-        TestCase.assertSame(ia, da.and(ia))
-        TestCase.assertSame(sa, ia.and(sa))
-        TestCase.assertSame(ia, sa.and(ia))
-        TestCase.assertSame(sa, da.and(sa))
-        TestCase.assertSame(da, sa.and(da))
+        assertSame(da, ia.and(da))
+        assertSame(ia, da.and(ia))
+        assertSame(sa, ia.and(sa))
+        assertSame(ia, sa.and(ia))
+        assertSame(sa, da.and(sa))
+        assertSame(da, sa.and(da))
 
         // boolean values
-        TestCase.assertSame(bb, ba.and(bb))
-        TestCase.assertSame(bb, bb.and(ba))
-        TestCase.assertSame(ia, ba.and(ia))
-        TestCase.assertSame(bb, bb.and(ia))
+        assertSame(bb, ba.and(bb))
+        assertSame(bb, bb.and(ba))
+        assertSame(ia, ba.and(ia))
+        assertSame(bb, bb.and(ia))
     }
 
-
+    @Test
     fun testOr() {
         val ia = LuaValue.valueOf(3)
         val ib = LuaValue.valueOf(4)
@@ -1151,25 +1168,26 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val bb = LuaValue.FALSE
 
         // like kinds
-        TestCase.assertSame(ia, ia.or(ib))
-        TestCase.assertSame(da, da.or(db))
-        TestCase.assertSame(sa, sa.or(sb))
+        assertSame(ia, ia.or(ib))
+        assertSame(da, da.or(db))
+        assertSame(sa, sa.or(sb))
 
         // unlike kinds
-        TestCase.assertSame(ia, ia.or(da))
-        TestCase.assertSame(da, da.or(ia))
-        TestCase.assertSame(ia, ia.or(sa))
-        TestCase.assertSame(sa, sa.or(ia))
-        TestCase.assertSame(da, da.or(sa))
-        TestCase.assertSame(sa, sa.or(da))
+        assertSame(ia, ia.or(da))
+        assertSame(da, da.or(ia))
+        assertSame(ia, ia.or(sa))
+        assertSame(sa, sa.or(ia))
+        assertSame(da, da.or(sa))
+        assertSame(sa, sa.or(da))
 
         // boolean values
-        TestCase.assertSame(ba, ba.or(bb))
-        TestCase.assertSame(ba, bb.or(ba))
-        TestCase.assertSame(ba, ba.or(ia))
-        TestCase.assertSame(ia, bb.or(ia))
+        assertSame(ba, ba.or(bb))
+        assertSame(ba, bb.or(ba))
+        assertSame(ba, ba.or(ia))
+        assertSame(ia, bb.or(ia))
     }
 
+    @Test
     fun testLexicalComparison() {
         val aaa = LuaValue.valueOf("aaa")
         val baa = LuaValue.valueOf("baa")
@@ -1180,58 +1198,59 @@ class UnaryBinaryOperatorsTest : TestCase() {
         val f = LuaValue.FALSE
 
         // basics
-        TestCase.assertEquals(t, aaa.eq(aaa))
-        TestCase.assertEquals(t, aaa.lt(baa))
-        TestCase.assertEquals(t, aaa.lteq(baa))
-        TestCase.assertEquals(f, aaa.gt(baa))
-        TestCase.assertEquals(f, aaa.gteq(baa))
-        TestCase.assertEquals(f, baa.lt(aaa))
-        TestCase.assertEquals(f, baa.lteq(aaa))
-        TestCase.assertEquals(t, baa.gt(aaa))
-        TestCase.assertEquals(t, baa.gteq(aaa))
-        TestCase.assertEquals(t, aaa.lteq(aaa))
-        TestCase.assertEquals(t, aaa.gteq(aaa))
+        assertEquals(t, aaa.eq(aaa))
+        assertEquals(t, aaa.lt(baa))
+        assertEquals(t, aaa.lteq(baa))
+        assertEquals(f, aaa.gt(baa))
+        assertEquals(f, aaa.gteq(baa))
+        assertEquals(f, baa.lt(aaa))
+        assertEquals(f, baa.lteq(aaa))
+        assertEquals(t, baa.gt(aaa))
+        assertEquals(t, baa.gteq(aaa))
+        assertEquals(t, aaa.lteq(aaa))
+        assertEquals(t, aaa.gteq(aaa))
 
         // different case
-        TestCase.assertEquals(t, Aaa.eq(Aaa))
-        TestCase.assertEquals(t, Aaa.lt(aaa))
-        TestCase.assertEquals(t, Aaa.lteq(aaa))
-        TestCase.assertEquals(f, Aaa.gt(aaa))
-        TestCase.assertEquals(f, Aaa.gteq(aaa))
-        TestCase.assertEquals(f, aaa.lt(Aaa))
-        TestCase.assertEquals(f, aaa.lteq(Aaa))
-        TestCase.assertEquals(t, aaa.gt(Aaa))
-        TestCase.assertEquals(t, aaa.gteq(Aaa))
-        TestCase.assertEquals(t, Aaa.lteq(Aaa))
-        TestCase.assertEquals(t, Aaa.gteq(Aaa))
+        assertEquals(t, Aaa.eq(Aaa))
+        assertEquals(t, Aaa.lt(aaa))
+        assertEquals(t, Aaa.lteq(aaa))
+        assertEquals(f, Aaa.gt(aaa))
+        assertEquals(f, Aaa.gteq(aaa))
+        assertEquals(f, aaa.lt(Aaa))
+        assertEquals(f, aaa.lteq(Aaa))
+        assertEquals(t, aaa.gt(Aaa))
+        assertEquals(t, aaa.gteq(Aaa))
+        assertEquals(t, Aaa.lteq(Aaa))
+        assertEquals(t, Aaa.gteq(Aaa))
 
         // second letter differs
-        TestCase.assertEquals(t, aaa.eq(aaa))
-        TestCase.assertEquals(t, aaa.lt(aba))
-        TestCase.assertEquals(t, aaa.lteq(aba))
-        TestCase.assertEquals(f, aaa.gt(aba))
-        TestCase.assertEquals(f, aaa.gteq(aba))
-        TestCase.assertEquals(f, aba.lt(aaa))
-        TestCase.assertEquals(f, aba.lteq(aaa))
-        TestCase.assertEquals(t, aba.gt(aaa))
-        TestCase.assertEquals(t, aba.gteq(aaa))
-        TestCase.assertEquals(t, aaa.lteq(aaa))
-        TestCase.assertEquals(t, aaa.gteq(aaa))
+        assertEquals(t, aaa.eq(aaa))
+        assertEquals(t, aaa.lt(aba))
+        assertEquals(t, aaa.lteq(aba))
+        assertEquals(f, aaa.gt(aba))
+        assertEquals(f, aaa.gteq(aba))
+        assertEquals(f, aba.lt(aaa))
+        assertEquals(f, aba.lteq(aaa))
+        assertEquals(t, aba.gt(aaa))
+        assertEquals(t, aba.gteq(aaa))
+        assertEquals(t, aaa.lteq(aaa))
+        assertEquals(t, aaa.gteq(aaa))
 
         // longer
-        TestCase.assertEquals(t, aaa.eq(aaa))
-        TestCase.assertEquals(t, aaa.lt(aaaa))
-        TestCase.assertEquals(t, aaa.lteq(aaaa))
-        TestCase.assertEquals(f, aaa.gt(aaaa))
-        TestCase.assertEquals(f, aaa.gteq(aaaa))
-        TestCase.assertEquals(f, aaaa.lt(aaa))
-        TestCase.assertEquals(f, aaaa.lteq(aaa))
-        TestCase.assertEquals(t, aaaa.gt(aaa))
-        TestCase.assertEquals(t, aaaa.gteq(aaa))
-        TestCase.assertEquals(t, aaa.lteq(aaa))
-        TestCase.assertEquals(t, aaa.gteq(aaa))
+        assertEquals(t, aaa.eq(aaa))
+        assertEquals(t, aaa.lt(aaaa))
+        assertEquals(t, aaa.lteq(aaaa))
+        assertEquals(f, aaa.gt(aaaa))
+        assertEquals(f, aaa.gteq(aaaa))
+        assertEquals(f, aaaa.lt(aaa))
+        assertEquals(f, aaaa.lteq(aaa))
+        assertEquals(t, aaaa.gt(aaa))
+        assertEquals(t, aaaa.gteq(aaa))
+        assertEquals(t, aaa.lteq(aaa))
+        assertEquals(t, aaa.gteq(aaa))
     }
 
+    @Test
     fun testBuffer() {
         val abc = LuaValue.valueOf("abcdefghi").substring(0, 3)
         val def = LuaValue.valueOf("abcdefghi").substring(3, 6)
@@ -1240,81 +1259,83 @@ class UnaryBinaryOperatorsTest : TestCase() {
 
         // basic append
         var b = Buffer()
-        TestCase.assertEquals("", b.value().tojstring())
+        assertEquals("", b.value().tojstring())
         b.append(def)
-        TestCase.assertEquals("def", b.value().tojstring())
+        assertEquals("def", b.value().tojstring())
         b.append(abc)
-        TestCase.assertEquals("defabc", b.value().tojstring())
+        assertEquals("defabc", b.value().tojstring())
         b.append(ghi)
-        TestCase.assertEquals("defabcghi", b.value().tojstring())
+        assertEquals("defabcghi", b.value().tojstring())
         b.append(n123)
-        TestCase.assertEquals("defabcghi123", b.value().tojstring())
+        assertEquals("defabcghi123", b.value().tojstring())
 
         // basic prepend
         b = Buffer()
-        TestCase.assertEquals("", b.value().tojstring())
+        assertEquals("", b.value().tojstring())
         b.prepend(def.strvalue()!!)
-        TestCase.assertEquals("def", b.value().tojstring())
+        assertEquals("def", b.value().tojstring())
         b.prepend(ghi.strvalue()!!)
-        TestCase.assertEquals("ghidef", b.value().tojstring())
+        assertEquals("ghidef", b.value().tojstring())
         b.prepend(abc.strvalue()!!)
-        TestCase.assertEquals("abcghidef", b.value().tojstring())
+        assertEquals("abcghidef", b.value().tojstring())
         b.prepend(n123.strvalue()!!)
-        TestCase.assertEquals("123abcghidef", b.value().tojstring())
+        assertEquals("123abcghidef", b.value().tojstring())
 
         // mixed append, prepend
         b = Buffer()
-        TestCase.assertEquals("", b.value().tojstring())
+        assertEquals("", b.value().tojstring())
         b.append(def)
-        TestCase.assertEquals("def", b.value().tojstring())
+        assertEquals("def", b.value().tojstring())
         b.append(abc)
-        TestCase.assertEquals("defabc", b.value().tojstring())
+        assertEquals("defabc", b.value().tojstring())
         b.prepend(ghi.strvalue()!!)
-        TestCase.assertEquals("ghidefabc", b.value().tojstring())
+        assertEquals("ghidefabc", b.value().tojstring())
         b.prepend(n123.strvalue()!!)
-        TestCase.assertEquals("123ghidefabc", b.value().tojstring())
+        assertEquals("123ghidefabc", b.value().tojstring())
         b.append(def)
-        TestCase.assertEquals("123ghidefabcdef", b.value().tojstring())
+        assertEquals("123ghidefabcdef", b.value().tojstring())
         b.append(abc)
-        TestCase.assertEquals("123ghidefabcdefabc", b.value().tojstring())
+        assertEquals("123ghidefabcdefabc", b.value().tojstring())
         b.prepend(ghi.strvalue()!!)
-        TestCase.assertEquals("ghi123ghidefabcdefabc", b.value().tojstring())
+        assertEquals("ghi123ghidefabcdefabc", b.value().tojstring())
         b.prepend(n123.strvalue()!!)
-        TestCase.assertEquals("123ghi123ghidefabcdefabc", b.value().tojstring())
+        assertEquals("123ghi123ghidefabcdefabc", b.value().tojstring())
 
         // value
         b = Buffer(def)
-        TestCase.assertEquals("def", b.value().tojstring())
+        assertEquals("def", b.value().tojstring())
         b.append(abc)
-        TestCase.assertEquals("defabc", b.value().tojstring())
+        assertEquals("defabc", b.value().tojstring())
         b.prepend(ghi.strvalue()!!)
-        TestCase.assertEquals("ghidefabc", b.value().tojstring())
+        assertEquals("ghidefabc", b.value().tojstring())
         b.setvalue(def)
-        TestCase.assertEquals("def", b.value().tojstring())
+        assertEquals("def", b.value().tojstring())
         b.prepend(ghi.strvalue()!!)
-        TestCase.assertEquals("ghidef", b.value().tojstring())
+        assertEquals("ghidef", b.value().tojstring())
         b.append(abc)
-        TestCase.assertEquals("ghidefabc", b.value().tojstring())
+        assertEquals("ghidefabc", b.value().tojstring())
     }
 
+    @Test
     fun testConcat() {
         val abc = LuaValue.valueOf("abcdefghi").substring(0, 3)
         val def = LuaValue.valueOf("abcdefghi").substring(3, 6)
         val ghi = LuaValue.valueOf("abcdefghi").substring(6, 9)
         val n123 = LuaValue.valueOf(123)
 
-        TestCase.assertEquals("abc", abc.tojstring())
-        TestCase.assertEquals("def", def.tojstring())
-        TestCase.assertEquals("ghi", ghi.tojstring())
-        TestCase.assertEquals("123", n123.tojstring())
-        TestCase.assertEquals("abcabc", abc.concat(abc).tojstring())
-        TestCase.assertEquals("defghi", def.concat(ghi).tojstring())
-        TestCase.assertEquals("ghidef", ghi.concat(def).tojstring())
-        TestCase.assertEquals("ghidefabcghi", ghi.concat(def).concat(abc).concat(ghi).tojstring())
-        TestCase.assertEquals("123def", n123.concat(def).tojstring())
-        TestCase.assertEquals("def123", def.concat(n123).tojstring())
+        assertEquals("abc", abc.tojstring())
+        assertEquals("def", def.tojstring())
+        assertEquals("ghi", ghi.tojstring())
+        assertEquals("123", n123.tojstring())
+        assertEquals("abcabc", abc.concat(abc).tojstring())
+        assertEquals("defghi", def.concat(ghi).tojstring())
+        assertEquals("ghidef", ghi.concat(def).tojstring())
+        assertEquals("ghidefabcghi", ghi.concat(def).concat(abc).concat(ghi).tojstring())
+        assertEquals("123def", n123.concat(def).tojstring())
+        assertEquals("def123", def.concat(n123).tojstring())
     }
 
+    @Test
     fun testConcatBuffer() {
         val abc = LuaValue.valueOf("abcdefghi").substring(0, 3)
         val def = LuaValue.valueOf("abcdefghi").substring(3, 6)
@@ -1323,20 +1344,21 @@ class UnaryBinaryOperatorsTest : TestCase() {
         var b: Buffer
 
         b = Buffer(def)
-        TestCase.assertEquals("def", b.value().tojstring())
+        assertEquals("def", b.value().tojstring())
         b = ghi.concat(b)
-        TestCase.assertEquals("ghidef", b.value().tojstring())
+        assertEquals("ghidef", b.value().tojstring())
         b = abc.concat(b)
-        TestCase.assertEquals("abcghidef", b.value().tojstring())
+        assertEquals("abcghidef", b.value().tojstring())
         b = n123.concat(b)
-        TestCase.assertEquals("123abcghidef", b.value().tojstring())
+        assertEquals("123abcghidef", b.value().tojstring())
         b.setvalue(n123)
         b = def.concat(b)
-        TestCase.assertEquals("def123", b.value().tojstring())
+        assertEquals("def123", b.value().tojstring())
         b = abc.concat(b)
-        TestCase.assertEquals("abcdef123", b.value().tojstring())
+        assertEquals("abcdef123", b.value().tojstring())
     }
 
+    @Test
     fun testConcatMetatag() {
         val def = LuaValue.valueOf("abcdefghi").substring(3, 6)
         val ghi = LuaValue.valueOf("abcdefghi").substring(6, 9)
@@ -1347,91 +1369,91 @@ class UnaryBinaryOperatorsTest : TestCase() {
         try {
             // always use left argument
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.CONCAT, RETURN_LHS))
-            TestCase.assertEquals(tru, tru.concat(tbl))
-            TestCase.assertEquals(tbl, tbl.concat(tru))
-            TestCase.assertEquals(tru, tru.concat(tbl))
-            TestCase.assertEquals(tbl, tbl.concat(tru))
-            TestCase.assertEquals(tru, tru.concat(tbl.buffer()).value())
-            TestCase.assertEquals(tbl, tbl.concat(tru.buffer()).value())
-            TestCase.assertEquals(fal, fal.concat(tbl.concat(tru.buffer())).value())
-            TestCase.assertEquals(uda, uda.concat(tru.concat(tbl.buffer())).value())
+            assertEquals(tru, tru.concat(tbl))
+            assertEquals(tbl, tbl.concat(tru))
+            assertEquals(tru, tru.concat(tbl))
+            assertEquals(tbl, tbl.concat(tru))
+            assertEquals(tru, tru.concat(tbl.buffer()).value())
+            assertEquals(tbl, tbl.concat(tru.buffer()).value())
+            assertEquals(fal, fal.concat(tbl.concat(tru.buffer())).value())
+            assertEquals(uda, uda.concat(tru.concat(tbl.buffer())).value())
             try {
                 tbl.concat(def)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 def.concat(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tbl.concat(def.buffer()).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 def.concat(tbl.buffer()).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 uda.concat(def.concat(tbl.buffer())).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 ghi.concat(tbl.concat(def.buffer())).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             // always use right argument
             LuaBoolean.s_metatable = LuaValue.tableOf(arrayOf(LuaValue.CONCAT, RETURN_RHS))
-            TestCase.assertEquals(tbl, tru.concat(tbl))
-            TestCase.assertEquals(tru, tbl.concat(tru))
-            TestCase.assertEquals(tbl, tru.concat(tbl.buffer()).value())
-            TestCase.assertEquals(tru, tbl.concat(tru.buffer()).value())
-            TestCase.assertEquals(tru, uda.concat(tbl.concat(tru.buffer())).value())
-            TestCase.assertEquals(tbl, fal.concat(tru.concat(tbl.buffer())).value())
+            assertEquals(tbl, tru.concat(tbl))
+            assertEquals(tru, tbl.concat(tru))
+            assertEquals(tbl, tru.concat(tbl.buffer()).value())
+            assertEquals(tru, tbl.concat(tru.buffer()).value())
+            assertEquals(tru, uda.concat(tbl.concat(tru.buffer())).value())
+            assertEquals(tbl, fal.concat(tru.concat(tbl.buffer())).value())
             try {
                 tbl.concat(def)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 def.concat(tbl)
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 tbl.concat(def.buffer()).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 def.concat(tbl.buffer()).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 uda.concat(def.concat(tbl.buffer())).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
             try {
                 uda.concat(tbl.concat(def.buffer())).value()
-                TestCase.fail("did not throw error")
+                fail("did not throw error")
             } catch (le: LuaError) {
             }
 
@@ -1440,6 +1462,7 @@ class UnaryBinaryOperatorsTest : TestCase() {
         }
     }
 
+    @Test
     fun testConcatErrors() {
         val ia = LuaValue.valueOf(111)
         val ib = LuaValue.valueOf(44)
@@ -1467,9 +1490,9 @@ class UnaryBinaryOperatorsTest : TestCase() {
         } catch (ite: InvocationTargetException) {
             val actual = ite.targetException.message!!
             if (!actual.startsWith("attempt to concatenate") || actual.indexOf(type) < 0)
-                TestCase.fail("(" + a.typename() + "," + op + "," + b.typename() + ") reported '" + actual + "'")
+                fail("(" + a.typename() + "," + op + "," + b.typename() + ") reported '" + actual + "'")
         } catch (e: Exception) {
-            TestCase.fail("(" + a.typename() + "," + op + "," + b.typename() + ") threw " + e)
+            fail("(" + a.typename() + "," + op + "," + b.typename() + ") threw " + e)
         }
 
     }
@@ -1477,15 +1500,11 @@ class UnaryBinaryOperatorsTest : TestCase() {
     companion object {
 
         private val RETURN_NIL = object : TwoArgFunction() {
-            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue {
-                return LuaValue.NIL
-            }
+            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue = LuaValue.NIL
         }
 
         private val RETURN_ONE = object : TwoArgFunction() {
-            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue {
-                return LuaValue.ONE
-            }
+            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue = LuaValue.ONE
         }
 
         private fun luaMod(x: Double, y: Double): Double {
@@ -1493,15 +1512,11 @@ class UnaryBinaryOperatorsTest : TestCase() {
         }
 
         private val RETURN_LHS = object : TwoArgFunction() {
-            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue {
-                return lhs
-            }
+            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue = lhs
         }
 
         private val RETURN_RHS = object : TwoArgFunction() {
-            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue {
-                return rhs
-            }
+            override fun call(lhs: LuaValue, rhs: LuaValue): LuaValue = rhs
         }
     }
 

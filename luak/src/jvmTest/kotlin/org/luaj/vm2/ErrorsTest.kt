@@ -21,10 +21,9 @@
  */
 package org.luaj.vm2
 
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
+import kotlin.test.*
 
-/*
 /**
  * Test argument type check errors
  *
@@ -33,49 +32,49 @@ import java.io.InputStream
  */
 class ErrorsTest : ScriptDrivenTest(ScriptDrivenTest.PlatformType.JSE, dir) {
 
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-    }
-
     fun testBaseLibArgs() {
         globals.STDIN = object : InputStream() {
-            @Throws(IOException::class)
-            override fun read(): Int {
-                return -1
-            }
+            override fun read(): Int = -1
         }
         runTest("baselibargs")
     }
 
+    @Test
     fun testCoroutineLibArgs() {
         runTest("coroutinelibargs")
     }
 
+    @Test
     fun testDebugLibArgs() {
         runTest("debuglibargs")
     }
 
+    @Test
     fun testIoLibArgs() {
         runTest("iolibargs")
     }
 
+    @Test
     fun testMathLibArgs() {
         runTest("mathlibargs")
     }
 
+    @Test
     fun testModuleLibArgs() {
         runTest("modulelibargs")
     }
 
+    @Test
     fun testOperators() {
         runTest("operators")
     }
 
+    @Test
     fun testStringLibArgs() {
         runTest("stringlibargs")
     }
 
+    @Test
     fun testTableLibArgs() {
         runTest("tablelibargs")
     }
@@ -86,4 +85,3 @@ class ErrorsTest : ScriptDrivenTest(ScriptDrivenTest.PlatformType.JSE, dir) {
     }
 
 }
-*/

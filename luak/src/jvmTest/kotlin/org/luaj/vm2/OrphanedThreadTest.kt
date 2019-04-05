@@ -21,15 +21,13 @@
  */
 package org.luaj.vm2
 
-import java.lang.ref.WeakReference
-
-import junit.framework.TestCase
-
-import org.luaj.vm2.lib.OneArgFunction
-import org.luaj.vm2.lib.jse.JsePlatform
+import org.luaj.vm2.lib.*
+import org.luaj.vm2.lib.jse.*
+import java.lang.ref.*
+import kotlin.test.*
 
 
-class OrphanedThreadTest : TestCase() {
+class OrphanedThreadTest {
 
     internal lateinit var globals: Globals
     internal var luathread: LuaThread? = null
@@ -37,91 +35,91 @@ class OrphanedThreadTest : TestCase() {
     internal var function: LuaValue? = null
     internal lateinit var func_ref: WeakReference<*>
 
-    @Throws(Exception::class)
-    override fun setUp() {
+    @BeforeTest
+    fun setUp() {
         LuaThread.thread_orphan_check_interval = 5
         globals = JsePlatform.standardGlobals()
     }
 
-    override fun tearDown() {
+    @AfterTest
+    fun tearDown() {
         LuaThread.thread_orphan_check_interval = 30000
     }
 
-    @Throws(Exception::class)
+    @Test
     fun testCollectOrphanedNormalThread() {
         function = NormalFunction(globals)
         doTest(LuaValue.TRUE, LuaValue.ZERO)
     }
 
-    @Throws(Exception::class)
+    @Test
     fun testCollectOrphanedEarlyCompletionThread() {
         function = EarlyCompletionFunction(globals)
         doTest(LuaValue.TRUE, LuaValue.ZERO)
     }
 
-    @Throws(Exception::class)
+    @Test
     fun testCollectOrphanedAbnormalThread() {
         function = AbnormalFunction(globals)
         doTest(LuaValue.FALSE, LuaValue.valueOf("abnormal condition"))
     }
 
-    @Throws(Exception::class)
+    @Test
     fun testCollectOrphanedClosureThread() {
         val script = "print('in closure, arg is '..(...))\n" +
-                "arg = coroutine.yield(1)\n" +
-                "print('in closure.2, arg is '..arg)\n" +
-                "arg = coroutine.yield(0)\n" +
-                "print('leakage in closure.3, arg is '..arg)\n" +
-                "return 'done'\n"
+            "arg = coroutine.yield(1)\n" +
+            "print('in closure.2, arg is '..arg)\n" +
+            "arg = coroutine.yield(0)\n" +
+            "print('leakage in closure.3, arg is '..arg)\n" +
+            "return 'done'\n"
         function = globals.load(script, "script")
         doTest(LuaValue.TRUE, LuaValue.ZERO)
     }
 
-    @Throws(Exception::class)
+    @Test
     fun testCollectOrphanedPcallClosureThread() {
         val script = "f = function(x)\n" +
-                "  print('in pcall-closure, arg is '..(x))\n" +
-                "  arg = coroutine.yield(1)\n" +
-                "  print('in pcall-closure.2, arg is '..arg)\n" +
-                "  arg = coroutine.yield(0)\n" +
-                "  print('leakage in pcall-closure.3, arg is '..arg)\n" +
-                "  return 'done'\n" +
-                "end\n" +
-                "print( 'pcall-closre.result:', pcall( f, ... ) )\n"
+            "  print('in pcall-closure, arg is '..(x))\n" +
+            "  arg = coroutine.yield(1)\n" +
+            "  print('in pcall-closure.2, arg is '..arg)\n" +
+            "  arg = coroutine.yield(0)\n" +
+            "  print('leakage in pcall-closure.3, arg is '..arg)\n" +
+            "  return 'done'\n" +
+            "end\n" +
+            "print( 'pcall-closre.result:', pcall( f, ... ) )\n"
         function = globals.load(script, "script")
         doTest(LuaValue.TRUE, LuaValue.ZERO)
     }
 
-    @Throws(Exception::class)
+    @Test
     fun testCollectOrphanedLoadCloasureThread() {
         val script = "t = { \"print \", \"'hello, \", \"world'\", }\n" +
-                "i = 0\n" +
-                "arg = ...\n" +
-                "f = function()\n" +
-                "	i = i + 1\n" +
-                "   print('in load-closure, arg is', arg, 'next is', t[i])\n" +
-                "   arg = coroutine.yield(1)\n" +
-                "	return t[i]\n" +
-                "end\n" +
-                "load(f)()\n"
+            "i = 0\n" +
+            "arg = ...\n" +
+            "f = function()\n" +
+            "	i = i + 1\n" +
+            "   print('in load-closure, arg is', arg, 'next is', t[i])\n" +
+            "   arg = coroutine.yield(1)\n" +
+            "	return t[i]\n" +
+            "end\n" +
+            "load(f)()\n"
         function = globals.load(script, "script")
         doTest(LuaValue.TRUE, LuaValue.ONE)
     }
 
-    @Throws(Exception::class)
     private fun doTest(status2: LuaValue, value2: LuaValue) {
         luathread = LuaThread(globals, function)
         luathr_ref = WeakReference(luathread)
         func_ref = WeakReference(function)
-        TestCase.assertNotNull(luathr_ref.get())
+        assertNotNull(luathr_ref.get())
 
         // resume two times
         var a = luathread!!.resume(LuaValue.valueOf("foo"))
-        TestCase.assertEquals(LuaValue.ONE, a.arg(2))
-        TestCase.assertEquals(LuaValue.TRUE, a.arg1())
+        assertEquals(LuaValue.ONE, a.arg(2))
+        assertEquals(LuaValue.TRUE, a.arg1())
         a = luathread!!.resume(LuaValue.valueOf("bar"))
-        TestCase.assertEquals(value2, a.arg(2))
-        TestCase.assertEquals(status2, a.arg1())
+        assertEquals(value2, a.arg(2))
+        assertEquals(status2, a.arg1())
 
         // drop strong references
         luathread = null
@@ -136,8 +134,8 @@ class OrphanedThreadTest : TestCase() {
         }
 
         // check reference
-        TestCase.assertNull(luathr_ref.get())
-        TestCase.assertNull(func_ref.get())
+        assertNull(luathr_ref.get())
+        assertNull(func_ref.get())
     }
 
 

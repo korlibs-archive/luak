@@ -21,34 +21,23 @@
  */
 package org.luaj.vm2
 
-import junit.framework.TestCase
-import java.lang.ref.WeakReference
+import java.lang.ref.*
+import kotlin.test.*
 
 abstract class WeakTableTest : TableTest() {
 
     class MyData(val value: Int) {
-        override fun hashCode(): Int {
-            return value
-        }
-
-        override fun equals(o: Any?): Boolean {
-            return o is MyData && o.value == value
-        }
-
-        override fun toString(): String {
-            return "mydata-$value"
-        }
+        override fun hashCode(): Int = value
+        override fun equals(o: Any?): Boolean = o is MyData && o.value == value
+        override fun toString(): String = "mydata-$value"
     }
 
     class WeakValueTableTest : WeakTableTest() {
-        override fun new_Table(): LuaTable {
-            return WeakTable.make(false, true)
-        }
+        override fun new_Table(): LuaTable = WeakTable.make(false, true)
+        override fun new_Table(n: Int, m: Int): LuaTable = WeakTable.make(false, true)
 
-        override fun new_Table(n: Int, m: Int): LuaTable {
-            return WeakTable.make(false, true)
-        }
-
+        @Test
+        @Suppress("UNUSED_VALUE")
         fun testWeakValuesTable() {
             val t = new_Table()
 
@@ -57,28 +46,28 @@ abstract class WeakTableTest : TableTest() {
             var stringValue: LuaString? = LuaString.valueOf("this is a test")
             var tableValue2: LuaTable? = LuaTable()
 
-            t.set("table", tableValue!!)
-            t.set("userdata", LuaValue.userdataOf(obj!!, null))
-            t.set("string", stringValue!!)
-            t.set("string2", LuaValue.valueOf("another string"))
-            t.set(1, tableValue2!!)
-            TestCase.assertTrue("table must have at least 4 elements", t.hashLength >= 4)
-            TestCase.assertTrue("array part must have 1 element", t.arrayLength >= 1)
+            t["table"] = tableValue!!
+            t["userdata"] = LuaValue.userdataOf(obj!!, null)
+            t["string"] = stringValue!!
+            t["string2"] = LuaValue.valueOf("another string")
+            t[1] = tableValue2!!
+            assertTrue(t.hashLength >= 4, "table must have at least 4 elements")
+            assertTrue(t.arrayLength >= 1, "array part must have 1 element")
 
             // check that table can be used to get elements
-            TestCase.assertEquals(tableValue, t.get("table"))
-            TestCase.assertEquals(stringValue, t.get("string"))
-            TestCase.assertEquals(obj, t.get("userdata").checkuserdata())
-            TestCase.assertEquals(tableValue2, t.get(1))
+            assertEquals(tableValue, t["table"])
+            assertEquals(stringValue, t["string"])
+            assertEquals(obj, t["userdata"].checkuserdata())
+            assertEquals(tableValue2, t[1])
 
             // nothing should be collected, since we have strong references here
             collectGarbage()
 
             // check that elements are still there
-            TestCase.assertEquals(tableValue, t.get("table"))
-            TestCase.assertEquals(stringValue, t.get("string"))
-            TestCase.assertEquals(obj, t.get("userdata").checkuserdata())
-            TestCase.assertEquals(tableValue2, t.get(1))
+            assertEquals(tableValue, t["table"])
+            assertEquals(stringValue, t["string"])
+            assertEquals(obj, t["userdata"].checkuserdata())
+            assertEquals(tableValue2, t[1])
 
             // drop our strong references
             obj = null
@@ -90,22 +79,18 @@ abstract class WeakTableTest : TableTest() {
             collectGarbage()
 
             // check that they are dropped
-            TestCase.assertEquals(LuaValue.NIL, t.get("table"))
-            TestCase.assertEquals(LuaValue.NIL, t.get("userdata"))
-            TestCase.assertEquals(LuaValue.NIL, t.get(1))
-            TestCase.assertFalse("strings should not be in weak references", t.get("string").isnil())
+            assertEquals(LuaValue.NIL, t["table"])
+            assertEquals(LuaValue.NIL, t["userdata"])
+            assertEquals(LuaValue.NIL, t[1])
+            assertFalse(t["string"].isnil(), "strings should not be in weak references")
         }
     }
 
     class WeakKeyTableTest : WeakTableTest() {
-        override fun new_Table(): LuaTable {
-            return WeakTable.make(true, false)
-        }
+        override fun new_Table(): LuaTable = WeakTable.make(true, false)
+        override fun new_Table(n: Int, m: Int): LuaTable = WeakTable.make(true, false)
 
-        override fun new_Table(n: Int, m: Int): LuaTable {
-            return WeakTable.make(true, false)
-        }
-
+        @Test
         fun testWeakKeysTable() {
             val t = WeakTable.make(true, false)
 
@@ -113,10 +98,10 @@ abstract class WeakTableTest : TableTest() {
             var `val`: LuaValue = LuaValue.userdataOf(MyData(222))
 
             // set up the table
-            t.set(key, `val`)
-            TestCase.assertEquals(`val`, t.get(key))
+            t[key] = `val`
+            assertEquals(`val`, t[key])
             System.gc()
-            TestCase.assertEquals(`val`, t.get(key))
+            assertEquals(`val`, t[key])
 
             // drop key and value references, replace them with new ones
             val origkey = WeakReference(key)
@@ -125,20 +110,21 @@ abstract class WeakTableTest : TableTest() {
             `val` = LuaValue.userdataOf(MyData(222))
 
             // new key and value should be interchangeable (feature of this test class)
-            TestCase.assertEquals(key, origkey.get())
-            TestCase.assertEquals(`val`, origval.get())
-            TestCase.assertEquals(`val`, t.get(key))
-            TestCase.assertEquals(`val`, t.get(origkey.get()!!))
-            TestCase.assertEquals(origval.get(), t.get(key))
+            assertEquals(key, origkey.get())
+            assertEquals(`val`, origval.get())
+            assertEquals(`val`, t[key])
+            assertEquals(`val`, t[origkey.get()!!])
+            assertEquals(origval.get(), t[key])
 
             // value should not be reachable after gc
             collectGarbage()
-            TestCase.assertEquals(null, origkey.get())
-            TestCase.assertEquals(LuaValue.NIL, t.get(key))
+            assertEquals(null, origkey.get())
+            assertEquals(LuaValue.NIL, t[key])
             collectGarbage()
-            TestCase.assertEquals(null, origval.get())
+            assertEquals(null, origval.get())
         }
 
+        @Test
         fun testNext() {
             val t = WeakTable.make(true, true)
 
@@ -150,9 +136,9 @@ abstract class WeakTableTest : TableTest() {
             val val3 = LuaValue.userdataOf(MyData(666))
 
             // set up the table
-            t.set(key, `val`)
-            t.set(key2!!, val2!!)
-            t.set(key3, val3)
+            t[key] = `val`
+            t[key2!!] = val2!!
+            t[key3] = val3
 
             // forget one of the keys
             key2 = null
@@ -166,19 +152,16 @@ abstract class WeakTableTest : TableTest() {
                 size++
                 k = t.next(k).arg1()
             }
-            TestCase.assertEquals(2, size)
+            assertEquals(2, size)
         }
     }
 
     class WeakKeyValueTableTest : WeakTableTest() {
-        override fun new_Table(): LuaTable {
-            return WeakTable.make(true, true)
-        }
+        override fun new_Table(): LuaTable = WeakTable.make(true, true)
+        override fun new_Table(n: Int, m: Int): LuaTable = WeakTable.make(true, true)
 
-        override fun new_Table(n: Int, m: Int): LuaTable {
-            return WeakTable.make(true, true)
-        }
-
+        @Test
+        @Suppress("UNUSED_VALUE")
         fun testWeakKeysValuesTable() {
             val t = WeakTable.make(true, true)
 
@@ -190,16 +173,16 @@ abstract class WeakTableTest : TableTest() {
             var val3: LuaValue = LuaValue.userdataOf(MyData(666))
 
             // set up the table
-            t.set(key, `val`)
-            t.set(key2, val2!!)
-            t.set(key3!!, val3)
-            TestCase.assertEquals(`val`, t.get(key))
-            TestCase.assertEquals(val2, t.get(key2))
-            TestCase.assertEquals(val3, t.get(key3))
+            t[key] = `val`
+            t[key2] = val2!!
+            t[key3!!] = val3
+            assertEquals(`val`, t[key])
+            assertEquals(val2, t[key2])
+            assertEquals(val3, t[key3])
             System.gc()
-            TestCase.assertEquals(`val`, t.get(key))
-            TestCase.assertEquals(val2, t.get(key2))
-            TestCase.assertEquals(val3, t.get(key3))
+            assertEquals(`val`, t[key])
+            assertEquals(val2, t[key2])
+            assertEquals(val3, t[key3])
 
             // drop key and value references, replace them with new ones
             val origkey = WeakReference(key)
@@ -216,22 +199,23 @@ abstract class WeakTableTest : TableTest() {
 
             // no values should be reachable after gc
             collectGarbage()
-            TestCase.assertEquals(null, origkey.get())
-            TestCase.assertEquals(null, origval.get())
-            TestCase.assertEquals(null, origkey2.get())
-            TestCase.assertEquals(null, origval3.get())
-            TestCase.assertEquals(LuaValue.NIL, t.get(key))
-            TestCase.assertEquals(LuaValue.NIL, t.get(key2))
-            TestCase.assertEquals(LuaValue.NIL, t.get(key3))
+            assertEquals(null, origkey.get())
+            assertEquals(null, origval.get())
+            assertEquals(null, origkey2.get())
+            assertEquals(null, origval3.get())
+            assertEquals(LuaValue.NIL, t[key])
+            assertEquals(LuaValue.NIL, t[key2])
+            assertEquals(LuaValue.NIL, t[key3])
 
             // all originals should be gone after gc, then access
             val2 = null
             key3 = null
             collectGarbage()
-            TestCase.assertEquals(null, origval2.get())
-            TestCase.assertEquals(null, origkey3.get())
+            assertEquals(null, origval2.get())
+            assertEquals(null, origkey3.get())
         }
 
+        @Test
         fun testReplace() {
             val t = WeakTable.make(true, true)
 
@@ -243,12 +227,12 @@ abstract class WeakTableTest : TableTest() {
             val val3 = LuaValue.userdataOf(MyData(666))
 
             // set up the table
-            t.set(key, `val`)
-            t.set(key2, val2)
-            t.set(key3, val3)
+            t[key] = `val`
+            t[key2] = val2
+            t[key3] = val3
 
             val val4 = LuaValue.userdataOf(MyData(777))
-            t.set(key2, val4)
+            t[key2] = val4
 
             // table should have 3 entries
             var size = 0
@@ -257,12 +241,11 @@ abstract class WeakTableTest : TableTest() {
                 size++
                 k = t.next(k).arg1()
             }
-            TestCase.assertEquals(3, size)
+            assertEquals(3, size)
         }
     }
 
     companion object {
-
         internal fun collectGarbage() {
             val rt = Runtime.getRuntime()
             rt.gc()

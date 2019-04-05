@@ -1,25 +1,14 @@
 package org.luaj.vm2.compiler
 
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.io.PrintStream
-import java.net.MalformedURLException
-import java.net.URL
+import org.luaj.vm2.*
+import org.luaj.vm2.lib.jse.*
+import java.io.*
+import java.net.*
+import kotlin.test.*
 
-import junit.framework.TestCase
-
-import org.luaj.vm2.Globals
-import org.luaj.vm2.LoadState
-import org.luaj.vm2.Print
-import org.luaj.vm2.Prototype
-import org.luaj.vm2.lib.jse.JsePlatform
-
-abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val dir: String) : TestCase() {
+abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val dir: String) {
     private val jar: String
-    private var globals: Globals? = null
+    private var globals: Globals = JsePlatform.standardGlobals()
 
     init {
         var zip: URL? = null
@@ -39,26 +28,9 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
         this.jar = "jar:" + zip.toExternalForm() + "!/"
     }
 
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-        globals = JsePlatform.standardGlobals()
-    }
-
-    protected fun pathOfFile(file: String): String {
-        return "$jar$dir/$file"
-    }
-
-    @Throws(IOException::class)
-    protected fun inputStreamOfPath(path: String): InputStream {
-        val url = URL(path)
-        return url.openStream()
-    }
-
-    @Throws(IOException::class)
-    protected fun inputStreamOfFile(file: String): InputStream {
-        return inputStreamOfPath(pathOfFile(file))
-    }
+    protected fun pathOfFile(file: String): String = "$jar$dir/$file"
+    protected fun inputStreamOfPath(path: String): InputStream = URL(path).openStream()
+    protected fun inputStreamOfFile(file: String): InputStream = inputStreamOfPath(pathOfFile(file))
 
     protected open fun doTest(file: String) {
         try {
@@ -77,7 +49,7 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
             val expected = protoToString(e)
 
             // compare results
-            TestCase.assertEquals(expected, actual)
+            assertEquals(expected, actual)
 
             // dump into memory
             val baos = ByteArrayOutputStream()
@@ -89,15 +61,14 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
             val actual2 = protoToString(p2)
 
             // compare again
-            TestCase.assertEquals(actual, actual2)
+            assertEquals(actual, actual2)
 
         } catch (e: IOException) {
-            TestCase.fail(e.toString())
+            throw AssertionError(e.toString())
         }
 
     }
 
-    @Throws(IOException::class)
     protected fun bytesFromJar(path: String): ByteArray {
         val `is` = inputStreamOfPath(path)
         val baos = ByteArrayOutputStream()
@@ -112,7 +83,6 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
         return baos.toByteArray()
     }
 
-    @Throws(IOException::class)
     protected fun loadFromBytes(bytes: ByteArray, script: String): Prototype {
         val `is` = ByteArrayInputStream(bytes)
         return globals!!.loadPrototype(`is`, script, "b")
