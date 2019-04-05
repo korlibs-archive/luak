@@ -525,13 +525,13 @@ abstract class IoLib : TwoArgFunction() {
     companion object {
 
         /** Enumerated value representing stdin  */
-        protected const val FTYPE_STDIN = 0
+        const val FTYPE_STDIN = 0
         /** Enumerated value representing stdout  */
-        protected const val FTYPE_STDOUT = 1
+        const val FTYPE_STDOUT = 1
         /** Enumerated value representing stderr  */
-        protected const val FTYPE_STDERR = 2
+        const val FTYPE_STDERR = 2
         /** Enumerated value representing a file type for a named file  */
-        protected const val FTYPE_NAMED = 3
+        const val FTYPE_NAMED = 3
 
         private val STDIN = LuaValue.valueOf("stdin")
         private val STDOUT = LuaValue.valueOf("stdout")
