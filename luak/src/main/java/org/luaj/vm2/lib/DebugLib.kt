@@ -238,7 +238,7 @@ class DebugLib : TwoArgFunction() {
                 val c = func as LuaClosure?
                 val name = findupvalue(c!!, up)
                 if (name != null) {
-                    return LuaValue.varargsOf(name, c.upValues[up - 1].value!!)
+                    return LuaValue.varargsOf(name, c.upValues[up - 1]!!.value!!)
                 }
             }
             return LuaValue.NIL
@@ -258,7 +258,7 @@ class DebugLib : TwoArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             var a = 1
             val t = if (args.isthread(a)) args.checkthread(a++) else globals!!.running
-            val func = args.optfunction(a++, null!!)
+            val func = args.optfunction(a++, null)
             val str = args.optjstring(a++, "")
             val count = args.optint(a++, 0)
             var call = false
@@ -320,7 +320,7 @@ class DebugLib : TwoArgFunction() {
                 val c = func as LuaClosure?
                 val name = findupvalue(c!!, up)
                 if (name != null) {
-                    c.upValues[up - 1].value = value
+                    c.upValues[up - 1]?.value = value
                     return name
                 }
             }

@@ -237,7 +237,7 @@ abstract class Varargs {
      * @return LuaValue that can be called if argument i is lua function or closure, or defval if not supplied or nil
      * @exception LuaError if the argument is not a lua function or closure
      */
-    fun optfunction(i: Int, defval: LuaFunction): LuaFunction? {
+    fun optfunction(i: Int, defval: LuaFunction?): LuaFunction? {
         return arg(i).optfunction(defval)
     }
 
