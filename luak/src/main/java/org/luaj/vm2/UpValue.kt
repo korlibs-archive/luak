@@ -29,15 +29,14 @@ package org.luaj.vm2
  *
  * @see Prototype
  */
-class UpValue
 /**
  * Create an upvalue relative to a stack
  * @param stack the stack
  * @param index the index on the stack for the upvalue
  */
-    (
-    @JvmField internal var array: Array<LuaValue?> // initially the stack, becomes a holder
-    , @JvmField internal var index: Int
+class UpValue(
+    @JvmField internal var array: Array<LuaValue?>, // initially the stack, becomes a holder
+    @JvmField internal var index: Int
 ) {
 
     /**
@@ -50,22 +49,16 @@ class UpValue
      */
     var value: LuaValue?
         get() = array[index]
-        set(value) {
-            array[index] = value
-        }
+        set(value) = run { array[index] = value }
 
-    override fun toString(): String {
-        return index.toString() + "/" + array.size + " " + array[index]
-    }
+    override fun toString(): String = "$index/${array.size} ${array[index]}"
 
     /**
      * Convert this upvalue to a Java String
      * @return the Java String for this upvalue.
      * @see LuaValue.tojstring
      */
-    fun tojstring(): String {
-        return array[index]?.tojstring() ?: "null"
-    }
+    fun tojstring(): String = array[index]?.tojstring() ?: "null"
 
     /**
      * Close this upvalue so it is no longer on the stack

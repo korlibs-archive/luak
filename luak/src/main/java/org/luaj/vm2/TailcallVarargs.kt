@@ -81,26 +81,22 @@ class TailcallVarargs : Varargs {
     }
 
     override fun arg(i: Int): LuaValue {
-        if (result == null)
-            eval()
+        if (result == null) eval()
         return result!!.arg(i)
     }
 
     override fun arg1(): LuaValue {
-        if (result == null)
-            eval()
+        if (result == null) eval()
         return result!!.arg1()
     }
 
     override fun narg(): Int {
-        if (result == null)
-            eval()
+        if (result == null) eval()
         return result!!.narg()
     }
 
     override fun subargs(start: Int): Varargs {
-        if (result == null)
-            eval()
+        if (result == null) eval()
         return result!!.subargs(start)
     }
 }

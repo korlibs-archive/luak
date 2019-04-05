@@ -25,12 +25,8 @@ class Upvaldesc(/* upvalue name (for debug information) */
     @JvmField var name: LuaString?, /* whether it is in stack */
     @JvmField val instack: Boolean, idx: Int
 ) {
-
     /* index of upvalue (in stack or in outer function's list) */
-    @JvmField
-    val idx: Short = idx.toShort()
+    @JvmField val idx: Short = idx.toShort()
 
-    override fun toString(): String {
-        return idx.toString() + (if (instack) " instack " else " closed ") + name.toString()
-    }
+    override fun toString(): String = idx.toString() + (if (instack) " instack " else " closed ") + name.toString()
 }

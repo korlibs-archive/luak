@@ -85,9 +85,7 @@ abstract class Varargs {
      * Evaluate any pending tail call and return result.
      * @return the evaluated tail call result
      */
-    open fun eval(): Varargs {
-        return this
-    }
+    open fun eval(): Varargs = this
 
     // -----------------------------------------------------------------------
     // utilities to get specific arguments and type-check them.
@@ -113,9 +111,7 @@ abstract class Varargs {
      * @see LuaValue.TTHREAD
      *
      */
-    fun type(i: Int): Int {
-        return arg(i).type()
-    }
+    fun type(i: Int): Int = arg(i).type()
 
     /** Tests if argument i is nil.
      * @param i the index of the argument to test, 1 is the first argument
@@ -123,9 +119,7 @@ abstract class Varargs {
      * @see LuaValue.TNIL
      *
      */
-    fun isnil(i: Int): Boolean {
-        return arg(i).isnil()
-    }
+    fun isnil(i: Int): Boolean = arg(i).isnil()
 
     /** Tests if argument i is a function.
      * @param i the index of the argument to test, 1 is the first argument
@@ -133,9 +127,7 @@ abstract class Varargs {
      * @see LuaValue.TFUNCTION
      *
      */
-    fun isfunction(i: Int): Boolean {
-        return arg(i).isfunction()
-    }
+    fun isfunction(i: Int): Boolean = arg(i).isfunction()
 
     /** Tests if argument i is a number.
      * Since anywhere a number is required, a string can be used that
@@ -149,9 +141,7 @@ abstract class Varargs {
      * @see LuaValue.TSTRING
      *
      */
-    fun isnumber(i: Int): Boolean {
-        return arg(i).isnumber()
-    }
+    fun isnumber(i: Int): Boolean = arg(i).isnumber()
 
     /** Tests if argument i is a string.
      * Since all lua numbers can be used where strings are used,
@@ -163,9 +153,7 @@ abstract class Varargs {
      * @see LuaValue.TSTRING
      *
      */
-    fun isstring(i: Int): Boolean {
-        return arg(i).isstring()
-    }
+    fun isstring(i: Int): Boolean = arg(i).isstring()
 
     /** Tests if argument i is a table.
      * @param i the index of the argument to test, 1 is the first argument
@@ -173,9 +161,7 @@ abstract class Varargs {
      * @see LuaValue.TTABLE
      *
      */
-    fun istable(i: Int): Boolean {
-        return arg(i).istable()
-    }
+    fun istable(i: Int): Boolean = arg(i).istable()
 
     /** Tests if argument i is a thread.
      * @param i the index of the argument to test, 1 is the first argument
@@ -183,9 +169,7 @@ abstract class Varargs {
      * @see LuaValue.TTHREAD
      *
      */
-    fun isthread(i: Int): Boolean {
-        return arg(i).isthread()
-    }
+    fun isthread(i: Int): Boolean = arg(i).isthread()
 
     /** Tests if argument i is a userdata.
      * @param i the index of the argument to test, 1 is the first argument
@@ -193,134 +177,104 @@ abstract class Varargs {
      * @see LuaValue.TUSERDATA
      *
      */
-    fun isuserdata(i: Int): Boolean {
-        return arg(i).isuserdata()
-    }
+    fun isuserdata(i: Int): Boolean = arg(i).isuserdata()
 
     /** Tests if a value exists at argument i.
      * @param i the index of the argument to test, 1 is the first argument
      * @return true if the argument exists, false otherwise
      */
-    fun isvalue(i: Int): Boolean {
-        return i > 0 && i <= narg()
-    }
+    fun isvalue(i: Int): Boolean = i > 0 && i <= narg()
 
     /** Return argument i as a boolean value, `defval` if nil, or throw a LuaError if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return true if argument i is boolean true, false if it is false, or defval if not supplied or nil
      * @exception LuaError if the argument is not a lua boolean
      */
-    fun optboolean(i: Int, defval: Boolean): Boolean {
-        return arg(i).optboolean(defval)
-    }
+    fun optboolean(i: Int, defval: Boolean): Boolean = arg(i).optboolean(defval)
 
     /** Return argument i as a closure, `defval` if nil, or throw a LuaError if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaClosure if argument i is a closure, or defval if not supplied or nil
      * @exception LuaError if the argument is not a lua closure
      */
-    fun optclosure(i: Int, defval: LuaClosure): LuaClosure? {
-        return arg(i).optclosure(defval)
-    }
+    fun optclosure(i: Int, defval: LuaClosure): LuaClosure? = arg(i).optclosure(defval)
 
     /** Return argument i as a double, `defval` if nil, or throw a LuaError if it cannot be converted to one.
      * @param i the index of the argument to test, 1 is the first argument
      * @return java double value if argument i is a number or string that converts to a number, or defval if not supplied or nil
      * @exception LuaError if the argument is not a number
      */
-    fun optdouble(i: Int, defval: Double): Double {
-        return arg(i).optdouble(defval)
-    }
+    fun optdouble(i: Int, defval: Double): Double = arg(i).optdouble(defval)
 
     /** Return argument i as a function, `defval` if nil, or throw a LuaError  if an incompatible type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaValue that can be called if argument i is lua function or closure, or defval if not supplied or nil
      * @exception LuaError if the argument is not a lua function or closure
      */
-    fun optfunction(i: Int, defval: LuaFunction?): LuaFunction? {
-        return arg(i).optfunction(defval)
-    }
+    fun optfunction(i: Int, defval: LuaFunction?): LuaFunction? = arg(i).optfunction(defval)
 
     /** Return argument i as a java int value, discarding any fractional part, `defval` if nil, or throw a LuaError  if not a number.
      * @param i the index of the argument to test, 1 is the first argument
      * @return int value with fraction discarded and truncated if necessary if argument i is number, or defval if not supplied or nil
      * @exception LuaError if the argument is not a number
      */
-    fun optint(i: Int, defval: Int): Int {
-        return arg(i).optint(defval)
-    }
+    fun optint(i: Int, defval: Int): Int = arg(i).optint(defval)
 
     /** Return argument i as a java int value, `defval` if nil, or throw a LuaError  if not a number or is not representable by a java int.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaInteger value that fits in a java int without rounding, or defval if not supplied or nil
      * @exception LuaError if the argument cannot be represented by a java int value
      */
-    fun optinteger(i: Int, defval: LuaInteger): LuaInteger? {
-        return arg(i).optinteger(defval)
-    }
+    fun optinteger(i: Int, defval: LuaInteger): LuaInteger? = arg(i).optinteger(defval)
 
     /** Return argument i as a java long value, discarding any fractional part, `defval` if nil, or throw a LuaError  if not a number.
      * @param i the index of the argument to test, 1 is the first argument
      * @return long value with fraction discarded and truncated if necessary if argument i is number, or defval if not supplied or nil
      * @exception LuaError if the argument is not a number
      */
-    fun optlong(i: Int, defval: Long): Long {
-        return arg(i).optlong(defval)
-    }
+    fun optlong(i: Int, defval: Long): Long = arg(i).optlong(defval)
 
     /** Return argument i as a LuaNumber, `defval` if nil, or throw a LuaError  if not a number or string that can be converted to a number.
      * @param i the index of the argument to test, 1 is the first argument, or defval if not supplied or nil
      * @return LuaNumber if argument i is number or can be converted to a number
      * @exception LuaError if the argument is not a number
      */
-    fun optnumber(i: Int, defval: LuaNumber): LuaNumber? {
-        return arg(i).optnumber(defval)
-    }
+    fun optnumber(i: Int, defval: LuaNumber): LuaNumber? = arg(i).optnumber(defval)
 
     /** Return argument i as a java String if a string or number, `defval` if nil, or throw a LuaError  if any other type
      * @param i the index of the argument to test, 1 is the first argument
      * @return String value if argument i is a string or number, or defval if not supplied or nil
      * @exception LuaError if the argument is not a string or number
      */
-    fun optjstring(i: Int, defval: String): String? {
-        return arg(i).optjstring(defval)
-    }
+    fun optjstring(i: Int, defval: String): String? = arg(i).optjstring(defval)
 
     /** Return argument i as a LuaString if a string or number, `defval` if nil, or throw a LuaError  if any other type
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaString value if argument i is a string or number, or defval if not supplied or nil
      * @exception LuaError if the argument is not a string or number
      */
-    fun optstring(i: Int, defval: LuaString): LuaString? {
-        return arg(i).optstring(defval)
-    }
+    fun optstring(i: Int, defval: LuaString): LuaString? = arg(i).optstring(defval)
 
     /** Return argument i as a LuaTable if a lua table, `defval` if nil, or throw a LuaError  if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaTable value if a table, or defval if not supplied or nil
      * @exception LuaError if the argument is not a lua table
      */
-    fun opttable(i: Int, defval: LuaTable): LuaTable? {
-        return arg(i).opttable(defval)
-    }
+    fun opttable(i: Int, defval: LuaTable): LuaTable? = arg(i).opttable(defval)
 
     /** Return argument i as a LuaThread if a lua thread, `defval` if nil, or throw a LuaError  if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaThread value if a thread, or defval if not supplied or nil
      * @exception LuaError if the argument is not a lua thread
      */
-    fun optthread(i: Int, defval: LuaThread): LuaThread? {
-        return arg(i).optthread(defval)
-    }
+    fun optthread(i: Int, defval: LuaThread): LuaThread? = arg(i).optthread(defval)
 
     /** Return argument i as a java Object if a userdata, `defval` if nil, or throw a LuaError  if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return java Object value if argument i is a userdata, or defval if not supplied or nil
      * @exception LuaError if the argument is not a userdata
      */
-    fun optuserdata(i: Int, defval: Any): Any? {
-        return arg(i).optuserdata(defval)
-    }
+    fun optuserdata(i: Int, defval: Any): Any? = arg(i).optuserdata(defval)
 
     /** Return argument i as a java Object if it is a userdata whose instance Class c or a subclass,
      * `defval` if nil, or throw a LuaError  if any other type.
@@ -329,135 +283,105 @@ abstract class Varargs {
      * @return java Object value if argument i is a userdata whose instance Class c or a subclass, or defval if not supplied or nil
      * @exception LuaError if the argument is not a userdata or from whose instance c is not assignable
      */
-    fun optuserdata(i: Int, c: Class<*>, defval: Any): Any? {
-        return arg(i).optuserdata(c, defval)
-    }
+    fun optuserdata(i: Int, c: Class<*>, defval: Any): Any? = arg(i).optuserdata(c, defval)
 
     /** Return argument i as a LuaValue if it exists, or `defval`.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaValue value if the argument exists, defval if not
      * @exception LuaError if the argument does not exist.
      */
-    fun optvalue(i: Int, defval: LuaValue): LuaValue {
-        return if (i > 0 && i <= narg()) arg(i) else defval
-    }
+    fun optvalue(i: Int, defval: LuaValue): LuaValue = if (i > 0 && i <= narg()) arg(i) else defval
 
     /** Return argument i as a boolean value, or throw an error if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return true if argument i is boolean true, false if it is false
      * @exception LuaError if the argument is not a lua boolean
      */
-    fun checkboolean(i: Int): Boolean {
-        return arg(i).checkboolean()
-    }
+    fun checkboolean(i: Int): Boolean = arg(i).checkboolean()
 
     /** Return argument i as a closure, or throw an error if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaClosure if argument i is a closure.
      * @exception LuaError if the argument is not a lua closure
      */
-    fun checkclosure(i: Int): LuaClosure? {
-        return arg(i).checkclosure()
-    }
+    fun checkclosure(i: Int): LuaClosure? = arg(i).checkclosure()
 
     /** Return argument i as a double, or throw an error if it cannot be converted to one.
      * @param i the index of the argument to test, 1 is the first argument
      * @return java double value if argument i is a number or string that converts to a number
      * @exception LuaError if the argument is not a number
      */
-    fun checkdouble(i: Int): Double {
-        return arg(i).checknumber()!!.todouble()
-    }
+    fun checkdouble(i: Int): Double = arg(i).checknumber()!!.todouble()
 
     /** Return argument i as a function, or throw an error if an incompatible type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaValue that can be called if argument i is lua function or closure
      * @exception LuaError if the argument is not a lua function or closure
      */
-    fun checkfunction(i: Int): LuaFunction? {
-        return arg(i).checkfunction()
-    }
+    fun checkfunction(i: Int): LuaFunction? = arg(i).checkfunction()
 
     /** Return argument i as a java int value, discarding any fractional part, or throw an error if not a number.
      * @param i the index of the argument to test, 1 is the first argument
      * @return int value with fraction discarded and truncated if necessary if argument i is number
      * @exception LuaError if the argument is not a number
      */
-    fun checkint(i: Int): Int {
-        return arg(i).checknumber()!!.toint()
-    }
+    fun checkint(i: Int): Int = arg(i).checknumber()!!.toint()
 
     /** Return argument i as a java int value, or throw an error if not a number or is not representable by a java int.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaInteger value that fits in a java int without rounding
      * @exception LuaError if the argument cannot be represented by a java int value
      */
-    fun checkinteger(i: Int): LuaInteger? {
-        return arg(i).checkinteger()
-    }
+    fun checkinteger(i: Int): LuaInteger? = arg(i).checkinteger()
 
     /** Return argument i as a java long value, discarding any fractional part, or throw an error if not a number.
      * @param i the index of the argument to test, 1 is the first argument
      * @return long value with fraction discarded and truncated if necessary if argument i is number
      * @exception LuaError if the argument is not a number
      */
-    fun checklong(i: Int): Long {
-        return arg(i).checknumber()!!.tolong()
-    }
+    fun checklong(i: Int): Long = arg(i).checknumber()!!.tolong()
 
     /** Return argument i as a LuaNumber, or throw an error if not a number or string that can be converted to a number.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaNumber if argument i is number or can be converted to a number
      * @exception LuaError if the argument is not a number
      */
-    fun checknumber(i: Int): LuaNumber? {
-        return arg(i).checknumber()
-    }
+    fun checknumber(i: Int): LuaNumber? = arg(i).checknumber()
 
     /** Return argument i as a java String if a string or number, or throw an error if any other type
      * @param i the index of the argument to test, 1 is the first argument
      * @return String value if argument i is a string or number
      * @exception LuaError if the argument is not a string or number
      */
-    fun checkjstring(i: Int): String? {
-        return arg(i).checkjstring()
-    }
+    fun checkjstring(i: Int): String? = arg(i).checkjstring()
 
     /** Return argument i as a LuaString if a string or number, or throw an error if any other type
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaString value if argument i is a string or number
      * @exception LuaError if the argument is not a string or number
      */
-    fun checkstring(i: Int): LuaString? {
-        return arg(i).checkstring()
-    }
+    fun checkstring(i: Int): LuaString? = arg(i).checkstring()
 
     /** Return argument i as a LuaTable if a lua table, or throw an error if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaTable value if a table
      * @exception LuaError if the argument is not a lua table
      */
-    fun checktable(i: Int): LuaTable? {
-        return arg(i).checktable()
-    }
+    fun checktable(i: Int): LuaTable? = arg(i).checktable()
 
     /** Return argument i as a LuaThread if a lua thread, or throw an error if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaThread value if a thread
      * @exception LuaError if the argument is not a lua thread
      */
-    fun checkthread(i: Int): LuaThread? {
-        return arg(i).checkthread()
-    }
+    fun checkthread(i: Int): LuaThread? = arg(i).checkthread()
 
     /** Return argument i as a java Object if a userdata, or throw an error if any other type.
      * @param i the index of the argument to test, 1 is the first argument
      * @return java Object value if argument i is a userdata
      * @exception LuaError if the argument is not a userdata
      */
-    fun checkuserdata(i: Int): Any? {
-        return arg(i).checkuserdata()
-    }
+    fun checkuserdata(i: Int): Any? = arg(i).checkuserdata()
 
     /** Return argument i as a java Object if it is a userdata whose instance Class c or a subclass,
      * or throw an error if any other type.
@@ -466,27 +390,21 @@ abstract class Varargs {
      * @return java Object value if argument i is a userdata whose instance Class c or a subclass
      * @exception LuaError if the argument is not a userdata or from whose instance c is not assignable
      */
-    fun checkuserdata(i: Int, c: Class<*>): Any? {
-        return arg(i).checkuserdata(c)
-    }
+    fun checkuserdata(i: Int, c: Class<*>): Any? = arg(i).checkuserdata(c)
 
     /** Return argument i as a LuaValue if it exists, or throw an error.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaValue value if the argument exists
      * @exception LuaError if the argument does not exist.
      */
-    fun checkvalue(i: Int): LuaValue {
-        return if (i <= narg()) arg(i) else LuaValue.argerror(i, "value expected")
-    }
+    fun checkvalue(i: Int): LuaValue = if (i <= narg()) arg(i) else LuaValue.argerror(i, "value expected")
 
     /** Return argument i as a LuaValue if it is not nil, or throw an error if it is nil.
      * @param i the index of the argument to test, 1 is the first argument
      * @return LuaValue value if the argument is not nil
      * @exception LuaError if the argument doesn't exist or evaluates to nil.
      */
-    fun checknotnil(i: Int): LuaValue {
-        return arg(i).checknotnil()
-    }
+    fun checknotnil(i: Int): LuaValue = arg(i).checknotnil()
 
     /** Performs test on argument i as a LuaValue when a user-supplied assertion passes, or throw an error.
      * Returns normally if the value of `test` is `true`, otherwise throws and argument error with
@@ -496,112 +414,86 @@ abstract class Varargs {
      * @param msg the error message to use when the test fails
      * @exception LuaError if the the value of `test` is `false`
      */
-    fun argcheck(test: Boolean, i: Int, msg: String) {
-        if (!test) LuaValue.argerror(i, msg)
-    }
+    fun argcheck(test: Boolean, i: Int, msg: String) = run { if (!test) LuaValue.argerror(i, msg) }
 
     /** Return true if there is no argument or nil at argument i.
      * @param i the index of the argument to test, 1 is the first argument
      * @return true if argument i contains either no argument or nil
      */
-    fun isnoneornil(i: Int): Boolean {
-        return i > narg() || arg(i).isnil()
-    }
+    fun isnoneornil(i: Int): Boolean = i > narg() || arg(i).isnil()
 
     /** Convert argument `i` to java boolean based on lua rules for boolean evaluation.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return `false` if argument i is nil or false, otherwise `true`
      */
-    fun toboolean(i: Int): Boolean {
-        return arg(i).toboolean()
-    }
+    fun toboolean(i: Int): Boolean = arg(i).toboolean()
 
     /** Return argument i as a java byte value, discarding any fractional part and truncating,
      * or 0 if not a number.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return byte value with fraction discarded and truncated if necessary if argument i is number, otherwise 0
      */
-    fun tobyte(i: Int): Byte {
-        return arg(i).tobyte()
-    }
+    fun tobyte(i: Int): Byte = arg(i).tobyte()
 
     /** Return argument i as a java char value, discarding any fractional part and truncating,
      * or 0 if not a number.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return char value with fraction discarded and truncated if necessary if argument i is number, otherwise 0
      */
-    fun tochar(i: Int): Char {
-        return arg(i).tochar()
-    }
+    fun tochar(i: Int): Char = arg(i).tochar()
 
     /** Return argument i as a java double value or 0 if not a number.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return double value if argument i is number, otherwise 0
      */
-    fun todouble(i: Int): Double {
-        return arg(i).todouble()
-    }
+    fun todouble(i: Int): Double = arg(i).todouble()
 
     /** Return argument i as a java float value, discarding excess fractional part and truncating,
      * or 0 if not a number.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return float value with excess fraction discarded and truncated if necessary if argument i is number, otherwise 0
      */
-    fun tofloat(i: Int): Float {
-        return arg(i).tofloat()
-    }
+    fun tofloat(i: Int): Float = arg(i).tofloat()
 
     /** Return argument i as a java int value, discarding any fractional part and truncating,
      * or 0 if not a number.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return int value with fraction discarded and truncated if necessary if argument i is number, otherwise 0
      */
-    fun toint(i: Int): Int {
-        return arg(i).toint()
-    }
+    fun toint(i: Int): Int = arg(i).toint()
 
     /** Return argument i as a java long value, discarding any fractional part and truncating,
      * or 0 if not a number.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return long value with fraction discarded and truncated if necessary if argument i is number, otherwise 0
      */
-    fun tolong(i: Int): Long {
-        return arg(i).tolong()
-    }
+    fun tolong(i: Int): Long = arg(i).tolong()
 
     /** Return argument i as a java String based on the type of the argument.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return String value representing the type
      */
-    fun tojstring(i: Int): String {
-        return arg(i).tojstring()
-    }
+    fun tojstring(i: Int): String = arg(i).tojstring()
 
     /** Return argument i as a java short value, discarding any fractional part and truncating,
      * or 0 if not a number.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return short value with fraction discarded and truncated if necessary if argument i is number, otherwise 0
      */
-    fun toshort(i: Int): Short {
-        return arg(i).toshort()
-    }
+    fun toshort(i: Int): Short = arg(i).toshort()
 
     /** Return argument i as a java Object if a userdata, or null.
      * @param i the index of the argument to convert, 1 is the first argument
      * @return java Object value if argument i is a userdata, otherwise null
      */
-    fun touserdata(i: Int): Any? {
-        return arg(i).touserdata()
-    }
+    fun touserdata(i: Int): Any? = arg(i).touserdata()
 
     /** Return argument i as a java Object if it is a userdata whose instance Class c or a subclass, or null.
      * @param i the index of the argument to convert, 1 is the first argument
      * @param c the class to which the userdata instance must be assignable
      * @return java Object value if argument i is a userdata whose instance Class c or a subclass, otherwise null
      */
-    fun touserdata(i: Int, c: Class<*>): Any? {
-        return arg(i).touserdata(c)
-    }
+    fun touserdata(i: Int, c: Class<*>): Any? = arg(i).touserdata(c)
 
     /** Convert the list of varargs values to a human readable java String.
      * @return String value in human readable form such as {1,2}.
@@ -624,9 +516,7 @@ abstract class Varargs {
      * @return String value in human readable form.
      * @see Varargs.tojstring
      */
-    override fun toString(): String {
-        return tojstring()
-    }
+    override fun toString(): String = tojstring()
 
     /**
      * Create a `Varargs` instance containing arguments starting at index `start`
@@ -646,30 +536,22 @@ abstract class Varargs {
             return if (i >= start && i <= end) v.arg(i) else LuaValue.NIL
         }
 
-        override fun arg1(): LuaValue {
-            return v.arg(start)
-        }
+        override fun arg1(): LuaValue = v.arg(start)
 
-        override fun narg(): Int {
-            return end + 1 - start
-        }
+        override fun narg(): Int = end + 1 - start
 
         override fun subargs(start: Int): Varargs {
-            if (start == 1)
-                return this
+            if (start == 1) return this
             val newstart = this.start + start - 1
-            if (start > 0) {
-                if (newstart >= this.end)
-                    return LuaValue.NONE
-                if (newstart == this.end)
-                    return v.arg(this.end)
-                return if (newstart == this.end - 1) PairVarargs(v.arg(this.end - 1), v.arg(this.end)) else SubVarargs(
-                    v,
-                    newstart,
-                    this.end
-                )
+            return if (start > 0) {
+                when {
+                    newstart >= this.end -> LuaValue.NONE
+                    newstart == this.end -> v.arg(this.end)
+                    else -> if (newstart == this.end - 1) PairVarargs(v.arg(this.end - 1), v.arg(this.end)) else SubVarargs(v, newstart, this.end)
+                }
+            } else {
+                SubVarargs(v, newstart, this.end)
             }
-            return SubVarargs(v, newstart, this.end)
         }
     }
 
@@ -681,7 +563,6 @@ abstract class Varargs {
      *
      * @see LuaValue.varargsOf
      */
-    internal class PairVarargs
     /** Construct a Varargs from an two LuaValue.
      *
      *
@@ -690,25 +571,15 @@ abstract class Varargs {
      *
      * @see LuaValue.varargsOf
      */
-        (private val v1: LuaValue, private val v2: Varargs) : Varargs() {
-        override fun arg(i: Int): LuaValue {
-            return if (i == 1) v1 else v2.arg(i - 1)
-        }
+    internal class PairVarargs(private val v1: LuaValue, private val v2: Varargs) : Varargs() {
+        override fun arg(i: Int): LuaValue = if (i == 1) v1 else v2.arg(i - 1)
+        override fun narg(): Int = 1 + v2.narg()
+        override fun arg1(): LuaValue = v1
 
-        override fun narg(): Int {
-            return 1 + v2.narg()
-        }
-
-        override fun arg1(): LuaValue {
-            return v1
-        }
-
-        override fun subargs(start: Int): Varargs {
-            if (start == 1)
-                return this
-            if (start == 2)
-                return v2
-            return if (start > 2) v2.subargs(start - 1) else LuaValue.argerror(1, "start must be > 0")
+        override fun subargs(start: Int): Varargs = when (start) {
+            1 -> this
+            2 -> v2
+            else -> if (start > 2) v2.subargs(start - 1) else LuaValue.argerror(1, "start must be > 0")
         }
     }
 
@@ -721,7 +592,6 @@ abstract class Varargs {
      * @see LuaValue.varargsOf
      * @see LuaValue.varargsOf
      */
-    class ArrayVarargs
     /** Construct a Varargs from an array of LuaValue.
      *
      *
@@ -731,25 +601,15 @@ abstract class Varargs {
      * @see LuaValue.varargsOf
      * @see LuaValue.varargsOf
      */
-        (private val v: Array<LuaValue>, private val r: Varargs) : Varargs() {
-        override fun arg(i: Int): LuaValue {
-            return if (i < 1) LuaValue.NIL else if (i <= v.size) v[i - 1] else r.arg(i - v.size)
-        }
+    class ArrayVarargs(private val v: Array<LuaValue>, private val r: Varargs) : Varargs() {
+        override fun arg(i: Int): LuaValue = if (i < 1) LuaValue.NIL else if (i <= v.size) v[i - 1] else r.arg(i - v.size)
+        override fun narg(): Int = v.size + r.narg()
+        override fun arg1(): LuaValue = if (v.size > 0) v[0] else r.arg1()
 
-        override fun narg(): Int {
-            return v.size + r.narg()
-        }
-
-        override fun arg1(): LuaValue {
-            return if (v.size > 0) v[0] else r.arg1()
-        }
-
-        override fun subargs(start: Int): Varargs {
-            if (start <= 0)
-                LuaValue.argerror(1, "start must be > 0")
-            if (start == 1)
-                return this
-            return if (start > v.size) r.subargs(start - v.size) else LuaValue.varargsOf(
+        override fun subargs(start: Int): Varargs = when {
+            start <= 0 -> LuaValue.argerror(1, "start must be > 0")
+            start == 1 -> this
+            else -> if (start > v.size) r.subargs(start - v.size) else LuaValue.varargsOf(
                 v,
                 start - 1,
                 v.size - (start - 1),
@@ -809,24 +669,14 @@ abstract class Varargs {
             this.more = more
         }
 
-        override fun arg(i: Int): LuaValue {
-            return if (i < 1) LuaValue.NIL else if (i <= length) v[offset + i - 1] else more.arg(i - length)
-        }
+        override fun arg(i: Int): LuaValue = if (i < 1) LuaValue.NIL else if (i <= length) v[offset + i - 1] else more.arg(i - length)
+        override fun narg(): Int = length + more.narg()
+        override fun arg1(): LuaValue = if (length > 0) v[offset] else more.arg1()
 
-        override fun narg(): Int {
-            return length + more.narg()
-        }
-
-        override fun arg1(): LuaValue {
-            return if (length > 0) v[offset] else more.arg1()
-        }
-
-        override fun subargs(start: Int): Varargs {
-            if (start <= 0)
-                LuaValue.argerror(1, "start must be > 0")
-            if (start == 1)
-                return this
-            return if (start > length) more.subargs(start - length) else LuaValue.varargsOf(
+        override fun subargs(start: Int): Varargs = when {
+            start <= 0 -> LuaValue.argerror(1, "start must be > 0")
+            start == 1 -> this
+            else -> if (start > length) more.subargs(start - length) else LuaValue.varargsOf(
                 v,
                 offset + start - 1,
                 length - (start - 1),
@@ -846,8 +696,7 @@ abstract class Varargs {
      * @return Varargs containing same values, but flattened.
      */
     open fun copyto(dest: Array<LuaValue>, offset: Int, length: Int) {
-        for (i in 0 until length)
-            dest[offset + i] = arg(i + 1)
+        for (i in 0 until length) dest[offset + i] = arg(i + 1)
     }
 
     /** Return Varargs that cannot be using a shared array for the storage, and is flattened.
@@ -856,14 +705,14 @@ abstract class Varargs {
      */
     fun dealias(): Varargs {
         val n = narg()
-        when (n) {
-            0 -> return LuaValue.NONE
-            1 -> return arg1()
-            2 -> return PairVarargs(arg1(), arg(2))
+        return when (n) {
+            0 -> LuaValue.NONE
+            1 -> arg1()
+            2 -> PairVarargs(arg1(), arg(2))
             else -> {
                 val v = arrayOfNulls<LuaValue>(n) as Array<LuaValue>
                 copyto(v, 0, n)
-                return ArrayVarargs(v, LuaValue.NONE)
+                ArrayVarargs(v, LuaValue.NONE)
             }
         }
     }

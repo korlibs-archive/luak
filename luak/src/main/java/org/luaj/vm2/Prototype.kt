@@ -113,7 +113,7 @@ class Prototype {
     }
 
     override fun toString(): String {
-        return source.toString() + ":" + linedefined + "-" + lastlinedefined
+        return "$source:$linedefined-$lastlinedefined"
     }
 
     /** Get the name of a local variable.
@@ -123,14 +123,12 @@ class Prototype {
      * @return the name, or null if not found
      */
     fun getlocalname(number: Int, pc: Int): LuaString? {
-        var number = number
-        var i: Int
-        i = 0
-        while (i < locvars!!.size && locvars!![i].startpc <= pc) {
-            if (pc < locvars!![i].endpc) {  /* is variable active? */
-                number--
-                if (number == 0)
-                    return locvars!![i].varname
+        var num = number
+        var i = 0
+        while (i < locvars.size && locvars[i].startpc <= pc) {
+            if (pc < locvars[i].endpc) {  /* is variable active? */
+                num--
+                if (num == 0) return locvars[i].varname
             }
             i++
         }
@@ -138,12 +136,12 @@ class Prototype {
     }
 
     fun shortsource(): String {
-        var name = source!!.tojstring()
-        if (name.startsWith("@") || name.startsWith("="))
-            name = name.substring(1)
-        else if (name.startsWith("\u001b"))
-            name = "binary string"
-        return name
+        val name = source.tojstring()
+        return when {
+            name.startsWith("@") || name.startsWith("=") -> name.substring(1)
+            name.startsWith("\u001b") -> "binary string"
+            else -> name
+        }
     }
 
     companion object {

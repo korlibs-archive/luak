@@ -2265,9 +2265,7 @@ abstract class LuaValue : Varargs() {
      * @see .eqmtcall
      * @see .EQ
      */
-    open fun eq_b(`val`: LuaValue): Boolean {
-        return this === `val`
-    }
+    open fun eq_b(`val`: LuaValue): Boolean = this === `val`
 
     /** Notquals: Perform inequality comparison with another value
      * including metatag processing using [.EQ].
@@ -2280,9 +2278,7 @@ abstract class LuaValue : Varargs() {
      * @see .eqmtcall
      * @see .EQ
      */
-    fun neq(`val`: LuaValue): LuaValue {
-        return if (eq_b(`val`)) FALSE else TRUE
-    }
+    fun neq(`val`: LuaValue): LuaValue = if (eq_b(`val`)) FALSE else TRUE
 
     /** Notquals: Perform inequality comparison with another value
      * including metatag processing using [.EQ].
@@ -3849,7 +3845,7 @@ abstract class LuaValue : Varargs() {
          * @param msg String providing information about the invalid argument
          * @throws LuaError in all cases
          */
-        @JvmStatic fun argerror(iarg: Int, msg: String): LuaValue {
+        @JvmStatic fun argerror(iarg: Int, msg: String): Nothing {
             throw LuaError("bad argument #$iarg: $msg")
         }
 

@@ -32,20 +32,17 @@ import java.io.PrintStream
  */
 class Print : Lua() {
     private fun _assert(b: Boolean) {
-        if (!b)
-            throw NullPointerException("_assert failed")
+        if (!b) throw NullPointerException("_assert failed")
     }
 
     companion object {
 
         /** opcode names  */
         private val STRING_FOR_NULL = "null"
-        @JvmField
-        var ps = System.out
+        @JvmField var ps = System.out
 
         /** String names for each lua opcode value.  */
-        @JvmField
-        val OPNAMES = arrayOf<String?>(
+        @JvmField val OPNAMES = arrayOf(
             "MOVE",
             "LOADK",
             "LOADKX",
@@ -195,20 +192,11 @@ class Print : Lua() {
             when (Lua.getOpMode(o)) {
                 Lua.iABC -> {
                     ps.print(a)
-                    if (Lua.getBMode(o) != Lua.OpArgN)
-                        ps.print(" " + if (Lua.ISK(b)) -1 - Lua.INDEXK(b) else b)
-                    if (Lua.getCMode(o) != Lua.OpArgN)
-                        ps.print(" " + if (Lua.ISK(c)) -1 - Lua.INDEXK(c) else c)
+                    if (Lua.getBMode(o) != Lua.OpArgN) ps.print(" " + if (Lua.ISK(b)) -1 - Lua.INDEXK(b) else b)
+                    if (Lua.getCMode(o) != Lua.OpArgN) ps.print(" " + if (Lua.ISK(c)) -1 - Lua.INDEXK(c) else c)
                 }
-                Lua.iABx -> if (Lua.getBMode(o) == Lua.OpArgK) {
-                    ps.print(a.toString() + " " + (-1 - bx))
-                } else {
-                    ps.print("$a $bx")
-                }
-                Lua.iAsBx -> if (o == Lua.OP_JMP)
-                    ps.print(sbx)
-                else
-                    ps.print("$a $sbx")
+                Lua.iABx -> if (Lua.getBMode(o) == Lua.OpArgK) ps.print(a.toString() + " " + (-1 - bx)) else ps.print("$a $bx")
+                Lua.iAsBx -> if (o == Lua.OP_JMP) ps.print(sbx) else ps.print("$a $sbx")
             }
             when (o) {
                 Lua.OP_LOADK -> {
@@ -223,92 +211,57 @@ class Print : Lua() {
                     ps.print("  ; ")
                     printUpvalue(ps, f.upvalues[b])
                     ps.print(" ")
-                    if (Lua.ISK(c))
-                        printConstant(ps, f, Lua.INDEXK(c))
-                    else
-                        ps.print("-")
+                    if (Lua.ISK(c)) printConstant(ps, f, Lua.INDEXK(c)) else ps.print("-")
                 }
                 Lua.OP_SETTABUP -> {
                     ps.print("  ; ")
                     printUpvalue(ps, f.upvalues[a])
                     ps.print(" ")
-                    if (Lua.ISK(b))
-                        printConstant(ps, f, Lua.INDEXK(b))
-                    else
-                        ps.print("-")
+                    if (Lua.ISK(b)) printConstant(ps, f, Lua.INDEXK(b)) else ps.print("-")
                     ps.print(" ")
-                    if (Lua.ISK(c))
-                        printConstant(ps, f, Lua.INDEXK(c))
-                    else
-                        ps.print("-")
+                    if (Lua.ISK(c)) printConstant(ps, f, Lua.INDEXK(c)) else ps.print("-")
                 }
                 Lua.OP_GETTABLE, Lua.OP_SELF -> if (Lua.ISK(c)) {
                     ps.print("  ; ")
                     printConstant(ps, f, Lua.INDEXK(c))
                 }
-                Lua.OP_SETTABLE, Lua.OP_ADD, Lua.OP_SUB, Lua.OP_MUL, Lua.OP_DIV, Lua.OP_POW, Lua.OP_EQ, Lua.OP_LT, Lua.OP_LE -> if (Lua.ISK(
-                        b
-                    ) || Lua.ISK(c)
-                ) {
+                Lua.OP_SETTABLE, Lua.OP_ADD, Lua.OP_SUB, Lua.OP_MUL, Lua.OP_DIV, Lua.OP_POW, Lua.OP_EQ, Lua.OP_LT, Lua.OP_LE -> if (Lua.ISK(b) || Lua.ISK(c)) {
                     ps.print("  ; ")
-                    if (Lua.ISK(b))
-                        printConstant(ps, f, Lua.INDEXK(b))
-                    else
-                        ps.print("-")
+                    if (Lua.ISK(b)) printConstant(ps, f, Lua.INDEXK(b)) else ps.print("-")
                     ps.print(" ")
-                    if (Lua.ISK(c))
-                        printConstant(ps, f, Lua.INDEXK(c))
-                    else
-                        ps.print("-")
+                    if (Lua.ISK(c)) printConstant(ps, f, Lua.INDEXK(c)) else ps.print("-")
                 }
                 Lua.OP_JMP, Lua.OP_FORLOOP, Lua.OP_FORPREP -> ps.print("  ; to " + (sbx + pc + 2))
                 Lua.OP_CLOSURE -> ps.print("  ; " + f.p[bx].javaClass.name)
-                Lua.OP_SETLIST -> if (c == 0)
-                    ps.print("  ; " + code[++pc])
-                else
-                    ps.print("  ; $c")
+                Lua.OP_SETLIST -> if (c == 0) ps.print("  ; " + code[++pc]) else ps.print("  ; $c")
                 Lua.OP_VARARG -> ps.print("  ; is_vararg=" + f.is_vararg)
-                else -> {
-                }
+                else -> Unit
             }
         }
 
         @JvmStatic
-        private fun getline(f: Prototype, pc: Int): Int {
-            return if (pc > 0 && f.lineinfo != null && pc < f.lineinfo.size) f.lineinfo[pc] else -1
-        }
+        private fun getline(f: Prototype, pc: Int): Int =
+            if (pc > 0 && f.lineinfo != null && pc < f.lineinfo.size) f.lineinfo[pc] else -1
 
         @JvmStatic
         internal fun printHeader(f: Prototype) {
             var s = f.source.toString()
-            if (s.startsWith("@") || s.startsWith("="))
-                s = s.substring(1)
-            else if ("\u001bLua" == s)
-                s = "(bstring)"
-            else
-                s = "(string)"
+            s = when {
+                s.startsWith("@") || s.startsWith("=") -> s.substring(1)
+                "\u001bLua" == s -> "(bstring)"
+                else -> "(string)"
+            }
             val a = if (f.linedefined == 0) "main" else "function"
-            ps.print(
-                "\n%" + a + " <" + s + ":" + f.linedefined + ","
-                        + f.lastlinedefined + "> (" + f.code.size + " instructions, "
-                        + f.code.size * 4 + " bytes at " + id(f) + ")\n"
-            )
-            ps.print(
-                f.numparams.toString() + " param, " + f.maxstacksize + " slot, "
-                        + f.upvalues.size + " upvalue, "
-            )
-            ps.print(
-                f.locvars.size.toString() + " local, " + f.k.size
-                        + " constant, " + f.p.size + " function\n"
-            )
+            ps.print("\n%$a <$s:${f.linedefined},${f.lastlinedefined}> (${f.code.size} instructions, ${f.code.size * 4} bytes at ${id(f)})\n")
+            ps.print("${f.numparams} param, ${f.maxstacksize} slot, ${f.upvalues.size} upvalue, ")
+            ps.print("${f.locvars.size} local, ${f.k.size} constant, ${f.p.size} function\n")
         }
 
         @JvmStatic
         internal fun printConstants(f: Prototype) {
-            var i: Int
             val n = f.k.size
-            ps.print("constants (" + n + ") for " + id(f) + ":\n")
-            i = 0
+            ps.print("constants ($n) for ${id(f)}:\n")
+            var i = 0
             while (i < n) {
                 ps.print("  " + (i + 1) + "  ")
                 printValue(ps, f.k[i])
@@ -319,22 +272,20 @@ class Print : Lua() {
 
         @JvmStatic
         internal fun printLocals(f: Prototype) {
-            var i: Int
             val n = f.locvars.size
-            ps.print("locals (" + n + ") for " + id(f) + ":\n")
-            i = 0
+            ps.print("locals ($n) for ${id(f)}:\n")
+            var i = 0
             while (i < n) {
-                ps.println("  " + i + "  " + f.locvars[i].varname + " " + (f.locvars[i].startpc + 1) + " " + (f.locvars[i].endpc + 1))
+                ps.println("  $i  ${f.locvars[i].varname} ${f.locvars[i].startpc + 1} ${f.locvars[i].endpc + 1}")
                 i++
             }
         }
 
         @JvmStatic
         internal fun printUpValues(f: Prototype) {
-            var i: Int
             val n = f.upvalues.size
             ps.print("upvalues (" + n + ") for " + id(f) + ":\n")
-            i = 0
+            var i = 0
             while (i < n) {
                 ps.print("  " + i + "  " + f.upvalues[i] + "\n")
                 i++
