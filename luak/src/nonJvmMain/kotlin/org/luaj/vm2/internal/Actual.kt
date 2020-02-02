@@ -10,8 +10,13 @@ internal actual object JSystem {
             override fun write(value: Int) = kotlin.io.print(value.toChar())
         }
     }
-    actual val err: LuaWriter get() = out
-    actual val `in`: LuaBinInput get() = TODO()
+    actual val err: LuaWriter by lazy { out }
+    actual val `in`: LuaBinInput by lazy {
+        object : LuaBinInput() {
+            // No input
+            override fun read(): Int = -1
+        }
+    }
 
     actual fun exit(code: Int) {
         TODO("exit($code)")
