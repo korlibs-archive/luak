@@ -46,7 +46,7 @@ class JseProcess private constructor(
      * @com.soywiz.luak.compat.java.Throws IOException If the system process could not be created.
      * @see Process
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     constructor(
         cmd: Array<String>,
         stdin: InputStream,
@@ -64,7 +64,7 @@ class JseProcess private constructor(
      * @com.soywiz.luak.compat.java.Throws IOException If the system process could not be created.
      * @see Process
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     constructor(
         cmd: String,
         stdin: InputStream?,
@@ -82,7 +82,7 @@ class JseProcess private constructor(
      * @return The exit status.
      * @com.soywiz.luak.compat.java.Throws InterruptedException
      */
-    @com.soywiz.luak.compat.java.Throws(InterruptedException::class)
+
     fun waitFor(): Int {
         val r = process.waitFor()
         input?.join()

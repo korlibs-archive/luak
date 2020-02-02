@@ -116,7 +116,7 @@ private constructor(
     /** Load a 4-byte int value from the input stream
      * @return the int value laoded.
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadInt(): Int {
         `is`.readFully(buf, 0, 4)
         return if (luacLittleEndian)
@@ -128,7 +128,7 @@ private constructor(
     /** Load an array of int values from the input stream
      * @return the array of int values laoded.
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadIntArray(): IntArray {
         val n = loadInt()
         if (n == 0)
@@ -157,7 +157,7 @@ private constructor(
     /** Load a long  value from the input stream
      * @return the long value laoded.
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadInt64(): Long {
         val a: Int
         val b: Int
@@ -174,7 +174,7 @@ private constructor(
     /** Load a lua strin gvalue from the input stream
      * @return the [LuaString] value laoded.
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadString(): LuaString? {
         val size = if (this.luacSizeofSizeT == 8) loadInt64().toInt() else loadInt()
         if (size == 0)
@@ -189,7 +189,7 @@ private constructor(
      * @return the [LuaValue] loaded
      * @com.soywiz.luak.compat.java.Throws IOException if an i/o exception occurs
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadNumber(): LuaValue {
         return if (luacNumberFormat == NUMBER_FORMAT_INTS_ONLY) {
             LuaInteger.valueOf(loadInt())
@@ -203,7 +203,7 @@ private constructor(
      * @param f the function prototype
      * @com.soywiz.luak.compat.java.Throws IOException if an i/o exception occurs
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadConstants(f: Prototype) {
         var n = loadInt()
         val values: Array<LuaValue?> = if (n > 0) arrayOfNulls<LuaValue>(n) else NOVALUES
@@ -227,7 +227,7 @@ private constructor(
     }
 
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadUpvalues(f: Prototype) {
         val n = loadInt()
         f.upvalues = if (n > 0) arrayOfNulls<Upvaldesc>(n) as Array<Upvaldesc> else NOUPVALDESCS
@@ -243,7 +243,7 @@ private constructor(
      * @param f the function Prototype
      * @com.soywiz.luak.compat.java.Throws IOException if there is an i/o exception
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun loadDebug(f: Prototype) {
         f.source = loadString() ?: LuaString.valueOf("Unknown")
         f.lineinfo = loadIntArray()
@@ -267,7 +267,7 @@ private constructor(
      * @return [Prototype] instance that was loaded
      * @com.soywiz.luak.compat.java.Throws IOException
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun loadFunction(p: LuaString): Prototype {
         val f = Prototype()
         ////		this.L.push(f);
@@ -296,7 +296,7 @@ private constructor(
      * Load the lua chunk header values.
      * @com.soywiz.luak.compat.java.Throws IOException if an i/o exception occurs.
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun loadHeader() {
         luacVersion = `is`.readByte().toInt()
         luacFormat = `is`.readByte().toInt()
@@ -316,7 +316,7 @@ private constructor(
     }
 
     private class GlobalsUndumper : Globals.Undumper {
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         override fun undump(stream: InputStream, chunkname: String): Prototype? {
             return LoadState.undump(stream, chunkname)
         }
@@ -418,7 +418,7 @@ private constructor(
          * @return [Prototype] that was loaded, or null if the first 4 bytes were not the lua signature.
          * @com.soywiz.luak.compat.java.Throws IOException if an IOException occurs
          */
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          fun undump(stream: InputStream, chunkname: String): Prototype? {
             // check rest of signature
             if (stream.read() != LUA_SIGNATURE[0].toInt()

@@ -151,14 +151,14 @@ class LuajavaLib : VarArgFunction() {
     }
 
     // load classes using app loader to allow luaj to be used as an extension
-    @com.soywiz.luak.compat.java.Throws(ClassNotFoundException::class)
+
     protected fun classForName(name: String?): Class<*> {
         return Class.forName(name, true, ClassLoader.getSystemClassLoader())
     }
 
     class ProxyInvocationHandler constructor(private val lobj: LuaValue) : InvocationHandler {
 
-        @com.soywiz.luak.compat.java.Throws(Throwable::class)
+
         override fun invoke(proxy: Any, method: Method, args: kotlin.Array<Any>?): Any? {
             val name = method.name
             val func = lobj[name]

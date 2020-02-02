@@ -62,7 +62,6 @@ class LoadOrderTest {
         }
     }
 
-    @Throws(Exception::class)
     @Ignore
     fun testClassLoadsStringFirst() {
         /*

@@ -63,14 +63,14 @@ class LuajClassLoader : ClassLoader() {
     /** Local cache of classes loaded by this loader.  */
     internal var classes: MutableMap<String, Class<*>> = HashMap()
 
-    @com.soywiz.luak.compat.java.Throws(ClassNotFoundException::class)
+
     override fun loadClass(classname: String): Class<*> {
         if (classes.containsKey(classname))
             return classes[classname]!!
         return if (!isUserClass(classname)) super.findSystemClass(classname) else loadAsUserClass(classname)
     }
 
-    @com.soywiz.luak.compat.java.Throws(ClassNotFoundException::class)
+
     private fun loadAsUserClass(classname: String): Class<*> {
         val path = classname.replace('.', '/') + ".class"
         val `is` = getResourceAsStream(path)
@@ -115,7 +115,7 @@ class LuajClassLoader : ClassLoader() {
          * @com.soywiz.luak.compat.java.Throws IllegalAccessException
          * @com.soywiz.luak.compat.java.Throws ClassNotFoundException
         </P> */
-        @com.soywiz.luak.compat.java.Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
+
         @JvmOverloads
         fun NewLauncher(launcher_class: Class<out Launcher> = DefaultLauncher::class.java): Launcher =
             LuajClassLoader().loadAsUserClass(launcher_class.name).newInstance() as Launcher

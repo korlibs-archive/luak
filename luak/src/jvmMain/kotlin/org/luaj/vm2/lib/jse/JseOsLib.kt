@@ -100,7 +100,7 @@ class JseOsLib : OsLib() {
         ) else LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf("signal"), LuaValue.valueOf(exitValue))
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     override fun remove(filename: String?) {
         val f = File(filename!!)
         if (!f.exists())
@@ -109,7 +109,7 @@ class JseOsLib : OsLib() {
             throw IOException("Failed to delete")
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     override fun rename(oldname: String?, newname: String?) {
         val f = File(oldname!!)
         if (!f.exists())

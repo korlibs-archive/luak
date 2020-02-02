@@ -265,7 +265,7 @@ open class Globals : LuaTable() {
      * @param chunkname Name that will be used within the chunk as the source.
      * @param mode String containing 'b' or 't' or both to control loading as binary or text or either.
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun loadPrototype(`is`: InputStream, chunkname: String, mode: String): Prototype {
         var `is` = `is`
         if (mode.indexOf('b') >= 0) {

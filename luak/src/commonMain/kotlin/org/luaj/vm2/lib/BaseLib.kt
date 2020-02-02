@@ -477,7 +477,6 @@ open class BaseLib : TwoArgFunction(), ResourceFinder {
         internal var bytes: ByteArray = byteArrayOf()
         internal var offset: Int = 0
         internal var remaining = 0
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
         override fun read(): Int {
             if (remaining <= 0) {
                 val s = func.call()

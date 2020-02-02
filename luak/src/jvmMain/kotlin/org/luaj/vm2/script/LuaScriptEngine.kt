@@ -61,7 +61,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
     override fun compile(script: String): CompiledScript = compile(StringReader(script))
 
-    @com.soywiz.luak.compat.java.Throws(ScriptException::class)
+
     override fun compile(script: Reader): CompiledScript {
         try {
             val `is` = Utf8Encoder(script)
@@ -117,7 +117,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
         private val buf = IntArray(2)
         private var n: Int = 0
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         override fun read(): Int {
             if (n > 0) return buf[--n]
             val c = r.read()

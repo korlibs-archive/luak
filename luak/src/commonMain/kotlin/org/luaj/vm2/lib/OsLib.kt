@@ -365,7 +365,7 @@ open class OsLib : TwoArgFunction() {
      * @param filename
      * @com.soywiz.luak.compat.java.Throws IOException if it fails
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected open fun remove(filename: String?) {
         throw IOException("not implemented")
     }
@@ -378,7 +378,7 @@ open class OsLib : TwoArgFunction() {
      * @param newname new file name
      * @com.soywiz.luak.compat.java.Throws IOException if it fails
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected open fun rename(oldname: String?, newname: String?) {
         throw IOException("not implemented")
     }

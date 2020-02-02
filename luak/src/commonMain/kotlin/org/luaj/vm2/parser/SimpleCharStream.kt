@@ -99,7 +99,7 @@ class SimpleCharStream
         tokenBegin = 0
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected fun FillBuff() {
         if (maxNextCharInd == available) {
             when {
@@ -140,7 +140,7 @@ class SimpleCharStream
     }
 
     /** Start.  */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun BeginToken(): Char {
         tokenBegin = -1
         val c = readChar()
@@ -174,7 +174,7 @@ class SimpleCharStream
     }
 
     /** Read a character.  */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun readChar(): Char {
         if (inBuf > 0) {
             --inBuf
@@ -251,7 +251,7 @@ class SimpleCharStream
     }
 
     /** Constructor.  */
-    @com.soywiz.luak.compat.java.Throws(UnsupportedEncodingException::class)
+
     @JvmOverloads
     constructor(
         dstream: InputStream, encoding: String?, startline: Int = 1,
@@ -272,7 +272,7 @@ class SimpleCharStream
     }
 
     /** Reinitialise.  */
-    @com.soywiz.luak.compat.java.Throws(UnsupportedEncodingException::class)
+
     @JvmOverloads
     fun ReInit(
         dstream: InputStream, encoding: String?, startline: Int = 1,

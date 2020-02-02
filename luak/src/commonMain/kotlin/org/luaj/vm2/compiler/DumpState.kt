@@ -78,17 +78,15 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
     internal var writer: DataOutputStream = DataOutputStream(w)
     internal var status: Int = 0
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
     internal fun dumpBlock(b: ByteArray, size: Int) {
         writer.write(b, 0, size)
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
     internal fun dumpChar(b: Int) {
         writer.write(b)
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpInt(x: Int) {
         if (IS_LITTLE_ENDIAN) {
             writer.writeByte(x and 0xff)
@@ -100,7 +98,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         }
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpString(s: LuaString) {
         val len = s.len().toint()
         dumpInt(len + 1)
@@ -108,7 +106,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         writer.write(0)
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpDouble(d: Double) {
         val l = (d).toRawBits()
         if (IS_LITTLE_ENDIAN) {
@@ -119,7 +117,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         }
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpCode(f: Prototype) {
         val code = f.code
         val n = code.size
@@ -128,7 +126,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
             dumpInt(code[i])
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpConstants(f: Prototype) {
         val k = f.k
         var i: Int
@@ -180,7 +178,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         }
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpUpvalues(f: Prototype) {
         val n = f.upvalues.size
         dumpInt(n)
@@ -190,7 +188,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         }
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpDebug(f: Prototype) {
         if (strip)
             dumpInt(0)
@@ -222,7 +220,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         }
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpFunction(f: Prototype) {
         dumpInt(f.linedefined)
         dumpInt(f.lastlinedefined)
@@ -235,7 +233,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         dumpDebug(f)
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     internal fun dumpHeader() {
         writer.write(LoadState.LUA_SIGNATURE)
         writer.write(LoadState.LUAC_VERSION)
@@ -278,7 +276,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
         /*
 	** dump Lua function as precompiled chunk
 	*/
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
 
         fun dump(f: Prototype, w: OutputStream, strip: Boolean): Int {
             val D = DumpState(w, strip)
@@ -298,7 +296,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
          * @com.soywiz.luak.compat.java.Throws IOException
          * @com.soywiz.luak.compat.java.Throws IllegalArgumentException if the number format it not supported
          */
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
 
         fun dump(f: Prototype, w: OutputStream, stripDebug: Boolean, numberFormat: Int, littleendian: Boolean): Int {
             when (numberFormat) {

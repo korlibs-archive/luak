@@ -92,36 +92,36 @@ abstract class IoLib : TwoArgFunction() {
     protected var globals: Globals? = null
 
     abstract inner class File : LuaValue() {
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         abstract fun write(string: LuaString?)
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         abstract fun flush()
 
         abstract fun isstdfile(): Boolean
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         abstract fun close()
 
         abstract fun isclosed(): Boolean
         // returns new position
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         abstract fun seek(option: String?, bytecount: Int): Int
 
         abstract fun setvbuf(mode: String?, size: Int)
         // get length remaining to read
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         abstract fun remaining(): Int
 
         // peek ahead one character
-        @com.soywiz.luak.compat.java.Throws(IOException::class, EOFException::class)
+
         abstract fun peek(): Int
 
         // return char if read, -1 if eof, throw IOException on other exception
-        @com.soywiz.luak.compat.java.Throws(IOException::class, EOFException::class)
+
         abstract fun read(): Int
 
         // return number of bytes read if positive, false if eof, throw IOException on other exception
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
         abstract fun read(bytes: ByteArray, offset: Int, length: Int): Int
 
         // delegate method access to file methods table
@@ -149,7 +149,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File
      * @com.soywiz.luak.compat.java.Throws IOException
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected abstract fun wrapStdin(): File
 
     /**
@@ -157,7 +157,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File
      * @com.soywiz.luak.compat.java.Throws IOException
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected abstract fun wrapStdout(): File
 
     /**
@@ -165,7 +165,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File
      * @com.soywiz.luak.compat.java.Throws IOException
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected abstract fun wrapStderr(): File
 
     /**
@@ -178,7 +178,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File object if successful
      * @com.soywiz.luak.compat.java.Throws IOException if could not be opened
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected abstract fun openFile(
         filename: String?,
         readMode: Boolean,
@@ -192,7 +192,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File object if successful
      * @com.soywiz.luak.compat.java.Throws IOException if could not be opened
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected abstract fun tmpFile(): File
 
     /**
@@ -202,7 +202,7 @@ abstract class IoLib : TwoArgFunction() {
      * @return File to read to or write from
      * @com.soywiz.luak.compat.java.Throws IOException if an i/o exception occurs
      */
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     protected abstract fun openProgram(prog: String?, mode: String?): File
 
     override fun call(modname: LuaValue, env: LuaValue): LuaValue {
@@ -293,7 +293,7 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	io.flush() -> bool
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _io_flush(): Varargs {
         checkopen(output())
         outfile!!.flush()
@@ -301,13 +301,13 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	io.tmpfile() -> file
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _io_tmpfile(): Varargs {
         return tmpFile()
     }
 
     //	io.close([file]) -> void
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _io_close(file: LuaValue): Varargs {
         val f = if (file.isnil()) output() else checkfile(file)
         checkopen(f)
@@ -346,13 +346,13 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     // io.popen(prog, [mode]) -> file
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _io_popen(prog: String?, mode: String?): Varargs {
         return openProgram(prog, mode)
     }
 
     //	io.open(filename, [mode]) -> file | nil,err
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _io_open(filename: String?, mode: String?): Varargs {
         return rawopenfile(FTYPE_NAMED, filename, mode)
     }
@@ -365,27 +365,27 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	io.read(...) -> (...)
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _io_read(args: Varargs): Varargs {
         checkopen(input())
         return ioread(infile, args)
     }
 
     //	io.write(...) -> void
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _io_write(args: Varargs): Varargs {
         checkopen(output())
         return iowrite(outfile, args)
     }
 
     // file:close() -> void
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _file_close(file: LuaValue): Varargs {
         return ioclose(checkfile(file))
     }
 
     // file:flush() -> void
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _file_flush(file: LuaValue): Varargs {
         checkfile(file).flush()
         return LuaValue.TRUE
@@ -403,19 +403,19 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	file:read(...) -> (...)
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _file_read(file: LuaValue, subargs: Varargs): Varargs {
         return ioread(checkfile(file), subargs)
     }
 
     //  file:seek([whence][,offset]) -> pos | nil,error
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _file_seek(file: LuaValue, whence: String?, offset: Int): Varargs {
         return LuaValue.valueOf(checkfile(file).seek(whence, offset))
     }
 
     //	file:write(...) -> void
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _file_write(file: LuaValue, subargs: Varargs): Varargs {
         return iowrite(checkfile(file), subargs)
     }
@@ -430,7 +430,7 @@ abstract class IoLib : TwoArgFunction() {
     }
 
     //	lines iterator(s,var) -> var'
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     fun _lines_iter(file: LuaValue): Varargs {
         return freadline(checkfile(file))
     }
@@ -462,7 +462,7 @@ abstract class IoLib : TwoArgFunction() {
 
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     private fun ioread(f: File?, args: Varargs): Varargs {
         var i: Int
         val n = args.narg()
@@ -507,7 +507,7 @@ abstract class IoLib : TwoArgFunction() {
         return if (i == 0) LuaValue.NIL else LuaValue.varargsOf(v as Array<LuaValue>, 0, i)
     }
 
-    @com.soywiz.luak.compat.java.Throws(IOException::class)
+
     private fun rawopenfile(filetype: Int, filename: String?, mode: String?): File {
         when (filetype) {
             FTYPE_STDIN -> return wrapStdin()
@@ -566,7 +566,7 @@ abstract class IoLib : TwoArgFunction() {
 
         val FILE_NAMES = arrayOf("close", "flush", "lines", "read", "seek", "setvbuf", "write")
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          private fun ioclose(f: File): Varargs {
             if (f.isstdfile())
                 return errorresult("cannot close standard file")
@@ -589,7 +589,7 @@ abstract class IoLib : TwoArgFunction() {
             return LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf(errortext))
         }
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          private fun iowrite(f: File?, args: Varargs): Varargs {
             var i = 1
             val n = args.narg()
@@ -621,14 +621,14 @@ abstract class IoLib : TwoArgFunction() {
 
         // ------------- file reading utilitied ------------------
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          fun freadbytes(f: File, count: Int): LuaValue {
             val b = ByteArray(count)
             val r: Int
             return if ((run { r = f.read(b, 0, b.size); r }) < 0) LuaValue.NIL else LuaString.valueUsing(b, 0, r)
         }
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          fun freaduntil(f: File?, lineonly: Boolean): LuaValue {
             val baos = ByteArrayOutputStream()
             var c: Int
@@ -656,12 +656,12 @@ abstract class IoLib : TwoArgFunction() {
                 LuaString.valueUsing(baos.toByteArray())
         }
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          fun freadline(f: File?): LuaValue {
             return freaduntil(f, true)
         }
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          fun freadall(f: File): LuaValue {
             val n = f.remaining()
             return if (n >= 0) {
@@ -671,7 +671,7 @@ abstract class IoLib : TwoArgFunction() {
             }
         }
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          fun freadnumber(f: File?): LuaValue {
             val baos = ByteArrayOutputStream()
             freadchars(f!!, " \t\r\n", null)
@@ -688,7 +688,7 @@ abstract class IoLib : TwoArgFunction() {
             return if (s.length > 0) LuaValue.valueOf(s.toDouble()) else LuaValue.NIL
         }
 
-        @com.soywiz.luak.compat.java.Throws(IOException::class)
+
          private fun freadchars(f: File, chars: String, baos: ByteArrayOutputStream?) {
             var c: Int
             while (true) {

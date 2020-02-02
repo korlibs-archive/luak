@@ -66,7 +66,7 @@ class LuaParser : LuaParserConstants {
     }
 
     /** Root production.  */
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Chunk(): Chunk {
         val b: Block
         val c: Chunk
@@ -88,7 +88,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Block(): Block {
         val b = org.luaj.vm2.ast.Block()
         var s: Stat?
@@ -118,7 +118,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Stat(): Stat? {
         val b: Block
         val b2: Block
@@ -281,7 +281,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun IfThenElse(): Stat {
         val b: Block
         var b2: Block
@@ -325,7 +325,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun ReturnStat(): Stat {
         var el: List<Exp>? = null
         val s: Stat
@@ -350,7 +350,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Label(): Stat {
         val n: Token
         jj_consume_token(LuaParserConstants.DBCOLON)
@@ -360,7 +360,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun ExprStat(): Stat {
         val p: Exp.PrimaryExp
         var s: Stat? = null
@@ -380,7 +380,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Assign(v0: Exp.VarExp): Stat {
         val vl = ArrayList<Exp.VarExp>()
         vl.add(v0)
@@ -408,7 +408,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun VarExp(): Exp.VarExp {
         val p: Exp.PrimaryExp
         p = PrimaryExp()
@@ -416,7 +416,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun FuncName(): FuncName {
         var n: Token
         val f: FuncName
@@ -449,7 +449,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun PrefixExp(): Exp.PrimaryExp {
         val n: Token
         val e: Exp
@@ -479,7 +479,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun PrimaryExp(): Exp.PrimaryExp {
         var p: Exp.PrimaryExp
         val i = LineInfo()
@@ -496,7 +496,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun PostfixOp(lhs: Exp.PrimaryExp): Exp.PrimaryExp {
         val n: Token
         val e: Exp
@@ -542,7 +542,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun FuncArgs(): FuncArgs {
         var el: MutableList<Exp>? = null
         val tc: TableConstructor
@@ -585,7 +585,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun NameList(): List<Name> {
         val l = ArrayList<Name>()
         var name: Token
@@ -604,7 +604,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun ExpList(): MutableList<Exp> {
         val l = ArrayList<Exp>()
         var e: Exp
@@ -626,7 +626,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun SimpleExp(): Exp {
         val n: Token
         val s: LuaString
@@ -696,7 +696,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Str(): LuaString {
         when (if (jj_ntk == -1) jj_ntk() else jj_ntk) {
             LuaParserConstants.STRING -> {
@@ -736,7 +736,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Exp(): Exp {
         var e: Exp
         var s: Exp
@@ -770,7 +770,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun FunctionCall(): FuncBody {
         val b: FuncBody
         val i = LineInfo()
@@ -781,7 +781,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun FuncBody(): FuncBody {
         var pl: ParList? = null
         val b: Block
@@ -803,7 +803,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun ParList(): ParList {
         var l: List<Name>? = null
         var v = false
@@ -841,7 +841,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun TableConstructor(): TableConstructor {
         val c = org.luaj.vm2.ast.TableConstructor()
         var l: List<TableField>? = null
@@ -862,7 +862,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun FieldList(): List<TableField> {
         val l = ArrayList<TableField>()
         var f: TableField
@@ -887,7 +887,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Field(): TableField {
         val name: Token
         val exp: Exp
@@ -934,7 +934,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun FieldSep() {
         when (if (jj_ntk == -1) jj_ntk() else jj_ntk) {
             72 -> jj_consume_token(72)
@@ -947,7 +947,7 @@ class LuaParser : LuaParserConstants {
         }
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Binop(): Int {
         when (if (jj_ntk == -1) jj_ntk() else jj_ntk) {
             82 -> {
@@ -1019,7 +1019,7 @@ class LuaParser : LuaParserConstants {
         throw Error("Missing return statement in function")
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     fun Unop(): Int {
         when (if (jj_ntk == -1) jj_ntk() else jj_ntk) {
             83 -> {
@@ -1662,7 +1662,7 @@ class LuaParser : LuaParserConstants {
         for (i in jj_2_rtns.indices) jj_2_rtns[i] = JJCalls()
     }
 
-    @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
     private fun jj_consume_token(kind: Int): Token {
         val oldToken: Token? = token
         if (oldToken?.next != null)
@@ -1873,21 +1873,21 @@ class LuaParser : LuaParserConstants {
             LuaValue.valueOf(true)
         }
 
-        @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
 
         fun main(args: Array<String>) {
             val parser = LuaParser(JSystem.`in`)
             parser.Chunk()
         }
 
-        @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
         private fun assertvarexp(pe: Exp.PrimaryExp): Exp.VarExp {
             if (!pe.isvarexp())
                 throw ParseException("expected variable")
             return pe as Exp.VarExp
         }
 
-        @com.soywiz.luak.compat.java.Throws(ParseException::class)
+
         private fun assertfunccall(pe: Exp.PrimaryExp): Exp.FuncCall {
             if (!pe.isfunccall())
                 throw ParseException("expected function call")

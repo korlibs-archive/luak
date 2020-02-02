@@ -45,7 +45,7 @@ class NameScope {
     }
 
     /** Look up a name.  If it is a global name, then throw IllegalArgumentException.  */
-    @com.soywiz.luak.compat.java.Throws(IllegalArgumentException::class)
+
     fun find(name: String): Variable {
         validateIsNotKeyword(name)
         var n: NameScope? = this
@@ -60,7 +60,7 @@ class NameScope {
     }
 
     /** Define a name in this scope.  If it is a global name, then throw IllegalArgumentException.  */
-    @com.soywiz.luak.compat.java.Throws(IllegalStateException::class, IllegalArgumentException::class)
+
     fun define(name: String): Variable {
         validateIsNotKeyword(name)
         val value = Variable(name, this)
