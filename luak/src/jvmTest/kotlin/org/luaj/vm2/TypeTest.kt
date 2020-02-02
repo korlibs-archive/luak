@@ -866,7 +866,7 @@ class TypeTest {
 
     private fun throwsErrorOptUserdataClass(obj: LuaValue, arg1: Class<*>, arg2: Any) {
         try {
-            obj.javaClass.getMethod("optuserdata", Class::class.java, Any::class.java).invoke(obj, arg1, arg2)
+            obj.javaClass.getMethod("optuserdata", KClass::class.java, Any::class.java).invoke(obj, arg1.kotlin, arg2)
         } catch (e: InvocationTargetException) {
             if (e.targetException !is LuaError)
                 fail("not a LuaError: " + e.targetException)

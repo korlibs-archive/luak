@@ -21,6 +21,7 @@
  */
 package org.luaj.vm2
 
+import com.soywiz.luak.compat.java.*
 
 /**
  * Base class for functions implemented in Java.
@@ -75,8 +76,7 @@ abstract class LuaFunction : LuaValue() {
      * @return String naming the last part of the class name after the last dot (.) or dollar sign ($).
      */
     fun classnamestub(): String {
-        //val s = javaClass.name
-        val s = this::class.qualifiedName ?: this::class.simpleName ?: "LuaFunction"
+        val s = this::class.name
         return s.substring(kotlin.math.max(s.lastIndexOf('.'), s.lastIndexOf('$')) + 1)
     }
 
