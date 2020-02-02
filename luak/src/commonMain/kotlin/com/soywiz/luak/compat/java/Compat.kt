@@ -8,5 +8,5 @@ import kotlin.reflect.*
 expect annotation class Throws(vararg val exceptionClasses: KClass<out Throwable>)
 
 expect val KClass<*>.name: String
-expect fun KClass<*>.isAssignableFrom(other: KClass<*>): Boolean
+expect fun KClass<*>.isInstance2(ins: Any): Boolean
 expect fun KClass<*>.getResourceAsStream(res: String): InputStream?

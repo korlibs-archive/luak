@@ -65,7 +65,7 @@ open class LuaUserdata : LuaValue {
     }
 
     override fun isuserdata(c: KClass<*>): Boolean {
-        return c.isAssignableFrom(m_instance::class)
+        return c.isInstance2(m_instance)
     }
 
     override fun touserdata(): Any {
@@ -73,7 +73,7 @@ open class LuaUserdata : LuaValue {
     }
 
     override fun touserdata(c: KClass<*>): Any? {
-        return if (c.isAssignableFrom(m_instance::class)) m_instance else null
+        return if (c.isInstance2(m_instance)) m_instance else null
     }
 
     override fun optuserdata(defval: Any?): Any? {
@@ -81,7 +81,7 @@ open class LuaUserdata : LuaValue {
     }
 
     override fun optuserdata(c: KClass<*>, defval: Any?): Any? {
-        if (!c.isAssignableFrom(m_instance::class))
+        if (!c.isInstance2(m_instance))
             typerror(c.name)
         return m_instance
     }
@@ -100,7 +100,8 @@ open class LuaUserdata : LuaValue {
     }
 
     override fun checkuserdata(c: KClass<*>): Any? {
-        return if (c.isAssignableFrom(m_instance::class)) m_instance else typerror(c.name)
+
+        return if (c.isInstance2(m_instance)) m_instance else typerror(c.name)
     }
 
     override fun get(key: LuaValue): LuaValue {

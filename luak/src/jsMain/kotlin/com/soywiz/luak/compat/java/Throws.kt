@@ -9,5 +9,5 @@ actual annotation class Throws actual constructor(actual vararg val exceptionCla
 
 actual val KClass<*>.name: String
     get() = this.simpleName ?: "Unknown"
-actual fun KClass<*>.isAssignableFrom(other: KClass<*>): Boolean = TODO()
-actual fun KClass<*>.getResourceAsStream(res: String): InputStream? = TODO()
+actual fun KClass<*>.isInstance2(ins: Any): Boolean = this.isInstance(ins)
+actual fun KClass<*>.getResourceAsStream(res: String): InputStream? = TODO("getResourceAsStream")

@@ -30,6 +30,7 @@ import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
+import kotlin.time.*
 
 /**
  * Subclass of [LibFunction] which implements the standard lua `os` library.
@@ -178,8 +179,10 @@ open class OsLib : TwoArgFunction() {
      * the program.  For luaj this simple returns the elapsed time since the
      * OsLib class was loaded.
      */
+    @UseExperimental(ExperimentalTime::class)
     protected fun clock(): Double {
-        return (JSystem.currentTimeMillis() - t0) / 1000.0
+        return MonoClock.markNow().elapsedNow().inSeconds
+        //return (JSystem.currentTimeMillis() - t0) / 1000.0
     }
 
     /**
@@ -476,8 +479,8 @@ open class OsLib : TwoArgFunction() {
             "tmpname"
         )
 
-        private val t0 = JSystem.currentTimeMillis()
-        private var tmpnames = t0
+        //private val t0 = JSystem.currentTimeMillis()
+        private var tmpnames = 0L
 
         private val WeekdayNameAbbrev = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         private val WeekdayName = arrayOf("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")

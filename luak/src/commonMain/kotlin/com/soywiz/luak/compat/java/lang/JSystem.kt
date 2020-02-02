@@ -10,7 +10,6 @@ expect object JSystem {
     fun arraycopy(src: Any, srcPos: Int, dst: Any, dstPos: Int, count: Int)
     fun getProperty(key: String, def: String? = null): String?
     fun gc()
-    fun currentTimeMillis(): Long
     fun totalMemory(): Long
     fun freeMemory(): Long
 }

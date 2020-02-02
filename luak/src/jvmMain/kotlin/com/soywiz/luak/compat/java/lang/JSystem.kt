@@ -12,7 +12,6 @@ actual object JSystem {
     actual fun arraycopy(src: Any, srcPos: Int, dst: Any, dstPos: Int, count: Int) = System.arraycopy(src, srcPos, dst, dstPos, count)
     actual fun getProperty(key: String, def: String?): String? = System.getProperty(key, def)
     actual fun gc() = System.gc()
-    actual fun currentTimeMillis(): Long = System.currentTimeMillis()
     actual fun totalMemory(): Long = Runtime.getRuntime().totalMemory()
     actual fun freeMemory(): Long = Runtime.getRuntime().freeMemory()
 }
