@@ -145,7 +145,7 @@ private constructor(args: Array<String>) {
 
             // write out the chunk
             if (!parseonly) {
-                DumpState.dump(chunk, out, stripdebug, numberformat, littleendian)
+                DumpState.dump(chunk, out.toLua(), stripdebug, numberformat, littleendian)
             }
 
         } catch (e: Exception) {

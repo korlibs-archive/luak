@@ -27,13 +27,8 @@ import org.luaj.vm2.LuaString
 import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.IoLib
 import org.luaj.vm2.lib.LibFunction
-import java.io.BufferedInputStream
-import java.io.EOFException
-import java.io.InputStream
 import java.io.OutputStream
-import java.io.PrintStream
 import java.io.RandomAccessFile
-import java.io.*
 
 /**
  * Subclass of [IoLib] and therefore [LibFunction] which implements the lua standard `io`
@@ -125,7 +120,7 @@ class JseIoLib : IoLib() {
         return FileImpl(RandomAccessFile(f, "rw"))
     }
 
-    private fun notimplemented() {
+    private fun notimplemented(): Nothing {
         throw LuaError("not implemented")
     }
 
@@ -240,25 +235,16 @@ class JseIoLib : IoLib() {
 
         // return number of bytes read if positive, -1 if eof, throws IOException
 
-        override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
-            if (file != null) {
-                return file.read(bytes, offset, length)
-            } else if (`is` != null) {
-                return `is`.read(bytes, offset, length)
-            } else {
-                notimplemented()
-            }
-            return length
+        override fun read(bytes: ByteArray, offset: Int, length: Int): Int = when {
+            file != null -> file.read(bytes, offset, length)
+            `is` != null -> `is`.read(bytes, offset, length)
+            else -> notimplemented()
         }
     }
 
     inner class StdoutFile constructor(private val file_type: Int) : IoLib.File() {
 
-        private val printStream: PrintStream
-            get() = if (file_type == IoLib.FTYPE_STDERR)
-                globals!!.STDERR
-            else
-                globals!!.STDOUT
+        private val printStream: LuaWriter get() = if (file_type == IoLib.FTYPE_STDERR) globals!!.STDERR else globals!!.STDOUT
 
         override fun tojstring(): String {
             return "file (" + this.hashCode() + ")"

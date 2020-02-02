@@ -2,6 +2,7 @@
 package org.luaj.vm2.parser
 
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 /** Token Manager.  */
 class LuaParserTokenManager
@@ -10,7 +11,7 @@ class LuaParserTokenManager
 
     /** Debug output.  */
     @kotlin.jvm.JvmField
-    var debugStream: PrintStream = JSystem.out
+    var debugStream: LuaWriter = JSystem.out
     private val jjrounds = IntArray(66)
     private val jjstateSet = IntArray(132)
     private val jjimage = StringBuilder()
@@ -221,7 +222,7 @@ class LuaParserTokenManager
         }
 
     /** Set debug output.  */
-    fun setDebugStream(ds: PrintStream) {
+    fun setDebugStream(ds: LuaWriter) {
         debugStream = ds
     }
 

@@ -125,9 +125,9 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
     protected fun runTest(testName: String) {
         try {
             // override print()
-            val output = ByteArrayOutputStream()
+            val output = ByteArrayLuaBinOutput()
             val oldps = globals.STDOUT
-            val ps = PrintStream(output)
+            val ps = output.toWriter()
             globals.STDOUT = ps
 
             // run the script

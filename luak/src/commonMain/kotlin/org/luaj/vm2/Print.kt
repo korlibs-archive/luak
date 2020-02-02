@@ -22,6 +22,7 @@
 package org.luaj.vm2
 
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 /**
  * Debug helper class to pretty-print lua bytecodes.
@@ -86,7 +87,7 @@ class Print : Lua() {
         )
 
 
-        internal fun printString(ps: PrintStream, s: LuaString) {
+        internal fun printString(ps: LuaWriter, s: LuaString) {
 
             ps.print('"')
             var i = 0
@@ -119,7 +120,7 @@ class Print : Lua() {
         }
 
 
-        internal fun printValue(ps: PrintStream, v: LuaValue) {
+        internal fun printValue(ps: LuaWriter, v: LuaValue) {
             when (v.type()) {
                 LuaValue.TSTRING -> printString(ps, v as LuaString)
                 else -> ps.print(v.tojstring())
@@ -127,12 +128,12 @@ class Print : Lua() {
         }
 
 
-        internal fun printConstant(ps: PrintStream, f: Prototype, i: Int) {
+        internal fun printConstant(ps: LuaWriter, f: Prototype, i: Int) {
             printValue(ps, f.k[i])
         }
 
 
-        internal fun printUpvalue(ps: PrintStream, u: Upvaldesc) {
+        internal fun printUpvalue(ps: LuaWriter, u: Upvaldesc) {
             ps.print(u.idx.toString() + " ")
             printValue(ps, u.name!!)
         }
@@ -171,7 +172,7 @@ class Print : Lua() {
          * @param pc the program counter to look up and print
          */
 
-        fun printOpCode(ps: PrintStream, f: Prototype, pc: Int) {
+        fun printOpCode(ps: LuaWriter, f: Prototype, pc: Int) {
             var pc = pc
             val code = f.code
             val i = code[pc]
@@ -353,8 +354,8 @@ class Print : Lua() {
         fun printState(cl: LuaClosure, pc: Int, stack: Array<LuaValue?>, top: Int, varargs: Varargs) {
             // print opcode into buffer
             val previous = ps
-            val baos = ByteArrayOutputStream()
-            ps = PrintStream(baos)
+            val baos = ByteArrayLuaBinOutput()
+            ps = LuaWriterBinOutput(baos)
             printOpCode(cl.p, pc)
             ps.flush()
             ps.close()

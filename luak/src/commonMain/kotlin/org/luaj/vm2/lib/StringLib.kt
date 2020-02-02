@@ -29,6 +29,7 @@ import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
 import org.luaj.vm2.compiler.DumpState
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 /**
  * Subclass of [LibFunction] which implements the lua standard `string`
@@ -176,7 +177,7 @@ class StringLib : TwoArgFunction() {
     internal class Dump : OneArgFunction() {
         override fun call(arg: LuaValue): LuaValue {
             val f = arg.checkfunction()
-            val baos = ByteArrayOutputStream()
+            val baos = ByteArrayLuaBinOutput()
             try {
                 DumpState.dump((f as LuaClosure).p, baos, true)
                 return LuaString.valueUsing(baos.toByteArray())

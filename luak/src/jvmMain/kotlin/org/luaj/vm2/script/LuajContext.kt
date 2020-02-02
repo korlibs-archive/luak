@@ -63,12 +63,12 @@ class LuajContext
     /** The initial value of globals.STDIN  */
     private val stdin: LuaBinInput = globals.STDIN
     /** The initial value of globals.STDOUT  */
-    private val stdout: PrintStream = globals.STDOUT
+    private val stdout: LuaWriter = globals.STDOUT
     /** The initial value of globals.STDERR  */
-    private val stderr: PrintStream = globals.STDERR
+    private val stderr: LuaWriter = globals.STDERR
 
     override fun setErrorWriter(writer: Writer?) {
-        globals.STDERR = if (writer != null) PrintStream(WriterOutputStream(writer)) else stderr
+        globals.STDERR = if (writer != null) PrintStream(WriterOutputStream(writer)).toLua() else stderr
     }
 
     override fun setReader(reader: Reader?) {
@@ -76,7 +76,7 @@ class LuajContext
     }
 
     override fun setWriter(writer: Writer?) {
-        globals.STDOUT = if (writer != null) PrintStream(WriterOutputStream(writer), true) else stdout
+        globals.STDOUT = if (writer != null) PrintStream(WriterOutputStream(writer), true).toLua() else stdout
     }
 
     internal class WriterOutputStream(val w: Writer) : OutputStream() {

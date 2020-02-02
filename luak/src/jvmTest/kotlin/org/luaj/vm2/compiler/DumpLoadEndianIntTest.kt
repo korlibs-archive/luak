@@ -104,7 +104,7 @@ class DumpLoadEndianIntTest {
             assertEquals(expectedPriorDump, actual)
 
             // dump into bytes
-            val baos = ByteArrayOutputStream()
+            val baos = ByteArrayLuaBinOutput()
             try {
                 DumpState.dump(p, baos, stripDebug, numberFormat, littleEndian)
                 if (!shouldPass)

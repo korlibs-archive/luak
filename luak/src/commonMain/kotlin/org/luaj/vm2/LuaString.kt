@@ -305,7 +305,7 @@ private constructor(
 
     /** Return true if the bytes in the supplied range match this LuaStrings bytes.  */
     private fun byteseq(bytes: ByteArray, off: Int, len: Int): Boolean = m_length == len && equals(m_bytes, m_offset, bytes, off, len)
-    fun write(writer: DataOutputStream, i: Int, len: Int) = writer.write(m_bytes, m_offset + i, len)
+    fun write(writer: LuaBinOutput, i: Int, len: Int) = writer.write(m_bytes, m_offset + i, len)
     override fun len(): LuaValue = LuaInteger.valueOf(m_length)
     override fun length(): Int = m_length
     override fun rawlen(): Int = m_length
@@ -501,7 +501,7 @@ private constructor(
      * an ASCII string, quoting and escaping control characters.
      * @param ps PrintStream to print to.
      */
-    fun printToStream(ps: PrintStream) {
+    fun printToStream(ps: LuaWriter) {
         var i = 0
         val n = m_length
         while (i < n) {

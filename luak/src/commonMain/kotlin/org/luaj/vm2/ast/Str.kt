@@ -23,6 +23,7 @@ package org.luaj.vm2.ast
 
 import org.luaj.vm2.LuaString
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 object Str {
 
@@ -50,7 +51,7 @@ object Str {
 
 
     fun iso88591bytes(s: String): ByteArray {
-        val baos = ByteArrayOutputStream()
+        val baos = ByteArrayLuaBinOutput()
         for (c in s) {
             baos.write(c.toInt()) // @TODO: Might require some adjustments?
         }
@@ -60,7 +61,7 @@ object Str {
     @UseExperimental(ExperimentalStdlibApi::class)
 
     fun unquote(s: String): ByteArray {
-        val baos = ByteArrayOutputStream()
+        val baos = ByteArrayLuaBinOutput()
         val c = s.toCharArray()
         val n = c.size
         var i = 0

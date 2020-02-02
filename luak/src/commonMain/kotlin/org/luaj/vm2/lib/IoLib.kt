@@ -27,6 +27,7 @@ import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 /**
  * Abstract base class extending [LibFunction] which implements the
@@ -628,7 +629,7 @@ abstract class IoLib : TwoArgFunction() {
 
 
          fun freaduntil(f: File, lineonly: Boolean): LuaValue {
-            val baos = ByteArrayOutputStream()
+            val baos = ByteArrayLuaBinOutput()
             var c: Int
             try {
                 if (lineonly) {
@@ -670,7 +671,7 @@ abstract class IoLib : TwoArgFunction() {
 
 
          fun freadnumber(f: File?): LuaValue {
-            val baos = ByteArrayOutputStream()
+            val baos = ByteArrayLuaBinOutput()
             freadchars(f!!, " \t\r\n", null)
             freadchars(f, "-+", baos)
             //freadchars(f,"0",baos);
@@ -686,7 +687,7 @@ abstract class IoLib : TwoArgFunction() {
         }
 
 
-         private fun freadchars(f: File, chars: String, baos: ByteArrayOutputStream?) {
+         private fun freadchars(f: File, chars: String, baos: ByteArrayLuaBinOutput?) {
             var c: Int
             while (true) {
                 c = f.peek()

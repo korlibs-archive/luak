@@ -22,6 +22,7 @@
 package org.luaj.vm2.lib.jse
 
 import org.luaj.vm2.*
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.*
 import java.io.*
 
@@ -82,15 +83,14 @@ class JseOsLib : OsLib() {
     }
 
     override fun execute(command: String?): Varargs {
-        var exitValue: Int
-        try {
-            exitValue = JseProcess(command!!, null, globals?.STDOUT, globals?.STDERR).waitFor()
+        val exitValue: Int = try {
+            JseProcess(command!!, null, globals?.STDOUT?.toOutputStream(), globals?.STDERR?.toOutputStream()).waitFor()
         } catch (ioe: IOException) {
-            exitValue = EXEC_IOEXCEPTION
+            EXEC_IOEXCEPTION
         } catch (e: InterruptedException) {
-            exitValue = EXEC_INTERRUPTED
+            EXEC_INTERRUPTED
         } catch (t: Throwable) {
-            exitValue = EXEC_ERROR
+            EXEC_ERROR
         }
 
         return if (exitValue == 0) LuaValue.varargsOf(

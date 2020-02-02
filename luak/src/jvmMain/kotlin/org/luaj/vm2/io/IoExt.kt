@@ -24,3 +24,30 @@ fun InputStream.toLua(): LuaBinInput {
         override fun read(): Int = self.read()
     }
 }
+
+fun OutputStream.toLua(): LuaBinOutput {
+    val self = this
+    return object : LuaBinOutput() {
+        override fun write(value: Int) = self.write(value)
+        override fun write(b: ByteArray, i: Int, size: Int) = self.write(b, i, size)
+        override fun flush() = self.flush()
+        override fun close() = self.close()
+    }
+}
+
+fun PrintStream.toLua(): LuaWriter {
+    val self = this
+    return object : LuaWriter() {
+        override fun write(value: Int) = self.write(value)
+        override fun print(v: String) = self.print(v)
+    }
+}
+
+fun LuaBinOutput.toOutputStream(): OutputStream {
+    val self = this
+    return object : OutputStream() {
+        override fun write(b: Int) {
+            self.write(b)
+        }
+    }
+}

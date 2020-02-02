@@ -52,7 +52,7 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
             assertEquals(expected, actual)
 
             // dump into memory
-            val baos = ByteArrayOutputStream()
+            val baos = ByteArrayLuaBinOutput()
             DumpState.dump(p, baos, false)
             val dumped = baos.toByteArray()
 
@@ -88,8 +88,8 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
     }
 
     protected fun protoToString(p: Prototype): String {
-        val baos = ByteArrayOutputStream()
-        val ps = PrintStream(baos)
+        val baos = ByteArrayLuaBinOutput()
+        val ps = LuaWriterBinOutput(baos)
         Print.ps = ps
         Print.printFunction(p, true)
         return baos.toString()

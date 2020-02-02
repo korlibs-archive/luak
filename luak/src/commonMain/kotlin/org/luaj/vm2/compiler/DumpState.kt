@@ -23,6 +23,7 @@ package org.luaj.vm2.compiler
 
 import org.luaj.vm2.*
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 /** Class to dump a [Prototype] into an output stream, as part of compiling.
  *
@@ -60,14 +61,14 @@ import org.luaj.vm2.internal.*
  *
  * @see Prototype
  */
-class DumpState(w: OutputStream, internal var strip: Boolean) {
+class DumpState(w: LuaBinOutput, internal var strip: Boolean) {
 
     // header fields
     private var IS_LITTLE_ENDIAN = false
     private var NUMBER_FORMAT = NUMBER_FORMAT_DEFAULT
     private var SIZEOF_LUA_NUMBER = 8
 
-    internal var writer: DataOutputStream = DataOutputStream(w)
+    internal var writer: LuaBinOutput = w
     internal var status: Int = 0
 
     internal fun dumpBlock(b: ByteArray, size: Int) {
@@ -270,7 +271,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
 	*/
 
 
-        fun dump(f: Prototype, w: OutputStream, strip: Boolean): Int {
+        fun dump(f: Prototype, w: LuaBinOutput, strip: Boolean): Int {
             val D = DumpState(w, strip)
             D.dumpHeader()
             D.dumpFunction(f)
@@ -290,7 +291,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
          */
 
 
-        fun dump(f: Prototype, w: OutputStream, stripDebug: Boolean, numberFormat: Int, littleendian: Boolean): Int {
+        fun dump(f: Prototype, w: LuaBinOutput, stripDebug: Boolean, numberFormat: Int, littleendian: Boolean): Int {
             when (numberFormat) {
                 NUMBER_FORMAT_FLOATS_OR_DOUBLES, NUMBER_FORMAT_INTS_ONLY, NUMBER_FORMAT_NUM_PATCH_INT32 -> {
                 }

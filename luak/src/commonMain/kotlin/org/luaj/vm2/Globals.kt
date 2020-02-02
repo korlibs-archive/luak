@@ -123,13 +123,13 @@ import kotlin.jvm.*
 open class Globals : LuaTable() {
 
     /** The current default input stream.  */
-    @kotlin.jvm.JvmField var STDIN = JSystem.`in`
+    @kotlin.jvm.JvmField var STDIN: LuaBinInput = JSystem.`in`
 
     /** The current default output stream.  */
-    @kotlin.jvm.JvmField var STDOUT = JSystem.out
+    @kotlin.jvm.JvmField var STDOUT: LuaWriter = JSystem.out
 
     /** The current default error stream.  */
-    @kotlin.jvm.JvmField var STDERR = JSystem.err
+    @kotlin.jvm.JvmField var STDERR: LuaWriter = JSystem.err
 
     /** The installed ResourceFinder for looking files by name.  */
     @kotlin.jvm.JvmField var finder: ResourceFinder? = null

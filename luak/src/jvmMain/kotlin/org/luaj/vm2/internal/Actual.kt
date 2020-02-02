@@ -7,8 +7,8 @@ import kotlin.reflect.*
 import kotlin.system.*
 
 internal actual object JSystem {
-    actual val out: PrintStream get() = System.out
-    actual val err: PrintStream get() = System.err
+    actual val out: LuaWriter get() = System.out.toLua().toWriter()
+    actual val err: LuaWriter get() = System.err.toLua().toWriter()
     actual val `in`: LuaBinInput get() = System.`in`.toLua()
 
     actual fun exit(code: Int): Unit = exitProcess(code)
@@ -42,11 +42,5 @@ actual fun Object_wait(obj: Any) = (obj as Object).wait()
 actual fun Object_wait(obj: Any, time: Long) = (obj as Object).wait(time)
 
 actual typealias InterruptedException = java.lang.InterruptedException
-
-actual typealias OutputStream = java.io.OutputStream
-actual typealias DataOutputStream = java.io.DataOutputStream
-actual typealias FilterOutputStream = java.io.FilterOutputStream
-actual typealias PrintStream = java.io.PrintStream
-actual typealias ByteArrayOutputStream = java.io.ByteArrayOutputStream
 
 actual typealias WeakReference<T> = java.lang.ref.WeakReference<T>
