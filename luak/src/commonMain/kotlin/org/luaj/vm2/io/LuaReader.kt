@@ -1,8 +1,6 @@
 package org.luaj.vm2.io
 
-import org.luaj.vm2.internal.*
-
-abstract class LuaReader : Closeable {
+abstract class LuaReader {
     abstract fun read(): Int
     fun read(cbuf: CharArray) = read(cbuf, 0, cbuf.size)
     open fun read(cbuf: CharArray, off: Int, len: Int): Int {
@@ -16,7 +14,7 @@ abstract class LuaReader : Closeable {
         }
         return len
     }
-    override fun close(): Unit = Unit
+    open fun close(): Unit = Unit
 }
 
 /** Reader implementation to read chars from a String in JME or JSE.  */
@@ -33,6 +31,8 @@ open class StrLuaReader(val s: String) : LuaReader() {
         return if (j > 0 || len == 0) j else -1
     }
 }
+
+fun String.luaReader() = StrLuaReader(this)
 
 
 // @TODO: Move to Java. Use UTF-8

@@ -147,8 +147,7 @@ class LuaThread : LuaValue {
         ) else s.lua_resume(this, args)
     }
 
-    class State internal constructor(private val globals: Globals, lua_thread: LuaThread, val function: LuaValue?) :
-        Runnable {
+    class State internal constructor(private val globals: Globals, lua_thread: LuaThread, val function: LuaValue?) {
         @kotlin.jvm.JvmField
         internal val lua_thread: WeakReference<*> =
             WeakReference(lua_thread)
@@ -182,7 +181,7 @@ class LuaThread : LuaValue {
         var status = LuaThread.STATUS_INITIAL
 
         @Synchronized
-        override fun run() {
+        fun run() {
             try {
                 val a = this.args
                 this.args = LuaValue.NONE
@@ -195,17 +194,9 @@ class LuaThread : LuaValue {
             }
         }
 
-        fun _notify() {
-            Object_notify(this)
-        }
-
-        fun _wait() {
-            Object_wait(this)
-        }
-
-        fun _wait(timeout: Long) {
-            Object_wait(this, timeout)
-        }
+        fun _notify() = JSystem.Object_notify(this)
+        fun _wait() = JSystem.Object_wait(this)
+        fun _wait(timeout: Long) = JSystem.Object_wait(this, timeout)
 
         @Synchronized
         fun lua_resume(new_thread: LuaThread, args: Varargs): Varargs {
@@ -215,7 +206,7 @@ class LuaThread : LuaValue {
                 this.args = args
                 if (this.status == STATUS_INITIAL) {
                     this.status = STATUS_RUNNING
-                    NativeThread(this, "Coroutine-" + ++coroutine_count).start()
+                    JSystem.StartNativeThread({ this.run() }, "Coroutine-" + ++coroutine_count)
                 } else {
                     (this )._notify()
                 }

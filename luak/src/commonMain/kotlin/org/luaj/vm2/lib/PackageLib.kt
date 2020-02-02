@@ -113,7 +113,7 @@ class PackageLib : TwoArgFunction() {
         val package_ = package_!!
         package_[_LOADED] = LuaTable()
         package_[_PRELOAD] = LuaTable()
-        package_[_PATH] = LuaValue.valueOf(DEFAULT_LUA_PATH!!)
+        package_[_PATH] = valueOf(DEFAULT_LUA_PATH!!)
         package_[_LOADLIB] = loadlib()
         package_[_SEARCHPATH] = searchpath()
         val searchers = LuaTable()
@@ -136,7 +136,7 @@ class PackageLib : TwoArgFunction() {
     /** Set the lua path used by this library instance to a new value.
      * Merely sets the value of [path] to be used in subsequent searches.  */
     fun setLuaPath(newLuaPath: String) {
-        package_!![_PATH] = LuaValue.valueOf(newLuaPath)
+        package_!![_PATH] = valueOf(newLuaPath)
     }
 
     override fun tojstring(): String {
@@ -217,10 +217,10 @@ class PackageLib : TwoArgFunction() {
     class loadlib : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             args.checkstring(1)
-            return LuaValue.varargsOf(
-                LuaValue.NIL,
-                LuaValue.valueOf("dynamic libraries not enabled"),
-                LuaValue.valueOf("absent")
+            return varargsOf(
+                NIL,
+                valueOf("dynamic libraries not enabled"),
+                valueOf("absent")
             )
         }
     }
@@ -230,7 +230,7 @@ class PackageLib : TwoArgFunction() {
             val name = args.checkstring(1)
             val `val` = package_!![_PRELOAD]!![name!!]
             return if (`val`.isnil())
-                LuaValue.valueOf("\n\tno field package.preload['$name']")
+                valueOf("\n\tno field package.preload['$name']")
             else
                 `val`
         }
@@ -244,10 +244,10 @@ class PackageLib : TwoArgFunction() {
             // get package path
             val path = package_!![_PATH]!!
             if (!path.isstring())
-                return LuaValue.valueOf("package.path is not a string")
+                return valueOf("package.path is not a string")
 
             // get the searchpath function.
-            var v = package_!![_SEARCHPATH]!!.invoke(LuaValue.varargsOf(name!!, path))
+            var v = package_!![_SEARCHPATH]!!.invoke(varargsOf(name!!, path))
 
             // Did we get a result?
             if (!v.isstring(1))
@@ -256,9 +256,9 @@ class PackageLib : TwoArgFunction() {
 
             // Try to load the file.
             v = globals!!.loadfile(filename!!.tojstring())
-            return if (v.arg1().isfunction()) LuaValue.varargsOf(v.arg1(), filename) else LuaValue.varargsOf(
-                LuaValue.NIL,
-                LuaValue.valueOf("'" + filename + "': " + v.arg(2).tojstring())
+            return if (v.arg1().isfunction()) varargsOf(v.arg1(), filename) else varargsOf(
+                NIL,
+                valueOf("'" + filename + "': " + v.arg(2).tojstring())
             )
 
             // report error
@@ -301,7 +301,7 @@ class PackageLib : TwoArgFunction() {
                     } catch (ioe: IOException) {
                     }
 
-                    return LuaValue.valueOf(filename)
+                    return valueOf(filename)
                 }
 
                 // report error
@@ -309,7 +309,7 @@ class PackageLib : TwoArgFunction() {
                     sb = StringBuilder()
                 sb.append("\n\t" + filename)
             }
-            return LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf(sb!!.toString()))
+            return varargsOf(NIL, valueOf(sb!!.toString()))
         }
     }
 
@@ -317,18 +317,12 @@ class PackageLib : TwoArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             val name = args.checkjstring(1)
             val classname = toClassname(name!!)
-            var c: Class<*>? = null
-            var v: LuaValue? = null
             try {
-                c = Class_forName(classname)
-                v = c!!.newInstance() as LuaValue
-                if (v.isfunction())
-                    (v as LuaFunction).initupvalue1(globals!!)
-                return LuaValue.varargsOf(v, globals!!)
-            } catch (cnfe: ClassNotFoundException) {
-                return LuaValue.valueOf("\n\tno class '$classname'")
+                val v = JSystem.InstantiateClassByName(classname) as? LuaValue ?: return valueOf("\n\tno class '$classname'")
+                if (v.isfunction()) (v as LuaFunction).initupvalue1(globals!!)
+                return varargsOf(v, globals!!)
             } catch (e: Exception) {
-                return LuaValue.valueOf("\n\tjava load failed on '$classname', $e")
+                return valueOf("\n\tjava load failed on '$classname', $e")
             }
         }
     }
@@ -350,14 +344,14 @@ class PackageLib : TwoArgFunction() {
                 DEFAULT_LUA_PATH = "?.lua"
         }
 
-        private val _LOADED = LuaValue.valueOf("loaded")
-        private val _LOADLIB = LuaValue.valueOf("loadlib")
-        private val _PRELOAD = LuaValue.valueOf("preload")
-        private val _PATH = LuaValue.valueOf("path")
-        private val _SEARCHPATH = LuaValue.valueOf("searchpath")
-        private val _SEARCHERS = LuaValue.valueOf("searchers")
+        private val _LOADED = valueOf("loaded")
+        private val _LOADLIB = valueOf("loadlib")
+        private val _PRELOAD = valueOf("preload")
+        private val _PATH = valueOf("path")
+        private val _SEARCHPATH = valueOf("searchpath")
+        private val _SEARCHERS = valueOf("searchers")
 
-        private val _SENTINEL = LuaValue.valueOf("\u0001")
+        private val _SENTINEL = valueOf("\u0001")
 
         private val FILE_SEP = JSystem.getProperty("file.separator")
 

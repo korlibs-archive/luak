@@ -1611,6 +1611,8 @@ class LuaParser : LuaParserConstants {
         for (i in jj_2_rtns.indices) jj_2_rtns[i] = JJCalls()
     }
 
+    constructor(stream: String) : this(stream.luaReader())
+
     /** Constructor.  */
     constructor(stream: LuaReader) {
         charStream = SimpleCharStream(stream, 1, 1)

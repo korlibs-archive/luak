@@ -2,7 +2,7 @@ package org.luaj.vm2.io
 
 import org.luaj.vm2.internal.*
 
-abstract class LuaBinInput() : Closeable {
+abstract class LuaBinInput() {
     abstract fun read(): Int
 
     open fun read(out: ByteArray, off: Int, size: Int): Int {
@@ -26,7 +26,7 @@ abstract class LuaBinInput() : Closeable {
     open fun markSupported(): Boolean = false
     open fun mark(value: Int): Unit = Unit
     open fun reset(): Unit = Unit
-    override fun close() = Unit
+    open fun close() = Unit
 
     fun readByte(): Byte = read().let { c -> if (c >= 0) c.toByte() else throw EOFException() }
     fun readUnsignedByte(): Int = readByte().toInt() and 0xFF

@@ -16,30 +16,23 @@ internal actual object JSystem {
     actual fun gc() = System.gc()
     actual fun totalMemory(): Long = Runtime.getRuntime().totalMemory()
     actual fun freeMemory(): Long = Runtime.getRuntime().freeMemory()
+    actual fun InstantiateClassByName(name: String): Any? = try {
+        Class.forName(name).newInstance()
+    } catch (e: ClassNotFoundException) {
+        null
+    }
+    actual fun StartNativeThread(runnable: () -> Unit, name: String): Unit = Thread(Runnable(runnable), name).start()
+    actual fun Object_notify(obj: Any) = (obj as Object).notify()
+    actual fun Object_wait(obj: Any) = (obj as Object).wait()
+    actual fun Object_wait(obj: Any, time: Long) = (obj as Object).wait(time)
+
+    actual fun Class_portableName(clazz: KClass<*>): String = clazz.java.name
+    actual fun Class_isInstancePortable(clazz: KClass<*>, ins: Any): Boolean = clazz.java.isAssignableFrom(ins::class.java)
+    actual fun Class_getResourceAsStreamPortable(clazz: KClass<*>, res: String): LuaBinInput? = clazz.java.getResourceAsStream(res)?.toLua()
 }
-
-actual typealias Class<T> = java.lang.Class<T>
-actual fun Class_forName(name: String): Class<*>? = java.lang.Class.forName(name)
-
-actual typealias ReflectiveOperationException = java.lang.ReflectiveOperationException
-actual typealias ClassNotFoundException = java.lang.ClassNotFoundException
-
-actual typealias Closeable = java.io.Closeable
-
-internal actual val KClass<*>.portableName: String get() = this.java.name
-internal actual fun KClass<*>.isInstancePortable(ins: Any): Boolean = this.java.isAssignableFrom(ins::class.java)
-internal actual fun KClass<*>.getResourceAsStreamPortable(res: String): LuaBinInput? = this.java.getResourceAsStream(res)?.toLua()
 
 actual typealias IOException = java.io.IOException
 actual typealias EOFException = java.io.EOFException
-
-actual typealias NativeThread = java.lang.Thread
-
-actual fun NativeThread(runnable: () -> Unit, name: String): NativeThread = NativeThread(Runnable(runnable), name)
-
-actual fun Object_notify(obj: Any) = (obj as Object).notify()
-actual fun Object_wait(obj: Any) = (obj as Object).wait()
-actual fun Object_wait(obj: Any, time: Long) = (obj as Object).wait(time)
 
 actual typealias InterruptedException = java.lang.InterruptedException
 

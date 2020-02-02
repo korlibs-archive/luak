@@ -3,7 +3,7 @@ package org.luaj.vm2.io
 import org.luaj.vm2.internal.*
 import org.luaj.vm2.internal.arraycopy
 
-abstract class LuaBinOutput : Closeable {
+abstract class LuaBinOutput {
     abstract fun write(value: Int)
     open fun write(b: ByteArray, i: Int, size: Int) = run { for (n in 0 until size) write(b[i + n].toInt() and 0xFF) }
     fun write(b: ByteArray) = write(b, 0, b.size)
@@ -21,7 +21,7 @@ abstract class LuaBinOutput : Closeable {
     }
 
     open fun flush() = Unit
-    override fun close() = Unit
+    open fun close() = Unit
 }
 
 open class ByteArrayLuaBinOutput(val initialCapacity: Int = 64) : LuaBinOutput() {

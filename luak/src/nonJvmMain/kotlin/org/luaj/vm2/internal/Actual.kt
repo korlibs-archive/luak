@@ -30,28 +30,25 @@ internal actual object JSystem {
 
     actual fun totalMemory(): Long = 0L
     actual fun freeMemory(): Long = 0L
-}
 
-actual class Class<T> {
-    actual fun newInstance(): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    actual fun InstantiateClassByName(name: String): Any? = TODO()
+    actual fun StartNativeThread(runnable: () -> Unit, name: String): Unit = TODO()
+    actual fun Object_notify(obj: Any) {
+        TODO()
     }
+
+    actual fun Object_wait(obj: Any) {
+        TODO()
+    }
+
+    actual fun Object_wait(obj: Any, time: Long) {
+        TODO()
+    }
+
+    actual fun Class_portableName(clazz: KClass<*>): String = clazz.simpleName ?: "Unknown"
+    actual fun Class_isInstancePortable(clazz: KClass<*>, ins: Any): Boolean = clazz.isInstance(ins)
+    actual fun Class_getResourceAsStreamPortable(clazz: KClass<*>, res: String): LuaBinInput? = TODO("getResourceAsStream")
 }
-
-actual fun Class_forName(name: String): Class<*>? {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-}
-
-actual open class ReflectiveOperationException() : Exception()
-actual open class ClassNotFoundException : ReflectiveOperationException()
-
-actual interface Closeable {
-    actual fun close()
-}
-
-internal actual val KClass<*>.portableName: String get() = this.simpleName ?: "Unknown"
-internal actual fun KClass<*>.isInstancePortable(ins: Any): Boolean = this.isInstance(ins)
-internal actual fun KClass<*>.getResourceAsStreamPortable(res: String): LuaBinInput? = TODO("getResourceAsStream")
 
 actual open class IOException : Exception {
     actual constructor() : super()
@@ -63,25 +60,6 @@ actual open class EOFException : IOException {
     actual constructor(message: String) : super(message)
 }
 
-actual class NativeThread {
-    actual fun start() {
-        TODO()
-    }
-}
-
-actual fun NativeThread(runnable: () -> Unit, name: String): NativeThread = NativeThread()
-
-actual fun Object_notify(obj: Any) {
-    TODO()
-}
-
-actual fun Object_wait(obj: Any) {
-    TODO()
-}
-
-actual fun Object_wait(obj: Any, time: Long) {
-    TODO()
-}
 
 actual class InterruptedException : Exception()
 

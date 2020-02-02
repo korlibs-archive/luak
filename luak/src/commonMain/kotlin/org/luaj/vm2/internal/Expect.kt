@@ -12,16 +12,15 @@ internal expect object JSystem {
     fun gc()
     fun totalMemory(): Long
     fun freeMemory(): Long
+    fun InstantiateClassByName(name: String): Any?
+    fun StartNativeThread(runnable: () -> Unit, name: String)
+    fun Object_notify(obj: Any)
+    fun Object_wait(obj: Any)
+    fun Object_wait(obj: Any, time: Long)
+    fun Class_portableName(clazz: KClass<*>): String
+    fun Class_isInstancePortable(clazz: KClass<*>, ins: Any): Boolean
+    fun Class_getResourceAsStreamPortable(clazz: KClass<*>, res: String): LuaBinInput?
 }
-
-expect class Class<T> {
-    fun newInstance(): T
-}
-
-expect fun Class_forName(name: String): Class<*>?
-
-expect class ReflectiveOperationException : Exception
-expect class ClassNotFoundException : ReflectiveOperationException
 
 expect open class IOException : Exception {
     constructor()
@@ -32,24 +31,6 @@ expect open class EOFException : IOException {
     constructor()
     constructor(message: String)
 }
-
-internal expect val KClass<*>.portableName: String
-internal expect fun KClass<*>.isInstancePortable(ins: Any): Boolean
-internal expect fun KClass<*>.getResourceAsStreamPortable(res: String): LuaBinInput?
-
-expect interface Closeable {
-    fun close()
-}
-
-expect class NativeThread {
-    fun start()
-}
-
-expect fun NativeThread(runnable: () -> Unit, name: String): NativeThread
-
-expect fun Object_notify(obj: Any)
-expect fun Object_wait(obj: Any)
-expect fun Object_wait(obj: Any, time: Long)
 
 expect class InterruptedException : Exception
 
