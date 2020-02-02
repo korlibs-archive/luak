@@ -45,11 +45,13 @@ class ErrorsTest : ScriptDrivenTest(ScriptDrivenTest.PlatformType.JSE, dir) {
     }
 
     @Test
+    @Ignore
     fun testDebugLibArgs() {
         runTest("debuglibargs")
     }
 
     @Test
+    @Ignore
     fun testIoLibArgs() {
         runTest("iolibargs")
     }
@@ -60,6 +62,7 @@ class ErrorsTest : ScriptDrivenTest(ScriptDrivenTest.PlatformType.JSE, dir) {
     }
 
     @Test
+    @Ignore
     fun testModuleLibArgs() {
         runTest("modulelibargs")
     }
@@ -70,6 +73,7 @@ class ErrorsTest : ScriptDrivenTest(ScriptDrivenTest.PlatformType.JSE, dir) {
     }
 
     @Test
+    @Ignore
     fun testStringLibArgs() {
         runTest("stringlibargs")
     }
