@@ -29,6 +29,7 @@ import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
+import org.luaj.vm2.internal.*
 
 /**
  * Abstract base class extending [LibFunction] which implements the
@@ -140,7 +141,7 @@ abstract class IoLib : TwoArgFunction() {
 
         // displays as "file" type
         override fun tojstring(): String {
-            return "file: " + Integer.toHexString(hashCode())
+            return "file: " + hashCode().toHexString()
         }
     }
 

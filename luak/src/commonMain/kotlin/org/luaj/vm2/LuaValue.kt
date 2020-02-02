@@ -443,7 +443,7 @@ abstract class LuaValue : Varargs() {
      * @see .TSTRING
      */
     override fun tojstring(): String {
-        return typename() + ": " + Integer.toHexString(hashCode())
+        return typename() + ": " + hashCode().toHexString()
     }
 
     /** Convert to userdata instance, or null.

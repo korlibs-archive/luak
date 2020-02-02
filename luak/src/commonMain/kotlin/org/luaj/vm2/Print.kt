@@ -113,7 +113,7 @@ class Print : Lua() {
                         0x000B /* vertical tab */ -> ps.print("\\v")
                         else -> {
                             ps.print('\\')
-                            ps.print(Integer.toString(1000 + 0xff and c).substring(1))
+                            ps.print((1000 + 0xff and c).toString(10).substring(1))
                         }
                     }
                 }
@@ -393,7 +393,7 @@ class Print : Lua() {
                             if (o != null) {
                                 var n = o::class.portableName
                                 n = n.substring(n.lastIndexOf('.') + 1)
-                                ps.print(n + ": " + Integer.toHexString(o.hashCode()))
+                                ps.print(n + ": " + o.hashCode().toHexString())
                             } else {
                                 ps.print(v.toString())
                             }

@@ -71,11 +71,11 @@ internal constructor(
     override fun optint(defval: Int): Int = v
     override fun optinteger(defval: LuaInteger?): LuaInteger? = this
     override fun optlong(defval: Long): Long = v.toLong()
-    override fun tojstring(): String = Integer.toString(v)
-    override fun strvalue(): LuaString? = LuaString.valueOf(Integer.toString(v))
-    override fun optstring(defval: LuaString?): LuaString? = LuaString.valueOf(Integer.toString(v))
-    override fun tostring(): LuaValue = LuaString.valueOf(Integer.toString(v))
-    override fun optjstring(defval: String?): String? = Integer.toString(v)
+    override fun tojstring(): String = v.toString(10)
+    override fun strvalue(): LuaString? = LuaString.valueOf(v.toString(10))
+    override fun optstring(defval: LuaString?): LuaString? = LuaString.valueOf(v.toString(10))
+    override fun tostring(): LuaValue = LuaString.valueOf(v.toString(10))
+    override fun optjstring(defval: String?): String? = v.toString(10)
     override fun checkinteger(): LuaInteger? = this
     override fun isstring(): Boolean = true
     override fun hashCode(): Int = v

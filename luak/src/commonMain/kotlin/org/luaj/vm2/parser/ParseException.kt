@@ -179,7 +179,7 @@ class ParseException : Exception {
                                 ch = str[i]
                                 (ch).toInt() < 0x20
                             } || ch.toInt() > 0x7e) {
-                            val s = "0000" + Integer.toString(ch.toInt(), 16)
+                            val s = "0000" + ch.toInt().toString(16)
                             retval.append("\\u" + s.substring(s.length - 4, s.length))
                         } else {
                             retval.append(ch)

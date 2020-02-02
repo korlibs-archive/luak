@@ -31,6 +31,7 @@ import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
 import org.luaj.vm2.compiler.DumpState
+import org.luaj.vm2.internal.*
 
 /**
  * Subclass of [LibFunction] which implements the lua standard `string`
@@ -314,10 +315,10 @@ class StringLib : TwoArgFunction() {
                 LuaValue.error("invalid format (repeated flags)")
 
             width = -1
-            if (Character.isDigit(c.toChar())) {
+            if (c.toChar().isDigit()) {
                 width = c - '0'.toInt()
                 c = if (p < n) strfrmt.luaByte(p++) else 0
-                if (Character.isDigit(c.toChar())) {
+                if (c.toChar().isDigit()) {
                     width = width * 10 + (c - '0'.toInt())
                     c = if (p < n) strfrmt.luaByte(p++) else 0
                 }
@@ -326,17 +327,17 @@ class StringLib : TwoArgFunction() {
             precision = -1
             if (c == '.'.toInt()) {
                 c = if (p < n) strfrmt.luaByte(p++) else 0
-                if (Character.isDigit(c.toChar())) {
+                if (c.toChar().isDigit()) {
                     precision = c - '0'.toInt()
                     c = if (p < n) strfrmt.luaByte(p++) else 0
-                    if (Character.isDigit(c.toChar())) {
+                    if (c.toChar().isDigit()) {
                         precision = precision * 10 + (c - '0'.toInt())
                         c = if (p < n) strfrmt.luaByte(p++) else 0
                     }
                 }
             }
 
-            if (Character.isDigit(c.toChar()))
+            if (c.toChar().isDigit())
                 LuaValue.error("invalid format (width or precision too long)")
 
             zeroPad = zeroPad and !leftAdjust // '-' overrides '0'
@@ -712,7 +713,7 @@ class StringLib : TwoArgFunction() {
                 } else {
                     ++i // skip ESC
                     b = news.luaByte(i).toByte()
-                    if (!Character.isDigit(b.toChar())) {
+                    if (!b.toChar().isDigit()) {
                         lbuf.append(b)
                     } else if (b == '0'.toByte()) {
                         lbuf.append(s.substring(soff, e))
@@ -907,7 +908,7 @@ class StringLib : TwoArgFunction() {
                             }
                             else -> {
                                 val c = p.luaByte(poffset + 1)
-                                if (Character.isDigit(c.toChar())) {
+                                if (c.toChar().isDigit()) {
                                     soffset = match_capture(soffset, c)
                                     return if (soffset == -1) -1 else match(soffset, poffset + 2)
                                 }
@@ -1029,7 +1030,7 @@ class StringLib : TwoArgFunction() {
         companion object {
 
             fun match_class(c: Int, cl: Int): Boolean {
-                val lcl = Character.toLowerCase(cl.toChar())
+                val lcl = cl.toChar().toLowerCase()
                 val cdata = CHAR_TABLE[c].toInt()
 
                 val res: Boolean
@@ -1067,7 +1068,7 @@ class StringLib : TwoArgFunction() {
                     else -> if (c <= 0x1F || c == 0x7F) {
                         buf.append('\\'.toByte())
                         if (i + 1 == n || s.luaByte(i + 1) < '0'.toInt() || s.luaByte(i + 1) > '9'.toInt()) {
-                            buf.append(Integer.toString(c))
+                            buf.append(c.toString(10))
                         } else {
                             buf.append('0'.toByte())
                             buf.append(('0'.toInt() + c / 10).toChar().toByte())
@@ -1160,9 +1161,9 @@ class StringLib : TwoArgFunction() {
         private val CHAR_TABLE: ByteArray = ByteArray(256).also { CHAR_TABLE ->
             for (i in 0..255) {
                 val c = i.toChar()
-                CHAR_TABLE[i] = ((if (Character.isDigit(c)) MASK_DIGIT else 0).toInt() or
-                    (if (Character.isLowerCase(c)) MASK_LOWERCASE else 0).toInt() or
-                    (if (Character.isUpperCase(c)) MASK_UPPERCASE else 0).toInt() or
+                CHAR_TABLE[i] = ((if (c.isDigit()) MASK_DIGIT else 0).toInt() or
+                    (if (c.isLowerCase()) MASK_LOWERCASE else 0).toInt() or
+                    (if (c.isUpperCase()) MASK_UPPERCASE else 0).toInt() or
                     (if (c < ' ' || c.toInt() == 0x7F) MASK_CONTROL else 0).toInt()).toByte()
                 if (c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F' || c >= '0' && c <= '9') {
                     CHAR_TABLE[i] = (CHAR_TABLE[i].toInt() or MASK_HEXDIGIT).toByte()
