@@ -22,7 +22,6 @@
 package org.luaj.vm2
 
 import com.soywiz.luak.compat.java.lang.*
-import com.soywiz.luak.compat.java.lang.reg.*
 import org.luaj.vm2.internal.*
 import kotlin.jvm.*
 
@@ -1237,7 +1236,7 @@ open class LuaTable : LuaValue, Metatable {
         }
 
         override fun toString(): String {
-            val buf = StringBuffer()
+            val buf = StringBuilder()
             buf.append("<dead")
             val k = key()
             if (k != null) {

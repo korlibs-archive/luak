@@ -1,4 +1,4 @@
-package com.soywiz.luak.compat.java.lang
+package org.luaj.vm2.internal
 
 actual typealias Class<T> = java.lang.Class<T>
 actual fun Class_forName(name: String): Class<*>? = java.lang.Class.forName(name)

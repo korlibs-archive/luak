@@ -21,7 +21,7 @@
  */
 package org.luaj.vm2
 
-import com.soywiz.luak.compat.java.lang.reg.*
+import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.LuaTable.Slot
 import org.luaj.vm2.LuaTable.StrongSlot
 
@@ -222,7 +222,8 @@ class WeakTable(
      * @see WeakTable
      */
     class WeakUserdata(value: LuaValue) : WeakValue(value) {
-        private val ob: WeakReference<*> = WeakReference(value.touserdata())
+        private val ob: WeakReference<*> =
+            WeakReference(value.touserdata())
         private val mt: LuaValue? = value.getmetatable()
 
         override fun strongvalue(): LuaValue? {

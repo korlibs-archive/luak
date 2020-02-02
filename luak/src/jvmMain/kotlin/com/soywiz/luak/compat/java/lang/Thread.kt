@@ -13,3 +13,5 @@ actual fun Object_wait(obj: Any) {
 actual fun Object_wait(obj: Any, time: Long) {
     (obj as java.lang.Object).wait(time)
 }
+
+actual typealias InterruptedException = java.lang.InterruptedException

@@ -21,7 +21,6 @@
  */
 package org.luaj.vm2
 
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
 import org.luaj.vm2.io.*
 

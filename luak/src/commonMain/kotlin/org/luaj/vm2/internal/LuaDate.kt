@@ -1,6 +1,6 @@
-package com.soywiz.luak.compat.java.util
+package org.luaj.vm2.internal
 
-class Date() {
+internal class LuaDate() {
     constructor(time: Long) : this() {
         TODO()
     }

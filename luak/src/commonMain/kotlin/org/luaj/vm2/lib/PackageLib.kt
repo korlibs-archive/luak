@@ -23,6 +23,7 @@ package org.luaj.vm2.lib
 
 import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.*
+import org.luaj.vm2.internal.*
 import org.luaj.vm2.io.*
 
 /**
@@ -185,7 +186,7 @@ class PackageLib : TwoArgFunction() {
 
             /* else must load it; iterate over available loaders */
             val tbl = package_!![_SEARCHERS].checktable()
-            val sb = StringBuffer()
+            val sb = StringBuilder()
             var loader: Varargs? = null
             var i = 1
             while (true) {
@@ -275,7 +276,7 @@ class PackageLib : TwoArgFunction() {
             // check the path elements
             var e = -1
             val n = path!!.length
-            var sb: StringBuffer? = null
+            var sb: StringBuilder? = null
             name = name!!.replace(sep!![0], rep!![0])
             while (e < n) {
 
@@ -306,7 +307,7 @@ class PackageLib : TwoArgFunction() {
 
                 // report error
                 if (sb == null)
-                    sb = StringBuffer()
+                    sb = StringBuilder()
                 sb.append("\n\t" + filename)
             }
             return LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf(sb!!.toString()))
@@ -370,7 +371,7 @@ class PackageLib : TwoArgFunction() {
             for (k in 0 until j) {
                 var c = filename[k]
                 if (!isClassnamePart(c) || c == '/' || c == '\\') {
-                    val sb = StringBuffer(j)
+                    val sb = StringBuilder(j)
                     for (i in 0 until j) {
                         c = filename[i]
                         sb.append(

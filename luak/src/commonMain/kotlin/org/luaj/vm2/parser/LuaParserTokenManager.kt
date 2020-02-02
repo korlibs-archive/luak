@@ -2,6 +2,7 @@
 package org.luaj.vm2.parser
 
 import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.internal.*
 
 /** Token Manager.  */
 class LuaParserTokenManager
@@ -13,8 +14,8 @@ class LuaParserTokenManager
     var debugStream: com.soywiz.luak.compat.java.io.PrintStream = JSystem.out
     private val jjrounds = IntArray(66)
     private val jjstateSet = IntArray(132)
-    private val jjimage = StringBuffer()
-    private var image: StringBuffer? = jjimage
+    private val jjimage = StringBuilder()
+    private var image: StringBuilder? = jjimage
     private var jjimageLen: Int = 0
     private val lengthOfMatch: Int = 0
     protected var curChar: Char = ' '
@@ -44,7 +45,7 @@ class LuaParserTokenManager
                 }
 
                 image = jjimage
-                image!!.setLength(0)
+                image!!.clear()
                 jjimageLen = 0
 
                 while (true) {

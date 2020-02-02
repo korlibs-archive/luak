@@ -17,3 +17,5 @@ actual fun Object_wait(obj: Any) {
 actual fun Object_wait(obj: Any, time: Long) {
     TODO()
 }
+
+actual class InterruptedException : Exception()

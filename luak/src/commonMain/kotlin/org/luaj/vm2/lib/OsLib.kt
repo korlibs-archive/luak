@@ -22,14 +22,14 @@
 package org.luaj.vm2.lib
 
 import com.soywiz.luak.compat.java.io.*
-import com.soywiz.luak.compat.java.lang.*
-import com.soywiz.luak.compat.java.util.Date
+import org.luaj.vm2.internal.LuaDate
 
 import org.luaj.vm2.Buffer
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
+import org.luaj.vm2.internal.*
 import kotlin.time.*
 
 /**
@@ -126,7 +126,7 @@ open class OsLib : TwoArgFunction() {
                         val s = args.optjstring(1, "%c")
                         val t = if (args.isnumber(2)) args.todouble(2) else time(null)
                         if (s == "*t") {
-                            val d = Date((t * 1000).toLong())
+                            val d = LuaDate((t * 1000).toLong())
                             val tbl = LuaValue.tableOf()
                             tbl["year"] = d.year
                             tbl["month"] = d.month1
@@ -218,10 +218,10 @@ open class OsLib : TwoArgFunction() {
     fun date(format: String, time: Double): String {
         var format = format
         var time = time
-        var d = Date((time * 1000).toLong())
+        var d = LuaDate((time * 1000).toLong())
         if (format.startsWith("!")) {
             time -= timeZoneOffset(d).toDouble()
-            d = Date((time * 1000).toLong())
+            d = LuaDate((time * 1000).toLong())
             format = format.substring(1)
         }
         val fmt = format.toCharArray()
@@ -276,11 +276,11 @@ open class OsLib : TwoArgFunction() {
         return result.tojstring()
     }
 
-    private fun beginningOfYear(d: Date): Date {
-        return Date(d.year, 0, 1, 0, 0, 0, 0)
+    private fun beginningOfYear(d: LuaDate): LuaDate {
+        return LuaDate(d.year, 0, 1, 0, 0, 0, 0)
     }
 
-    private fun weekNumber(d: Date, startDay: Int): Int {
+    private fun weekNumber(d: LuaDate, startDay: Int): Int {
         /*
         val y0 = beginningOfYear(d)
         y0.set(Calendar.DAY_OF_MONTH, 1 + (startDay + 8 - y0.get(Calendar.DAY_OF_WEEK)) % 7)
@@ -294,7 +294,7 @@ open class OsLib : TwoArgFunction() {
         TODO()
     }
 
-    private fun timeZoneOffset(d: Date): Int {
+    private fun timeZoneOffset(d: LuaDate): Int {
         /*
         val localStandarTimeMillis = (d.get(Calendar.HOUR_OF_DAY) * 3600 +
                 d.get(Calendar.MINUTE) * 60 +
@@ -311,7 +311,7 @@ open class OsLib : TwoArgFunction() {
         return 0
     }
 
-    private fun isDaylightSavingsTime(d: Date): Boolean {
+    private fun isDaylightSavingsTime(d: LuaDate): Boolean {
         //return timeZoneOffset(d) != d.timeZone.rawOffset / 1000
         TODO()
     }
@@ -415,17 +415,17 @@ open class OsLib : TwoArgFunction() {
      * @return long value for the time
      */
     protected fun time(table: LuaTable?): Double {
-        val d: Date = when (table) {
-            null -> Date()
-            else -> Date(
-                    table["year"].checkint(),
-                    table["month"].checkint() - 1,
-                    table["day"].checkint(),
-                    table["hour"].optint(12),
-                    table["min"].optint(0),
-                    table["sec"].optint(0),
-                    0
-                )
+        val d: LuaDate = when (table) {
+            null -> LuaDate()
+            else -> LuaDate(
+                table["year"].checkint(),
+                table["month"].checkint() - 1,
+                table["day"].checkint(),
+                table["hour"].optint(12),
+                table["min"].optint(0),
+                table["sec"].optint(0),
+                0
+            )
         }
         return d.time / 1000.0
     }

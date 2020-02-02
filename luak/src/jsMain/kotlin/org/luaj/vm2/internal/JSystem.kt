@@ -1,9 +1,9 @@
-package com.soywiz.luak.compat.java.lang
+package org.luaj.vm2.internal
 
 import com.soywiz.luak.compat.java.io.*
 import org.luaj.vm2.io.*
 
-actual object JSystem {
+internal actual object JSystem {
     actual val out: PrintStream by lazy {
         PrintStream(object : OutputStream() {
             override fun write(value: Int) {

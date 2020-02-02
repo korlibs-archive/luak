@@ -536,7 +536,7 @@ class DebugLib : TwoArgFunction() {
         @Synchronized
         internal fun traceback(level: Int): String {
             var level = level
-            val sb = StringBuffer()
+            val sb = StringBuilder()
             sb.append("stack traceback:")
             var c: CallFrame?
             while ((run { c = getCallFrame(level++); c }) != null) {

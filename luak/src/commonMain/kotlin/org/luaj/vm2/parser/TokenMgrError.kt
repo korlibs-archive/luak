@@ -60,7 +60,7 @@ class TokenMgrError : Error {
          */
 
         protected fun addEscapes(str: String): String {
-            val retval = StringBuffer()
+            val retval = StringBuilder()
             var ch: Char
             loop@for (i in 0 until str.length) {
                 when (str[i]) {

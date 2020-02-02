@@ -1,4 +1,4 @@
-package com.soywiz.luak.compat.java.lang.reg
+package com.soywiz.luak.compat.java.lang
 
 actual class WeakReference<T> actual constructor(val value: T) {
     actual fun get(): T? {

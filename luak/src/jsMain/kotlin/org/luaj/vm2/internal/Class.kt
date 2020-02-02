@@ -1,4 +1,4 @@
-package com.soywiz.luak.compat.java.lang
+package org.luaj.vm2.internal
 
 actual class Class<T> {
     actual fun newInstance(): T {

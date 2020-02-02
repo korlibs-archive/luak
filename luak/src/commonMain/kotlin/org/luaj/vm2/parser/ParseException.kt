@@ -3,6 +3,7 @@
 package org.luaj.vm2.parser
 
 import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.internal.*
 
 /**
  * This exception is thrown when parse errors are encountered.
@@ -90,7 +91,7 @@ class ParseException : Exception {
             tokenImage: Array<String>
         ): String {
             val eol = JSystem.getProperty("line.separator", "\n")
-            val expected = StringBuffer()
+            val expected = StringBuilder()
             var maxSize = 0
             for (i in expectedTokenSequences.indices) {
                 if (maxSize < expectedTokenSequences[i].size) {
@@ -135,7 +136,7 @@ class ParseException : Exception {
          * string literal.
          */
         internal fun add_escapes(str: String): String {
-            val retval = StringBuffer()
+            val retval = StringBuilder()
             var ch: Char
             loop@for (i in 0 until str.length) {
                 when (str[i]) {

@@ -1,9 +1,9 @@
-package com.soywiz.luak.compat.java.lang
+package org.luaj.vm2.internal
 
 import com.soywiz.luak.compat.java.io.*
 import org.luaj.vm2.io.*
 
-expect object JSystem {
+internal expect object JSystem {
     val out: PrintStream
     val err: PrintStream
     val `in`: LuaBinInput

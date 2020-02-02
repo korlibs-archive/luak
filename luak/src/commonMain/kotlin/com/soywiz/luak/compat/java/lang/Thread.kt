@@ -7,3 +7,5 @@ expect class Thread(runnable: Runnable, name: String) {
 expect fun Object_notify(obj: Any)
 expect fun Object_wait(obj: Any)
 expect fun Object_wait(obj: Any, time: Long)
+
+expect class InterruptedException : Exception

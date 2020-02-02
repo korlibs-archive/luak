@@ -22,6 +22,7 @@
 package org.luaj.vm2
 
 import com.soywiz.luak.compat.java.*
+import org.luaj.vm2.internal.*
 import kotlin.reflect.*
 
 open class LuaUserdata : LuaValue {
