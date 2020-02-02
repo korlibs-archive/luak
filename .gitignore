@@ -9,3 +9,4 @@
 *.iml
 *.hprof
 /local.properties
+.DS_Store
