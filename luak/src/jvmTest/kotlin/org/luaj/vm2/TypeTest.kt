@@ -25,6 +25,7 @@ import kotlin.test.*
 import org.luaj.vm2.lib.*
 import org.luaj.vm2.lib.jse.*
 import java.lang.reflect.*
+import kotlin.reflect.*
 
 class TypeTest {
 
@@ -1231,7 +1232,7 @@ class TypeTest {
 
     private fun throwsErrorReqCheckUserdataClass(obj: LuaValue, arg: Class<*>) {
         try {
-            obj.javaClass.getMethod("checkuserdata", Class::class.java).invoke(obj, arg)
+            obj.javaClass.getMethod("checkuserdata", KClass::class.java).invoke(obj, arg.kotlin)
         } catch (e: InvocationTargetException) {
             if (e.targetException !is LuaError)
                 fail("not a LuaError: " + e.targetException)

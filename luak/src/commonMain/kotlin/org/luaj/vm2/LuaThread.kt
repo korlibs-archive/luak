@@ -190,9 +190,20 @@ class LuaThread : LuaValue {
                 this.error = t.message
             } finally {
                 this.status = LuaThread.STATUS_DEAD
-                //(this as java.lang.Object).notify()
-                TODO()
+                (this)._notify()
             }
+        }
+
+        fun _notify() {
+            Object_notify(this)
+        }
+
+        fun _wait() {
+            Object_wait(this)
+        }
+
+        fun _wait(timeout: Long) {
+            Object_wait(this, timeout)
         }
 
         @Synchronized
@@ -203,17 +214,14 @@ class LuaThread : LuaValue {
                 this.args = args
                 if (this.status == STATUS_INITIAL) {
                     this.status = STATUS_RUNNING
-                    //Thread(this, "Coroutine-" + ++coroutine_count).start()
-                    TODO()
+                    Thread(this, "Coroutine-" + ++coroutine_count).start()
                 } else {
-                    //(this as java.lang.Object).notify()
-                    TODO()
+                    (this )._notify()
                 }
                 if (previous_thread != null)
                     previous_thread.state.status = STATUS_NORMAL
                 this.status = STATUS_RUNNING
-                //(this as java.lang.Object).wait()
-                TODO()
+                (this )._wait()
                 return if (this.error != null)
                     LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(this.error!!))
                 else
@@ -236,11 +244,9 @@ class LuaThread : LuaValue {
             try {
                 this.result = args
                 this.status = STATUS_SUSPENDED
-                //(this as java.lang.Object).notify()
-                TODO()
+                (this )._notify()
                 do {
-                    //(this as java.lang.Object).wait(thread_orphan_check_interval)
-                    TODO()
+                    (this )._wait(thread_orphan_check_interval)
                     if (this.lua_thread.get() == null) {
                         this.status = STATUS_DEAD
                         throw OrphanedThread()
@@ -260,11 +266,9 @@ class LuaThread : LuaValue {
     companion object {
 
         /** Shared metatable for lua threads.  */
-        @kotlin.jvm.JvmField
         var s_metatable: LuaValue? = null
 
         /** The current number of coroutines.  Should not be set.  */
-        @kotlin.jvm.JvmField
         var coroutine_count = 0
 
         /** Polling interval, in milliseconds, which each thread uses while waiting to
@@ -274,24 +278,17 @@ class LuaThread : LuaValue {
          * Orphaned threads cannot be detected and collected unless garbage
          * collection is run.  This can be changed by Java startup code if desired.
          */
-        @kotlin.jvm.JvmField
         var thread_orphan_check_interval: Long = 5000
 
-        @kotlin.jvm.JvmField
-        val STATUS_INITIAL = 0
-        @kotlin.jvm.JvmField
-        val STATUS_SUSPENDED = 1
-        @kotlin.jvm.JvmField
-        val STATUS_RUNNING = 2
-        @kotlin.jvm.JvmField
-        val STATUS_NORMAL = 3
-        @kotlin.jvm.JvmField
-        val STATUS_DEAD = 4
-        @kotlin.jvm.JvmField
+        const val STATUS_INITIAL = 0
+        const val STATUS_SUSPENDED = 1
+        const val STATUS_RUNNING = 2
+        const val STATUS_NORMAL = 3
+        const val STATUS_DEAD = 4
+
         val STATUS_NAMES = arrayOf("suspended", "suspended", "running", "normal", "dead")
 
-        @kotlin.jvm.JvmField
-        val MAX_CALLSTACK = 256
+        const val MAX_CALLSTACK = 256
     }
 
 }
