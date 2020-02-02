@@ -21,9 +21,6 @@
  */
 package org.luaj.vm2.compiler
 
-import com.soywiz.luak.compat.java.*
-import com.soywiz.luak.compat.java.io.*
-
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaClosure
 import org.luaj.vm2.LuaFunction

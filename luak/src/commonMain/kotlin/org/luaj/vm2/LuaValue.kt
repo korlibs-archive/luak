@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2
 
-import com.soywiz.luak.compat.java.*
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
 import kotlin.jvm.*
 import kotlin.reflect.*

@@ -2,7 +2,6 @@
 /* JavaCCOptions:KEEP_LINE_COL=null */
 package org.luaj.vm2.parser
 
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
 
 /**

@@ -84,7 +84,7 @@ class LuajClassLoader : ClassLoader() {
                 val result = super.defineClass(classname, bytes, 0, bytes.size)
                 classes[classname] = result
                 return result
-            } catch (e: com.soywiz.luak.compat.java.io.IOException) {
+            } catch (e: IOException) {
                 throw ClassNotFoundException("Read failed: $classname: $e")
             }
 

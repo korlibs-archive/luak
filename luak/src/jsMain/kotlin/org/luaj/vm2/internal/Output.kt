@@ -1,4 +1,6 @@
-package com.soywiz.luak.compat.java.io
+package org.luaj.vm2.internal
+
+import org.luaj.vm2.internal.Closeable
 
 actual abstract class OutputStream actual constructor() : Closeable {
     actual abstract fun write(value: Int)

@@ -21,9 +21,6 @@
  */
 package org.luaj.vm2.lib
 
-import com.soywiz.luak.compat.java.io.*
-import com.soywiz.luak.compat.java.lang.*
-
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaTable

@@ -1,4 +1,4 @@
-package com.soywiz.luak.compat.java.io
+package org.luaj.vm2.internal
 
 actual open class IOException : Exception {
     actual constructor() : super()

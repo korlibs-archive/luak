@@ -21,9 +21,9 @@
  */
 package org.luaj.vm2
 
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.LuaTable.Slot
 import org.luaj.vm2.LuaTable.StrongSlot
+import org.luaj.vm2.internal.*
 
 /**
  * Subclass of [LuaTable] that provides weak key and weak value semantics.

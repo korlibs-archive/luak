@@ -1,3 +1,3 @@
-package com.soywiz.luak.compat.java.io
+package org.luaj.vm2.internal
 
 actual typealias Closeable = java.io.Closeable

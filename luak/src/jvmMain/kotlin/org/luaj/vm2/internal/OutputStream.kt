@@ -1,4 +1,4 @@
-package com.soywiz.luak.compat.java.io
+package org.luaj.vm2.internal
 
 actual typealias OutputStream = java.io.OutputStream
 actual typealias DataOutputStream = java.io.DataOutputStream

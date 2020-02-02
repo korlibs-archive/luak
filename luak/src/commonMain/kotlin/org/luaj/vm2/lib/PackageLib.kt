@@ -21,7 +21,6 @@
  */
 package org.luaj.vm2.lib
 
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.*
 import org.luaj.vm2.internal.*
 import org.luaj.vm2.io.*
@@ -299,7 +298,7 @@ class PackageLib : TwoArgFunction() {
                 if (`is` != null) {
                     try {
                         `is`.close()
-                    } catch (ioe: com.soywiz.luak.compat.java.io.IOException) {
+                    } catch (ioe: IOException) {
                     }
 
                     return LuaValue.valueOf(filename)

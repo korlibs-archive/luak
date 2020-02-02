@@ -2,8 +2,6 @@
 /* JavaCCOptions:STATIC=false,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package org.luaj.vm2.parser
 
-import com.soywiz.luak.compat.java.io.*
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
 import org.luaj.vm2.io.*
 import kotlin.jvm.*

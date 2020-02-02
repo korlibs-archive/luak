@@ -21,7 +21,6 @@
  */
 package org.luaj.vm2.compiler
 
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.LocVars
 import org.luaj.vm2.Lua
 import org.luaj.vm2.LuaError

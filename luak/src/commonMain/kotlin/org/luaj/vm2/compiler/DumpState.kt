@@ -21,16 +21,8 @@
  */
 package org.luaj.vm2.compiler
 
-import com.soywiz.luak.compat.java.*
-import com.soywiz.luak.compat.java.io.*
-
-import org.luaj.vm2.Globals
-import org.luaj.vm2.LoadState
-import org.luaj.vm2.LocVars
-import org.luaj.vm2.Prototype
-import org.luaj.vm2.LuaString
-import org.luaj.vm2.LuaValue
-import kotlin.jvm.*
+import org.luaj.vm2.*
+import org.luaj.vm2.internal.*
 
 /** Class to dump a [Prototype] into an output stream, as part of compiling.
  *

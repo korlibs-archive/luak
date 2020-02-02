@@ -21,10 +21,6 @@
  */
 package org.luaj.vm2
 
-import com.soywiz.luak.compat.java.*
-import com.soywiz.luak.compat.java.io.ByteArrayOutputStream
-import com.soywiz.luak.compat.java.io.PrintStream
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
 
 /**

@@ -2,8 +2,6 @@
 /* JavaCCOptions: */
 package org.luaj.vm2.parser
 
-import com.soywiz.luak.compat.java.lang.*
-
 /** Token Manager Error.  */
 class TokenMgrError : Error {
 

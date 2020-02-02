@@ -1,4 +1,4 @@
-package com.soywiz.luak.compat.java.io
+package org.luaj.vm2.internal
 
 expect abstract class OutputStream() : Closeable {
     abstract fun write(value: Int)

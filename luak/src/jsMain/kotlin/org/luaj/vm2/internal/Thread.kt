@@ -1,4 +1,6 @@
-package com.soywiz.luak.compat.java.lang
+package org.luaj.vm2.internal
+
+import org.luaj.vm2.internal.Runnable
 
 actual class Thread actual constructor(runnable: Runnable, name: String) {
     actual fun start() {

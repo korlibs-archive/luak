@@ -1,6 +1,6 @@
 package org.luaj.vm2.io
 
-import com.soywiz.luak.compat.java.io.*
+import org.luaj.vm2.internal.*
 
 abstract class LuaBinInput() : Closeable {
     abstract fun read(): Int

@@ -21,9 +21,8 @@
  */
 package org.luaj.vm2.ast
 
-import com.soywiz.luak.compat.java.io.ByteArrayOutputStream
-
 import org.luaj.vm2.LuaString
+import org.luaj.vm2.internal.*
 
 object Str {
 

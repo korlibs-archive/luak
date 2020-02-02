@@ -21,7 +21,6 @@
  */
 package org.luaj.vm2.lib.jse
 
-import com.soywiz.luak.compat.java.io.OutputStream
 import org.luaj.vm2.io.*
 import java.io.*
 

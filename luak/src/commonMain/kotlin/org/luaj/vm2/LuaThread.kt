@@ -22,7 +22,7 @@
 package org.luaj.vm2
 
 
-import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.internal.*
 import kotlin.jvm.*
 
 /**
@@ -147,7 +147,8 @@ class LuaThread : LuaValue {
         ) else s.lua_resume(this, args)
     }
 
-    class State internal constructor(private val globals: Globals, lua_thread: LuaThread, val function: LuaValue?) : Runnable {
+    class State internal constructor(private val globals: Globals, lua_thread: LuaThread, val function: LuaValue?) :
+        Runnable {
         @kotlin.jvm.JvmField
         internal val lua_thread: WeakReference<*> =
             WeakReference(lua_thread)

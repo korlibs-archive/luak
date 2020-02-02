@@ -1,6 +1,5 @@
 package org.luaj.vm2.internal
 
-import com.soywiz.luak.compat.java.io.*
 import org.luaj.vm2.io.*
 
 internal expect object JSystem {

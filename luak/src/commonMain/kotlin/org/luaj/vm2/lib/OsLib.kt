@@ -21,9 +21,7 @@
  */
 package org.luaj.vm2.lib
 
-import com.soywiz.luak.compat.java.io.*
 import org.luaj.vm2.internal.LuaDate
-
 import org.luaj.vm2.Buffer
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaTable
