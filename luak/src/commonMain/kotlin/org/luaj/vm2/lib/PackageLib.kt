@@ -23,11 +23,7 @@ package org.luaj.vm2.lib
 
 import com.soywiz.luak.compat.java.io.InputStream
 import com.soywiz.luak.compat.java.lang.*
-
-import org.luaj.vm2.Globals
-import org.luaj.vm2.LuaTable
-import org.luaj.vm2.LuaValue
-import org.luaj.vm2.Varargs
+import org.luaj.vm2.*
 
 /**
  * Subclass of [LibFunction] which implements the lua standard package and module
@@ -123,7 +119,7 @@ class PackageLib : TwoArgFunction() {
         val searchers = LuaTable()
         searchers.set(1, run { preload_searcher = Preload_searcher(); preload_searcher!! })
         searchers.set(2, run { lua_searcher = Lua_searcher(); lua_searcher!! })
-        //searchers.set(3, run { java_searcher = Java_searcher(); java_searcher!! })
+        searchers.set(3, run { java_searcher = Java_searcher(); java_searcher!! })
         package_[_SEARCHERS] = searchers
         package_[_LOADED]["package"] = package_
         env["package"] = package_
@@ -319,13 +315,12 @@ class PackageLib : TwoArgFunction() {
 
     inner class Java_searcher : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
-            /*
             val name = args.checkjstring(1)
             val classname = toClassname(name!!)
             var c: Class<*>? = null
             var v: LuaValue? = null
             try {
-                c = Class.forName(classname)
+                c = Class_forName(classname)
                 v = c!!.newInstance() as LuaValue
                 if (v.isfunction())
                     (v as LuaFunction).initupvalue1(globals!!)
@@ -335,8 +330,6 @@ class PackageLib : TwoArgFunction() {
             } catch (e: Exception) {
                 return LuaValue.valueOf("\n\tjava load failed on '$classname', $e")
             }
-            */
-            TODO()
         }
     }
 
