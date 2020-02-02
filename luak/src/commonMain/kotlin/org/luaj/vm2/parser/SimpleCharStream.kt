@@ -4,6 +4,7 @@ package org.luaj.vm2.parser
 
 import com.soywiz.luak.compat.java.io.*
 import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.internal.*
 import kotlin.jvm.*
 
 /**
@@ -64,27 +65,27 @@ class SimpleCharStream
 
         try {
             if (wrapAround) {
-                JSystem.arraycopy(buffer!!, tokenBegin, newbuffer, 0, bufsize - tokenBegin)
-                JSystem.arraycopy(buffer!!, 0, newbuffer, bufsize - tokenBegin, bufpos)
+                arraycopy(buffer!!, tokenBegin, newbuffer, 0, bufsize - tokenBegin)
+                arraycopy(buffer!!, 0, newbuffer, bufsize - tokenBegin, bufpos)
                 buffer = newbuffer
 
-                JSystem.arraycopy(bufline!!, tokenBegin, newbufline, 0, bufsize - tokenBegin)
-                JSystem.arraycopy(bufline!!, 0, newbufline, bufsize - tokenBegin, bufpos)
+                arraycopy(bufline!!, tokenBegin, newbufline, 0, bufsize - tokenBegin)
+                arraycopy(bufline!!, 0, newbufline, bufsize - tokenBegin, bufpos)
                 bufline = newbufline
 
-                JSystem.arraycopy(bufcolumn!!, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin)
-                JSystem.arraycopy(bufcolumn!!, 0, newbufcolumn, bufsize - tokenBegin, bufpos)
+                arraycopy(bufcolumn!!, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin)
+                arraycopy(bufcolumn!!, 0, newbufcolumn, bufsize - tokenBegin, bufpos)
                 bufcolumn = newbufcolumn
 
                 maxNextCharInd = (run { bufpos += bufsize - tokenBegin; bufpos })
             } else {
-                JSystem.arraycopy(buffer!!, tokenBegin, newbuffer, 0, bufsize - tokenBegin)
+                arraycopy(buffer!!, tokenBegin, newbuffer, 0, bufsize - tokenBegin)
                 buffer = newbuffer
 
-                JSystem.arraycopy(bufline!!, tokenBegin, newbufline, 0, bufsize - tokenBegin)
+                arraycopy(bufline!!, tokenBegin, newbufline, 0, bufsize - tokenBegin)
                 bufline = newbufline
 
-                JSystem.arraycopy(bufcolumn!!, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin)
+                arraycopy(bufcolumn!!, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin)
                 bufcolumn = newbufcolumn
 
                 maxNextCharInd = (run { bufpos -= tokenBegin; bufpos })
@@ -303,13 +304,13 @@ class SimpleCharStream
         val ret = CharArray(len)
 
         if (bufpos + 1 >= len)
-            JSystem.arraycopy(buffer!!, bufpos - len + 1, ret, 0, len)
+            arraycopy(buffer!!, bufpos - len + 1, ret, 0, len)
         else {
-            JSystem.arraycopy(
+            arraycopy(
                 buffer!!, bufsize - (len - bufpos - 1), ret, 0,
                 len - bufpos - 1
             )
-            JSystem.arraycopy(buffer!!, 0, ret, len - bufpos - 1, bufpos + 1)
+            arraycopy(buffer!!, 0, ret, len - bufpos - 1, bufpos + 1)
         }
 
         return ret

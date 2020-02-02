@@ -6,10 +6,6 @@ expect abstract class Reader : Closeable {
     open fun read(cbuf: CharArray): Int
 }
 
-expect open class BufferedReader(r: Reader) : Reader {
-    open fun readLine(): String?
-}
-
 expect open class InputStreamReader : Reader {
     constructor(iss: InputStream, encoding: String?)
     constructor(iss: InputStream)

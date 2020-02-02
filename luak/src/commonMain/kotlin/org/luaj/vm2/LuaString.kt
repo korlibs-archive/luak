@@ -27,6 +27,7 @@ import com.soywiz.luak.compat.java.io.DataOutputStream
 import com.soywiz.luak.compat.java.io.InputStream
 import com.soywiz.luak.compat.java.io.PrintStream
 import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.internal.*
 
 import org.luaj.vm2.lib.MathLib
 import kotlin.jvm.*
@@ -191,8 +192,8 @@ private constructor(
     override fun concatTo(lhs: LuaNumber): LuaValue = concatTo(lhs.strvalue()!!)
     override fun concatTo(lhs: LuaString): LuaValue {
         val b = ByteArray(lhs.m_length + this.m_length)
-        JSystem.arraycopy(lhs.m_bytes, lhs.m_offset, b, 0, lhs.m_length)
-        JSystem.arraycopy(this.m_bytes, this.m_offset, b, lhs.m_length, this.m_length)
+        arraycopy(lhs.m_bytes, lhs.m_offset, b, 0, lhs.m_length)
+        arraycopy(this.m_bytes, this.m_offset, b, lhs.m_length, this.m_length)
         return valueUsing(b, 0, b.size)
     }
 
@@ -335,7 +336,7 @@ private constructor(
      * @param len number of bytes to copy
      */
     fun copyInto(strOffset: Int, bytes: ByteArray, arrayOffset: Int, len: Int) =
-        JSystem.arraycopy(m_bytes, m_offset + strOffset, bytes, arrayOffset, len)
+        arraycopy(m_bytes, m_offset + strOffset, bytes, arrayOffset, len)
 
     /** Java version of strpbrk - find index of any byte that in an accept string.
      * @param accept [LuaString] containing characters to look for.

@@ -6,44 +6,50 @@ actual abstract class InputStream actual constructor() : Closeable {
     actual open fun markSupported(): Boolean = false
     actual open fun mark(i: Int) = Unit
     actual open fun reset() = Unit
-    actual open fun read(b: ByteArray): Int = TODO()
-    actual open fun read(b: ByteArray, i0: Int, n: Int): Int = TODO()
-    actual open fun skip(n: Long): Long = TODO()
-    actual open fun available(): Int = TODO()
-    actual override fun close() {
+    actual open fun read(b: ByteArray, off: Int, len: Int): Int {
+        for (n in 0 until len) {
+            val c = read()
+            if (c < 0) return n
+            b[off + n] = c.toByte()
+        }
+        return len
     }
+    actual open fun read(b: ByteArray): Int = read(b, 0, b.size)
+    actual open fun skip(n: Long): Long {
+        for (cur in 0L until n) if (read() < 0) return cur
+        return n
+    }
+    actual open fun available(): Int = 0
+    actual override fun close() = Unit
 }
 
 actual open class FilterInputStream(val iss: InputStream) : InputStream() {
-    override fun read(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun close() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun read(): Int = iss.read()
+    override fun close() = iss.close()
 }
 
 actual open class DataInputStream actual constructor(iss: InputStream) : FilterInputStream(iss) {
-    actual fun readFully(buf: ByteArray, i: Int, i1: Int) {
+    actual fun readFully(b: ByteArray, off: Int, len: Int) {
+        var count: Int
+        var n = 0
+        while (n < len) {
+            count = iss.read(b, off + n, len - n)
+            if (count < 0) throw EOFException()
+            n += count
+        }
     }
 
-    actual fun readByte(): Byte {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    actual fun readUnsignedByte(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    actual fun readByte(): Byte = iss.read().let { c -> if (c < 0) throw EOFException() else c.toByte() }
+    actual fun readUnsignedByte(): Int = readByte().toInt() and 0xFF
 }
 
-actual open class ByteArrayInputStream actual constructor(buf: ByteArray, offset: Int, size: Int) :
-    InputStream() {
+actual open class ByteArrayInputStream actual constructor(val buf: ByteArray, val start: Int, val size: Int) : InputStream() {
+    var current = 0
+
     override fun read(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (current >= size) return -1
+        return buf[start + current++].toInt() and 0xFF
     }
 
-    override fun close() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun close() = Unit
 }

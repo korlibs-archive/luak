@@ -38,6 +38,7 @@ import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Print
 import org.luaj.vm2.Prototype
 import org.luaj.vm2.Varargs
+import org.luaj.vm2.internal.*
 import kotlin.jvm.*
 
 /**
@@ -495,7 +496,7 @@ class DebugLib : TwoArgFunction() {
             if (calls >= frame.size) {
                 val n = kotlin.math.max(4, frame.size * 3 / 2)
                 val f = arrayOfNulls<CallFrame>(n)
-                JSystem.arraycopy(frame, 0, f, 0, frame.size)
+                arraycopy(frame as Array<CallFrame?>, 0, f, 0, frame.size)
                 for (i in frame.size until n)
                     f[i] = CallFrame()
                 frame = f as Array<CallFrame>

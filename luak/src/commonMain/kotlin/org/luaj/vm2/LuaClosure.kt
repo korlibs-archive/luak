@@ -21,7 +21,7 @@
  */
 package org.luaj.vm2
 
-import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.internal.*
 
 /**
  * Extension of [LuaFunction] which executes lua bytecode.
@@ -119,7 +119,7 @@ class LuaClosure
 
     override fun call(arg: LuaValue): LuaValue {
         val stack = arrayOfNulls<LuaValue>(p.maxstacksize) as Array<LuaValue>
-        JSystem.arraycopy(LuaValue.NILS, 0, stack, 0, p.maxstacksize)
+        arraycopy(LuaValue.NILS, 0, stack, 0, p.maxstacksize)
         for (i in 1 until p.numparams) stack[i] = LuaValue.NIL
         when (p.numparams) {
             0 -> return execute(stack, arg).arg1()

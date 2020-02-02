@@ -7,7 +7,6 @@ expect object JSystem {
     val err: PrintStream
     val `in`: InputStream
     fun exit(code: Int)
-    fun arraycopy(src: Any, srcPos: Int, dst: Any, dstPos: Int, count: Int)
     fun getProperty(key: String, def: String? = null): String?
     fun gc()
     fun totalMemory(): Long

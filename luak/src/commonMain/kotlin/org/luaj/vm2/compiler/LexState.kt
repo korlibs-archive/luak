@@ -32,6 +32,7 @@ import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Prototype
 import org.luaj.vm2.compiler.FuncState.BlockCnt
+import org.luaj.vm2.internal.*
 import org.luaj.vm2.lib.MathLib
 import kotlin.js.*
 
@@ -874,7 +875,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
         }
         fs!!.patchlist(gt.pc, label.pc)
         /* remove goto from pending list */
-        JSystem.arraycopy(gl, g + 1, gl, g, this.dyd.n_gt - g - 1)
+        arraycopy(gl, g + 1, gl, g, this.dyd.n_gt - g - 1)
         gl[--this.dyd.n_gt] = null
     }
 

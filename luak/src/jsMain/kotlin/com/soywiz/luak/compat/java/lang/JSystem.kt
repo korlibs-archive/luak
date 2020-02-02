@@ -20,21 +20,6 @@ actual object JSystem {
         TODO("exit($code)")
     }
 
-    actual fun arraycopy(src: Any, srcPos: Int, dst: Any, dstPos: Int, count: Int) {
-        @Suppress("UNCHECKED_CAST")
-        when (src) {
-            is BooleanArray -> src.copyInto(dst as BooleanArray, dstPos, srcPos, srcPos + count)
-            is ByteArray -> src.copyInto(dst as ByteArray, dstPos, srcPos, srcPos + count)
-            is CharArray -> src.copyInto(dst as CharArray, dstPos, srcPos, srcPos + count)
-            is ShortArray -> src.copyInto(dst as ShortArray, dstPos, srcPos, srcPos + count)
-            is IntArray -> src.copyInto(dst as IntArray, dstPos, srcPos, srcPos + count)
-            is LongArray -> src.copyInto(dst as LongArray, dstPos, srcPos, srcPos + count)
-            is FloatArray -> src.copyInto(dst as FloatArray, dstPos, srcPos, srcPos + count)
-            is DoubleArray -> src.copyInto(dst as DoubleArray, dstPos, srcPos, srcPos + count)
-            is Array<*> -> (src as Array<Any>).copyInto(dst as Array<Any>, dstPos, srcPos, srcPos + count)
-        }
-    }
-
     actual fun getProperty(key: String, def: String?): String? = when (key) {
         "CALLS" -> "0"
         "TRACE" -> "0"

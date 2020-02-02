@@ -23,6 +23,7 @@ package org.luaj.vm2
 
 import com.soywiz.luak.compat.java.lang.*
 import com.soywiz.luak.compat.java.lang.reg.*
+import org.luaj.vm2.internal.*
 import kotlin.jvm.*
 
 /**
@@ -641,7 +642,7 @@ open class LuaTable : LuaValue, Metatable {
                     ++i
                 }
             }
-            JSystem.arraycopy(oldArray, 0, newArray, 0, kotlin.math.min(oldArray.size, newArraySize))
+            arraycopy(oldArray, 0, newArray, 0, kotlin.math.min(oldArray.size, newArraySize))
         } else {
             newArray = array
         }
@@ -1281,7 +1282,7 @@ open class LuaTable : LuaValue, Metatable {
         /** Resize the table  */
         private fun resize(old: Array<LuaValue?>, n: Int): Array<LuaValue?> {
             val v = arrayOfNulls<LuaValue>(n)
-            JSystem.arraycopy(old, 0, v, 0, old.size)
+            arraycopy(old, 0, v, 0, old.size)
             return v
         }
 

@@ -1,37 +1,25 @@
 package com.soywiz.luak.compat.java.io
 
 actual abstract class Reader() : Closeable {
-    actual open fun read(): Int = TODO()
     actual abstract fun read(cbuf: CharArray, off: Int, len: Int): Int
-    actual open fun read(cbuf: CharArray): Int = TODO()
+    actual open fun read(cbuf: CharArray): Int = read(cbuf, 0, cbuf.size)
+    actual open fun read(): Int = CharArray(1).let { c -> read(c); c[0].toInt() }
 }
 
-actual open class BufferedReader actual constructor(val r: Reader) : Reader() {
-    actual open fun readLine(): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+actual open class InputStreamReader actual constructor(val iss: InputStream, val encoding: String?) : Reader() {
+    actual constructor(iss: InputStream) : this(iss, null)
 
     override fun read(cbuf: CharArray, off: Int, len: Int): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // @TODO: This reads ASCII
+        for (n in 0 until len) {
+            val c = read()
+            if (c >= 0) {
+                cbuf[off + n] = c.toChar()
+            }
+            return n
+        }
+        return len
     }
 
-    override fun close() {
-        r.close()
-    }
-}
-
-actual open class InputStreamReader : Reader {
-    actual constructor(iss: InputStream) {
-        TODO()
-    }
-    actual constructor(iss: InputStream, encoding: String?) {
-        TODO()
-    }
-    override fun read(cbuf: CharArray, off: Int, len: Int): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun close() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun close() = iss.close()
 }

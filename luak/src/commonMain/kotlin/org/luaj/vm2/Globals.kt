@@ -23,6 +23,7 @@ package org.luaj.vm2
 
 import com.soywiz.luak.compat.java.io.*
 import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.internal.*
 
 import org.luaj.vm2.lib.BaseLib
 import org.luaj.vm2.lib.DebugLib
@@ -333,11 +334,11 @@ open class Globals : LuaTable() {
         protected abstract fun avail(): Int
         override fun read(): Int = avail().let { a -> if (a <= 0) -1 else 0xff and b[i++].toInt() and 0xFF }
         override fun read(b: ByteArray): Int = read(b, 0, b.size)
-        override fun read(b: ByteArray, i0: Int, n: Int): Int {
+        override fun read(b: ByteArray, off: Int, len: Int): Int {
             val a = avail()
             if (a <= 0) return -1
-            val n_read = kotlin.math.min(a, n)
-            JSystem.arraycopy(this.b, i, b, i0, n_read)
+            val n_read = kotlin.math.min(a, len)
+            arraycopy(this.b, i, b, off, n_read)
             i += n_read
             return n_read
         }
@@ -404,7 +405,7 @@ open class Globals : LuaTable() {
         override fun mark(n: Int) {
             if (i > 0 || n > b.size) {
                 val dest = if (n > b.size) ByteArray(n) else b
-                JSystem.arraycopy(b, i, dest, 0, j - i)
+                arraycopy(b, i, dest, 0, j - i)
                 j -= i
                 i = 0
                 b = dest
