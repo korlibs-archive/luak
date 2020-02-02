@@ -11,7 +11,7 @@ abstract class LuaReader : Closeable {
             if (c >= 0) {
                 cbuf[off + n] = c.toChar()
             } else {
-                return n
+                return if (n == 0) -1 else n
             }
         }
         return len
@@ -36,7 +36,7 @@ open class StrLuaReader(val s: String) : LuaReader() {
 
 
 // @TODO: Move to Java. Use UTF-8
-open class InputStreamLuaReader(val iss: InputStream, val encoding: String? = null) : LuaReader() {
+open class InputStreamLuaReader(val iss: LuaBinInput, val encoding: String? = null) : LuaReader() {
     init {
         if (encoding != null) {
             error("Unsupported encoding $encoding")
@@ -45,3 +45,5 @@ open class InputStreamLuaReader(val iss: InputStream, val encoding: String? = nu
     override fun read(): Int = iss.read()
     override fun close() = iss.close()
 }
+
+fun LuaBinInput.reader(encoding: String? = null) = InputStreamLuaReader(this, encoding)

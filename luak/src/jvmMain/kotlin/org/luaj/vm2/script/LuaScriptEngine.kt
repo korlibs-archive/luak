@@ -65,15 +65,14 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
     override fun compile(script: Reader): CompiledScript {
         try {
-            val `is` = Utf8Encoder(script)
             try {
                 val g = ctx.globals
-                val f = g.load(script.toLuaReader(), "script").checkfunction()
+                val f = g.load(script.toLua(), "script").checkfunction()
                 return LuajCompiledScript(f!!, g)
             } catch (lee: LuaError) {
                 throw ScriptException(lee.message)
             } finally {
-                `is`.close()
+                script.close()
             }
         } catch (e: Exception) {
             throw ScriptException("eval threw $e")
@@ -114,7 +113,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
     // ------ convert char stream to byte stream for lua compiler -----
 
-    inner class Utf8Encoder constructor(private val r: Reader) : InputStream() {
+    inner class Utf8Encoder constructor(private val r: Reader) : LuaBinInput() {
         private val buf = IntArray(2)
         private var n: Int = 0
 

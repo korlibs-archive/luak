@@ -49,7 +49,7 @@ class LoadOrderTest {
             return arrayOf(LuaString.valueOf("foo"))
         }
 
-        override fun launch(script: InputStream, arg: Array<Any>?): Array<Any?>? {
+        override fun launch(script: LuaBinInput, arg: Array<Any>?): Array<Any?>? {
             return null
         }
 

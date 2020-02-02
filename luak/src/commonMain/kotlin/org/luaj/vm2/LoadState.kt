@@ -22,6 +22,7 @@
 package org.luaj.vm2
 
 import com.soywiz.luak.compat.java.io.*
+import org.luaj.vm2.io.*
 
 /**
  * Class to undump compiled lua bytecode into a [Prototype] instances.
@@ -92,7 +93,7 @@ import com.soywiz.luak.compat.java.io.*
 class LoadState
 /** Private constructor for create a load state  */
 private constructor(
-    stream: InputStream,
+    stream: LuaBinInput,
     /** Name of what is being loaded?  */
     internal var name: String
 ) {
@@ -108,7 +109,7 @@ private constructor(
     private var luacNumberFormat: Int = 0
 
     /** input stream from which we are loading  */
-    val `is`: DataInputStream = DataInputStream(stream)
+    val `is`: LuaBinInput = stream
 
     /** Read buffer  */
     private var buf = ByteArray(512)
@@ -314,7 +315,7 @@ private constructor(
 
     private class GlobalsUndumper : Globals.Undumper {
 
-        override fun undump(stream: InputStream, chunkname: String): Prototype? {
+        override fun undump(stream: LuaBinInput, chunkname: String): Prototype? {
             return LoadState.undump(stream, chunkname)
         }
     }
@@ -416,7 +417,7 @@ private constructor(
          * @com.soywiz.luak.compat.java.Throws IOException if an IOException occurs
          */
 
-         fun undump(stream: InputStream, chunkname: String): Prototype? {
+         fun undump(stream: LuaBinInput, chunkname: String): Prototype? {
             // check rest of signature
             if (stream.read() != LUA_SIGNATURE[0].toInt()
                 || stream.read() != LUA_SIGNATURE[1].toInt()

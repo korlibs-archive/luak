@@ -21,6 +21,7 @@
  */
 package org.luaj.vm2
 
+import org.luaj.vm2.io.*
 import java.io.*
 import kotlin.test.*
 
@@ -33,7 +34,7 @@ import kotlin.test.*
 class ErrorsTest : ScriptDrivenTest(ScriptDrivenTest.PlatformType.JSE, dir) {
 
     fun testBaseLibArgs() {
-        globals.STDIN = object : InputStream() {
+        globals.STDIN = object : LuaBinInput() {
             override fun read(): Int = -1
         }
         runTest("baselibargs")

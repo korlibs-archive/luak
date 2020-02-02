@@ -22,13 +22,14 @@
 package org.luaj.vm2
 
 import org.luaj.vm2.Globals.BufferedStream
+import org.luaj.vm2.io.*
 import java.io.ByteArrayInputStream
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BufferedStreamTest {
     private fun NewBufferedStream(buflen: Int, contents: String): BufferedStream =
-        BufferedStream(buflen, ByteArrayInputStream(contents.toByteArray()))
+        BufferedStream(buflen, BytesLuaBinInput(contents.toByteArray()))
 
     @Test
     fun testReadEmptyStream() {

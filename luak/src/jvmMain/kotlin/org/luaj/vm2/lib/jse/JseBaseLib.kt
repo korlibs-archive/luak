@@ -28,6 +28,7 @@ import java.io.InputStream
 
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaValue
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.BaseLib
 import org.luaj.vm2.lib.LibFunction
 import org.luaj.vm2.lib.ResourceFinder
@@ -92,7 +93,7 @@ class JseBaseLib : BaseLib() {
     </P> */
     override fun call(modname: LuaValue, env: LuaValue): LuaValue {
         super.call(modname, env)
-        env.checkglobals()!!.STDIN = System.`in`
+        env.checkglobals()!!.STDIN = System.`in`.toLua()
         return env
     }
 
@@ -113,12 +114,12 @@ class JseBaseLib : BaseLib() {
      * @param filename
      * @return InputStream, or null if not found.
      */
-    override fun findResource(filename: String): InputStream? {
+    override fun findResource(filename: String): LuaBinInput? {
         val f = File(filename)
         if (!f.exists())
             return super.findResource(filename)
         try {
-            return FileInputStream(f)
+            return f.readBytes().toLuaBinInput()
         } catch (ioe: IOException) {
             return null
         }

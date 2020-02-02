@@ -21,15 +21,11 @@
  */
 package org.luaj.vm2.server
 
-import com.soywiz.luak.compat.java.io.InputStream
-
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaValue
-import org.luaj.vm2.Varargs
 import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.CoerceJavaToLua
 import org.luaj.vm2.lib.jse.JsePlatform
-import java.io.*
 
 /**
  * Default [Launcher] instance that creates standard globals
@@ -55,7 +51,7 @@ class DefaultLauncher : Launcher {
     override fun launch(script: String, arg: Array<Any>?): Array<Any?>? = launchChunk(g.load(script, "main"), arg!!)
 
     /** Launches the script with chunk name 'main' and loading using modes 'bt'  */
-    override fun launch(script: InputStream, arg: Array<Any>?): Array<Any?>? =
+    override fun launch(script: LuaBinInput, arg: Array<Any>?): Array<Any?>? =
         launchChunk(g.load(script, "main", "bt", g), arg!!)
 
     /** Launches the script with chunk name 'main'  */

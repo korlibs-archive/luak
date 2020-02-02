@@ -24,6 +24,7 @@ package org.luaj.vm2.lib.jse
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaError
 import org.luaj.vm2.LuaString
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.IoLib
 import org.luaj.vm2.lib.LibFunction
 import java.io.BufferedInputStream
@@ -114,7 +115,7 @@ class JseIoLib : IoLib() {
         return if ("w" == mode)
             FileImpl(p.outputStream)
         else
-            FileImpl(p.inputStream)
+            FileImpl(p.inputStream.toLua())
     }
 
 
@@ -131,19 +132,19 @@ class JseIoLib : IoLib() {
 
     private inner class FileImpl private constructor(
         private val file: RandomAccessFile?,
-        `is`: InputStream?,
+        `is`: LuaBinInput?,
         private val os: OutputStream?
     ) : IoLib.File() {
-        private val `is`: InputStream?
+        private val `is`: LuaBinInput?
         private var closed = false
         private var nobuffer = false
 
         init {
-            this.`is` = if (`is` != null) if (`is`.markSupported()) `is` else BufferedInputStream(`is`) else null
+            this.`is` = if (`is` != null) if (`is`.markSupported()) `is` else (`is`.buffered()) else null
         }
 
         constructor(f: RandomAccessFile) : this(f, null, null) {}
-        constructor(i: InputStream) : this(null, i, null) {}
+        constructor(i: LuaBinInput) : this(null, i, null) {}
         constructor(o: OutputStream) : this(null, null, o) {}
 
         override fun tojstring(): String {

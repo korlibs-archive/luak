@@ -1,6 +1,7 @@
 package org.luaj.vm2.compiler
 
 import org.luaj.vm2.*
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.*
 import java.io.*
 import java.net.*
@@ -29,8 +30,8 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
     }
 
     protected fun pathOfFile(file: String): String = "$jar$dir/$file"
-    protected fun inputStreamOfPath(path: String): InputStream = URL(path).openStream()
-    protected fun inputStreamOfFile(file: String): InputStream = inputStreamOfPath(pathOfFile(file))
+    protected fun inputStreamOfPath(path: String): LuaBinInput = URL(path).readBytes().toLuaBinInput()
+    protected fun inputStreamOfFile(file: String): LuaBinInput = inputStreamOfPath(pathOfFile(file))
 
     protected open fun doTest(file: String) {
         try {
@@ -39,8 +40,7 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
             val lua = bytesFromJar(path)
 
             // compile in memory
-            val `is` = ByteArrayInputStream(lua)
-            val p = globals!!.loadPrototype(`is`, "@$file", "bt")
+            val p = globals.loadPrototype(lua.toLuaBinInput(), "@$file", "bt")
             val actual = protoToString(p)
 
             // load expected value from jar
@@ -84,8 +84,7 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
     }
 
     protected fun loadFromBytes(bytes: ByteArray, script: String): Prototype {
-        val `is` = ByteArrayInputStream(bytes)
-        return globals!!.loadPrototype(`is`, script, "b")
+        return globals!!.loadPrototype(BytesLuaBinInput(bytes), script, "b")
     }
 
     protected fun protoToString(p: Prototype): String {

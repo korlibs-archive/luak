@@ -125,17 +125,17 @@ object lua {
             var i = 0
             while (i < args.size) {
                 if (!processing || !args[i].startsWith("-")) {
-                    processScript(FileInputStream(args[i]), args[i], args, i)
+                    processScript(File(args[i]).readBytes().toLuaBinInput(), args[i], args, i)
                     break
                 } else if ("-" == args[i]) {
-                    processScript(System.`in`, "=stdin", args, i)
+                    processScript(System.`in`.toLua(), "=stdin", args, i)
                     break
                 } else {
                     when (args[i][1]) {
                         'l', 'c' -> ++i
                         'e' -> {
                             ++i
-                            processScript(ByteArrayInputStream(args[i].toByteArray()), "string", args, i)
+                            processScript(args[i].toByteArray().toLuaBinInput(), "string", args, i)
                         }
                         '-' -> processing = false
                     }
@@ -173,14 +173,14 @@ object lua {
     }
 
     @Throws(IOException::class)
-    private fun processScript(script: InputStream, chunkname: String, args: Array<String>?, firstarg: Int) {
+    private fun processScript(script: LuaBinInput, chunkname: String, args: Array<String>?, firstarg: Int) {
         var script = script
         try {
             val c: LuaValue
             try {
-                script = BufferedInputStream(script)
+                script = script.buffered()
                 c = if (encoding != null)
-                    globals!!.load(InputStreamReader(script, encoding!!).toLuaReader(), chunkname)
+                    globals!!.load(script.reader(encoding!!), chunkname)
                 else
                     globals!!.load(script, chunkname, "bt", globals)
             } finally {
@@ -215,7 +215,7 @@ object lua {
             print("> ")
             System.out.flush()
             val line = reader.readLine() ?: return
-            processScript(ByteArrayInputStream(line.toByteArray()), "=stdin", null, 0)
+            processScript(line.toByteArray().toLuaBinInput(), "=stdin", null, 0)
         }
     }
 }

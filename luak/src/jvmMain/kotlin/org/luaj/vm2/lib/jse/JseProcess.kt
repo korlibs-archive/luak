@@ -21,21 +21,21 @@
  */
 package org.luaj.vm2.lib.jse
 
-import com.soywiz.luak.compat.java.io.InputStream
 import com.soywiz.luak.compat.java.io.OutputStream
+import org.luaj.vm2.io.*
 import java.io.*
 
 /** Analog of Process that pipes input and output to client-specified streams.
  */
 class JseProcess private constructor(
     internal val process: Process,
-    stdin: InputStream?,
+    stdin: LuaBinInput?,
     stdout: OutputStream?,
     stderr: OutputStream?
 ) {
     @kotlin.jvm.JvmField internal val input: Thread? = if (stdin == null) null else copyBytes(stdin, process.outputStream, null, process.outputStream)
-    @kotlin.jvm.JvmField internal val output: Thread? = if (stdout == null) null else copyBytes(process.inputStream, stdout, process.inputStream, null)
-    @kotlin.jvm.JvmField internal val error: Thread? = if (stderr == null) null else copyBytes(process.errorStream, stderr, process.errorStream, null)
+    @kotlin.jvm.JvmField internal val output: Thread? = if (stdout == null) null else copyBytes(process.inputStream.toLua(), stdout, process.inputStream.toLua(), null)
+    @kotlin.jvm.JvmField internal val error: Thread? = if (stderr == null) null else copyBytes(process.errorStream.toLua(), stderr, process.errorStream.toLua(), null)
 
     /** Construct a process around a command, with specified streams to redirect input and output to.
      *
@@ -49,7 +49,7 @@ class JseProcess private constructor(
 
     constructor(
         cmd: Array<String>,
-        stdin: InputStream,
+        stdin: LuaBinInput,
         stdout: OutputStream,
         stderr: OutputStream
     ) : this(Runtime.getRuntime().exec(cmd), stdin, stdout, stderr) {
@@ -67,7 +67,7 @@ class JseProcess private constructor(
 
     constructor(
         cmd: String,
-        stdin: InputStream?,
+        stdin: LuaBinInput?,
         stdout: OutputStream?,
         stderr: OutputStream?
     ) : this(Runtime.getRuntime().exec(cmd), stdin, stdout, stderr) {
@@ -94,8 +94,8 @@ class JseProcess private constructor(
 
     /** Create a thread to copy bytes from input to output.  */
     private fun copyBytes(
-        input: InputStream,
-        output: OutputStream, ownedInput: InputStream?,
+        input: LuaBinInput,
+        output: OutputStream, ownedInput: LuaBinInput?,
         ownedOutput: OutputStream?
     ): Thread {
         val t = CopyThread(output, ownedOutput, ownedInput, input)
@@ -105,7 +105,7 @@ class JseProcess private constructor(
 
     class CopyThread constructor(
         private val output: OutputStream, private val ownedOutput: OutputStream?,
-        private val ownedInput: InputStream?, private val input: InputStream
+        private val ownedInput: LuaBinInput?, private val input: LuaBinInput
     ) : Thread() {
 
         override fun run() {

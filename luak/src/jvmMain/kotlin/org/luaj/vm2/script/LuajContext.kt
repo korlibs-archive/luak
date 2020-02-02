@@ -25,6 +25,7 @@ import javax.script.ScriptContext
 import javax.script.SimpleScriptContext
 
 import org.luaj.vm2.Globals
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.JsePlatform
 import java.io.*
 
@@ -60,7 +61,7 @@ class LuajContext
     val globals: Globals = if (createDebugGlobals) JsePlatform.debugGlobals() else JsePlatform.standardGlobals()
 
     /** The initial value of globals.STDIN  */
-    private val stdin: InputStream = globals.STDIN
+    private val stdin: LuaBinInput = globals.STDIN
     /** The initial value of globals.STDOUT  */
     private val stdout: PrintStream = globals.STDOUT
     /** The initial value of globals.STDERR  */
@@ -86,7 +87,7 @@ class LuajContext
         override fun flush() = w.flush()
     }
 
-    internal class ReaderInputStream(val r: Reader) : InputStream() {
+    internal class ReaderInputStream(val r: Reader) : LuaBinInput() {
         override fun read(): Int = r.read()
     }
 }

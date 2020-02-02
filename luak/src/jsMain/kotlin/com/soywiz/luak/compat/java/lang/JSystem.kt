@@ -1,6 +1,7 @@
 package com.soywiz.luak.compat.java.lang
 
 import com.soywiz.luak.compat.java.io.*
+import org.luaj.vm2.io.*
 
 actual object JSystem {
     actual val out: PrintStream by lazy {
@@ -14,7 +15,7 @@ actual object JSystem {
         })
     }
     actual val err: PrintStream get() = out
-    actual val `in`: InputStream get() = TODO()
+    actual val `in`: LuaBinInput get() = TODO()
 
     actual fun exit(code: Int) {
         TODO("exit($code)")

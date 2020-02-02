@@ -21,6 +21,7 @@
  */
 package org.luaj.vm2
 
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.*
 import org.luaj.vm2.lib.jse.*
 import java.io.*
@@ -52,8 +53,8 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
     }
 
     // ResourceFinder implementation.
-    override fun findResource(filename: String): InputStream? {
-        var `is`: InputStream? = findInPlainFile(filename)
+    override fun findResource(filename: String): LuaBinInput? {
+        var `is`: LuaBinInput? = findInPlainFile(filename)
         if (`is` != null) return `is`
         `is` = findInPlainFileAsResource("", filename)
         if (`is` != null) return `is`
@@ -67,15 +68,15 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
         return `is`
     }
 
-    private fun findInPlainFileAsResource(prefix: String, filename: String): InputStream? {
-        return javaClass.getResourceAsStream(prefix + subdir + filename)
+    private fun findInPlainFileAsResource(prefix: String, filename: String): LuaBinInput? {
+        return javaClass.getResourceAsStream(prefix + subdir + filename)?.readBytes()?.toLuaBinInput()
     }
 
-    private fun findInPlainFile(filename: String): InputStream? {
+    private fun findInPlainFile(filename: String): LuaBinInput? {
         try {
             val f = File(zipdir + subdir + filename)
             if (f.exists())
-                return FileInputStream(f)
+                return f.readBytes().toLuaBinInput()
         } catch (ioe: IOException) {
             ioe.printStackTrace()
         }
@@ -83,7 +84,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
         return null
     }
 
-    private fun findInZipFileAsPlainFile(filename: String): InputStream? {
+    private fun findInZipFileAsPlainFile(filename: String): LuaBinInput? {
         val zip: URL
         val file = File(zipdir + zipfile)
         try {
@@ -91,7 +92,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
                 zip = file.toURI().toURL()
                 val path = "jar:" + zip.toExternalForm() + "!/" + subdir + filename
                 val url = URL(path)
-                return url.openStream()
+                return url.openStream().readBytes().toLuaBinInput()
             }
         } catch (e: MalformedURLException) {
             e.printStackTrace()
@@ -105,14 +106,14 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
     }
 
 
-    private fun findInZipFileAsResource(prefix: String, filename: String): InputStream? {
+    private fun findInZipFileAsResource(prefix: String, filename: String): LuaBinInput? {
         var zip: URL? = null
         zip = javaClass.getResource(zipfile)
         if (zip != null)
             try {
                 val path = "jar:" + zip.toExternalForm() + "!/" + subdir + filename
                 val url = URL(path)
-                return url.openStream()
+                return url.openStream().readBytes().toLuaBinInput()
             } catch (ioe: IOException) {
                 ioe.printStackTrace()
             }
@@ -203,7 +204,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
     }
 
     @Throws(IOException::class)
-    private fun readString(`is`: InputStream): String {
+    private fun readString(`is`: LuaBinInput): String {
         val baos = ByteArrayOutputStream()
         copy(`is`, baos)
         return String(baos.toByteArray())
@@ -216,7 +217,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
         internal val zipfile = "luaj3.0-tests.zip"
 
         @Throws(IOException::class, InterruptedException::class)
-        fun collectProcessOutput(cmd: Array<String>, input: InputStream): String {
+        fun collectProcessOutput(cmd: Array<String>, input: LuaBinInput): String {
             val r = Runtime.getRuntime()
             val baos = ByteArrayOutputStream()
             JseProcess(cmd, input, baos, System.err).waitFor()
@@ -224,7 +225,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
         }
 
         @Throws(IOException::class)
-        private fun copy(`is`: InputStream, os: OutputStream) {
+        private fun copy(`is`: LuaBinInput, os: OutputStream) {
             val buf = ByteArray(1024)
             var r: Int
             while (run {

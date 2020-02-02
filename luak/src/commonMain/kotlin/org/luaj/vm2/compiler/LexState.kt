@@ -33,11 +33,12 @@ import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Prototype
 import org.luaj.vm2.compiler.FuncState.BlockCnt
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.MathLib
 import kotlin.js.*
 
 @Suppress("MemberVisibilityCanBePrivate")
-class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /* input stream */) : Constants() {
+class LexState(internal var L: LuaC.CompileState, internal var z: LuaBinInput  /* input stream */) : Constants() {
 
     internal var current: Int = 0  /* current character (charint) */
     internal var linenumber: Int = 0  /* input line counter */
@@ -175,7 +176,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
             syntaxerror("chunk has too many lines")
     }
 
-    internal fun setinput(L: LuaC.CompileState, firstByte: Int, z: InputStream, source: LuaString) {
+    internal fun setinput(L: LuaC.CompileState, firstByte: Int, z: LuaBinInput, source: LuaString) {
         this.decpoint = '.'.toByte()
         this.L = L
         this.lookahead.token = TK_EOS /* no look-ahead token */

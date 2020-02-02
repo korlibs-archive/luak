@@ -21,9 +21,8 @@
  */
 package org.luaj.vm2.lib
 
-import com.soywiz.luak.compat.java.io.InputStream
-
-import org.luaj.vm2.Globals
+import org.luaj.vm2.*
+import org.luaj.vm2.io.*
 
 /**
  * Interface for opening application resource files such as scripts sources.
@@ -65,5 +64,5 @@ interface ResourceFinder {
      * @param filename
      * @return InputStream, or null if not found.
      */
-    fun findResource(filename: String): InputStream?
+    fun findResource(filename: String): LuaBinInput?
 }

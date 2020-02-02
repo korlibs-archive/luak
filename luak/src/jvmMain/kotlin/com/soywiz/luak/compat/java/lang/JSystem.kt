@@ -1,12 +1,13 @@
 package com.soywiz.luak.compat.java.lang
 
 import com.soywiz.luak.compat.java.io.*
+import org.luaj.vm2.io.*
 import kotlin.system.*
 
 actual object JSystem {
     actual val out: PrintStream get() = System.out
     actual val err: PrintStream get() = System.err
-    actual val `in`: InputStream get() = System.`in`
+    actual val `in`: LuaBinInput get() = System.`in`.toLua()
 
     actual fun exit(code: Int): Unit = exitProcess(code)
     actual fun getProperty(key: String, def: String?): String? = System.getProperty(key, def)

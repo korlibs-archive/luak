@@ -25,6 +25,7 @@ import org.luaj.vm2.*
 import com.soywiz.luak.compat.java.*
 import com.soywiz.luak.compat.java.io.*
 import com.soywiz.luak.compat.java.lang.*
+import org.luaj.vm2.io.*
 
 /**
  * Subclass of [LibFunction] which implements the lua basic library functions.
@@ -125,7 +126,7 @@ open class BaseLib : TwoArgFunction(), ResourceFinder {
      *
      * Tries to open the file as a resource, which can work for JSE and JME.
      */
-    override fun findResource(filename: String): InputStream? {
+    override fun findResource(filename: String): LuaBinInput? {
         return this::class.getResourceAsStreamPortable(if (filename.startsWith("/")) filename else "/$filename")
     }
 
@@ -208,7 +209,7 @@ open class BaseLib : TwoArgFunction(), ResourceFinder {
             val env = args.optvalue(4, globals!!)
             return loadStream(
                 if (ld.isstring())
-                    ld.strvalue()!!.toInputStream()
+                    ld.strvalue()!!.toLuaBinInput()
                 else
                     StringInputStream(ld.checkfunction()!!), source, mode, env
             )
@@ -460,7 +461,7 @@ open class BaseLib : TwoArgFunction(), ResourceFinder {
         }
     }
 
-    fun loadStream(`is`: InputStream?, chunkname: String?, mode: String?, env: LuaValue?): Varargs {
+    fun loadStream(`is`: LuaBinInput?, chunkname: String?, mode: String?, env: LuaValue?): Varargs {
         try {
             return if (`is` == null) LuaValue.varargsOf(
                 LuaValue.NIL,
@@ -473,7 +474,7 @@ open class BaseLib : TwoArgFunction(), ResourceFinder {
     }
 
 
-    private class StringInputStream internal constructor(internal val func: LuaValue) : InputStream() {
+    private class StringInputStream internal constructor(internal val func: LuaValue) : LuaBinInput() {
         internal var bytes: ByteArray = byteArrayOf()
         internal var offset: Int = 0
         internal var remaining = 0

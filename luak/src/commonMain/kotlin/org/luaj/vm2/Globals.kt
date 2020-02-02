@@ -21,7 +21,6 @@
  */
 package org.luaj.vm2
 
-import com.soywiz.luak.compat.java.io.*
 import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
 import org.luaj.vm2.io.*
@@ -172,13 +171,13 @@ open class Globals : LuaTable() {
     /** Interface for module that converts lua source text into a prototype.  */
     interface Compiler {
         /** Compile lua source into a Prototype. The InputStream is assumed to be in UTF-8.  */
-        fun compile(stream: InputStream, chunkname: String): Prototype
+        fun compile(stream: LuaBinInput, chunkname: String): Prototype
     }
 
     /** Interface for module that loads lua binary chunk into a prototype.  */
     interface Undumper {
         /** Load the supplied input stream into a prototype.  */
-        fun undump(stream: InputStream, chunkname: String): Prototype?
+        fun undump(stream: LuaBinInput, chunkname: String): Prototype?
     }
 
     /** Check that this object is a Globals object, and return it, otherwise throw an error.  */
@@ -250,7 +249,7 @@ open class Globals : LuaTable() {
      * @param mode String containing 'b' or 't' or both to control loading as binary or text or either.
      * @param environment LuaTable to be used as the environment for the loaded function.
      */
-    fun load(`is`: InputStream, chunkname: String, mode: String, environment: LuaValue): LuaValue {
+    fun load(`is`: LuaBinInput, chunkname: String, mode: String, environment: LuaValue): LuaValue {
         try {
             return loader!!.load(loadPrototype(`is`, chunkname, mode), chunkname, environment)
         } catch (l: LuaError) {
@@ -268,7 +267,7 @@ open class Globals : LuaTable() {
      * @param mode String containing 'b' or 't' or both to control loading as binary or text or either.
      */
 
-    fun loadPrototype(`is`: InputStream, chunkname: String, mode: String): Prototype {
+    fun loadPrototype(`is`: LuaBinInput, chunkname: String, mode: String): Prototype {
         var `is` = `is`
         if (mode.indexOf('b') >= 0) {
             if (undumper == null) LuaValue.error("No undumper.")
@@ -294,7 +293,7 @@ open class Globals : LuaTable() {
      * The input is assumed to be UTf-8, but since bytes in the range 128-255 are passed along as
      * literal bytes, any ASCII-compatible encoding such as ISO 8859-1 may also be used.
      */
-    fun compilePrototype(stream: InputStream, chunkname: String): Prototype {
+    fun compilePrototype(stream: LuaBinInput, chunkname: String): Prototype {
         if (compiler == null) LuaValue.error("No compiler.")
         return compiler!!.compile(stream, chunkname)
     }
@@ -312,14 +311,13 @@ open class Globals : LuaTable() {
     /* Abstract base class to provide basic buffered input storage and delivery.
 	 * This class may be moved to its own package in the future.
 	 */
-    internal abstract class AbstractBufferedStream protected constructor(buflen: Int) : InputStream() {
+    internal abstract class AbstractBufferedStream protected constructor(buflen: Int) : LuaBinInput() {
         protected var b: ByteArray = ByteArray(buflen)
         protected var i = 0
         protected var j = 0
 
         protected abstract fun avail(): Int
         override fun read(): Int = avail().let { a -> if (a <= 0) -1 else 0xff and b[i++].toInt() and 0xFF }
-        override fun read(b: ByteArray): Int = read(b, 0, b.size)
         override fun read(b: ByteArray, off: Int, len: Int): Int {
             val a = avail()
             if (a <= 0) return -1
@@ -363,8 +361,8 @@ open class Globals : LuaTable() {
      * as well as speed up normal compilation and reading of lua scripts.
      * This class may be moved to its own package in the future.
      */
-    internal class BufferedStream(buflen: Int, private val s: InputStream) : AbstractBufferedStream(buflen) {
-        constructor(s: InputStream) : this(128, s)
+    internal class BufferedStream(buflen: Int, private val s: LuaBinInput) : AbstractBufferedStream(buflen) {
+        constructor(s: LuaBinInput) : this(128, s)
 
         override fun avail(): Int {
             if (i < j) return j - i

@@ -30,6 +30,7 @@ import org.luaj.vm2.LuaFunction
 import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Prototype
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.BaseLib
 
 /**
@@ -88,7 +89,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
      * @com.soywiz.luak.compat.java.Throws IOException
      */
 
-    override fun compile(stream: InputStream, chunkname: String): Prototype {
+    override fun compile(stream: LuaBinInput, chunkname: String): Prototype {
         return CompileState().luaY_parser(stream, chunkname)
     }
 
@@ -102,7 +103,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
         " Use Globals.load(InputString, String, String) instead, \n\t  or LuaC.compile(InputStream, String) and construct LuaClosure directly.", ReplaceWith("LuaClosure(compile(stream, chunkname), globals)", "org.luaj.vm2.LuaClosure")
     )
 
-    fun load(stream: InputStream, chunkname: String, globals: Globals): LuaValue {
+    fun load(stream: LuaBinInput, chunkname: String, globals: Globals): LuaValue {
         return LuaClosure(compile(stream, chunkname), globals)
     }
 
@@ -113,7 +114,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
 
         /** Parse the input  */
 
-        fun luaY_parser(z: InputStream, name: String): Prototype {
+        fun luaY_parser(z: LuaBinInput, name: String): Prototype {
             val lexstate = LexState(this, z)
             val funcstate = FuncState()
             // lexstate.buff = buff;

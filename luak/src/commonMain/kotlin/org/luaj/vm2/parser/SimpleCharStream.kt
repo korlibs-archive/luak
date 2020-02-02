@@ -256,7 +256,7 @@ class SimpleCharStream
 
     @JvmOverloads
     constructor(
-        dstream: InputStream, encoding: String?, startline: Int = 1,
+        dstream: LuaBinInput, encoding: String?, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) : this(
         if (encoding == null) InputStreamLuaReader(dstream) else InputStreamLuaReader(dstream, encoding),
@@ -268,7 +268,7 @@ class SimpleCharStream
     /** Constructor.  */
     @JvmOverloads
     constructor(
-        dstream: InputStream, startline: Int = 1,
+        dstream: LuaBinInput, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) : this(InputStreamLuaReader(dstream), startline, startcolumn, buffersize) {
     }
@@ -277,7 +277,7 @@ class SimpleCharStream
 
     @JvmOverloads
     fun ReInit(
-        dstream: InputStream, encoding: String?, startline: Int = 1,
+        dstream: LuaBinInput, encoding: String?, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) {
         ReInit(if (encoding == null) InputStreamLuaReader(dstream) else InputStreamLuaReader(dstream, encoding), startline, startcolumn, buffersize)
@@ -286,7 +286,7 @@ class SimpleCharStream
     /** Reinitialise.  */
     @JvmOverloads
     fun ReInit(
-        dstream: InputStream, startline: Int = 1,
+        dstream: LuaBinInput, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) {
         ReInit(InputStreamLuaReader(dstream), startline, startcolumn, buffersize)

@@ -21,9 +21,9 @@
  */
 package org.luaj.vm2.lib
 
-import com.soywiz.luak.compat.java.io.InputStream
 import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.*
+import org.luaj.vm2.io.*
 
 /**
  * Subclass of [LibFunction] which implements the lua standard package and module
@@ -239,7 +239,7 @@ class PackageLib : TwoArgFunction() {
     inner class Lua_searcher : VarArgFunction() {
         override fun invoke(args: Varargs): Varargs {
             val name = args.checkstring(1)
-            val `is`: InputStream? = null
+            val `is`: LuaBinInput? = null
 
             // get package path
             val path = package_!![_PATH]!!

@@ -106,9 +106,9 @@ private constructor(args: Array<String>) {
                 while (i < args.size) {
                     if (!processing || !args[i].startsWith("-")) {
                         val chunkname = args[i].substring(0, args[i].length - 4)
-                        processScript(globals, FileInputStream(args[i]), chunkname, fos)
+                        processScript(globals, File(args[i]).readBytes().toLuaBinInput(), chunkname, fos)
                     } else if (args[i].length <= 1) {
-                        processScript(globals, System.`in`, "=stdin", fos)
+                        processScript(globals, System.`in`.toLua(), "=stdin", fos)
                     } else {
                         when (args[i][1]) {
                             'o', 'c' -> ++i
@@ -129,13 +129,13 @@ private constructor(args: Array<String>) {
     }
 
     @Throws(IOException::class)
-    private fun processScript(globals: Globals, script: InputStream, chunkname: String, out: OutputStream) {
+    private fun processScript(globals: Globals, script: LuaBinInput, chunkname: String, out: OutputStream) {
         var script = script
         try {
             // create the chunk
-            script = BufferedInputStream(script)
+            script = (script).buffered()
             val chunk = if (encoding != null)
-                globals.compilePrototype(InputStreamReader(script, encoding!!).toLuaReader(), chunkname)
+                globals.compilePrototype(script.reader(encoding!!), chunkname)
             else
                 globals.compilePrototype(script, chunkname)
 

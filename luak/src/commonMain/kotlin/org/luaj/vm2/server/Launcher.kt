@@ -22,7 +22,6 @@
 package org.luaj.vm2.server
 
 import org.luaj.vm2.io.*
-import java.io.*
 
 /** Interface to launch lua scripts using the [LuajClassLoader].
  * <P>
@@ -60,7 +59,7 @@ interface Launcher {
      * @param arg Optional arguments supplied to the script.
      * @return return values from the script.
      */
-    fun launch(script: InputStream, arg: Array<Any>?): Array<Any?>?
+    fun launch(script: LuaBinInput, arg: Array<Any>?): Array<Any?>?
 
     /** Launch a script from a Reader.
      *

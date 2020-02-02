@@ -119,7 +119,7 @@ class DumpLoadEndianIntTest {
             val dumped = baos.toByteArray()
 
             // load again using compiler
-            val `is` = ByteArrayInputStream(dumped)
+            val `is` = BytesLuaBinInput(dumped)
             f = globals!!.load(`is`, "dumped", "b", globals!!).checkfunction()
             r = f!!.call()
             actual = r.tojstring()
