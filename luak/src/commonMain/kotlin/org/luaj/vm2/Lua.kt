@@ -110,31 +110,31 @@ open class Lua {
         /*
 	** the following macros help to manipulate instructions
 	*/
-        @kotlin.jvm.JvmStatic fun GET_OPCODE(i: Int): Int {
+         fun GET_OPCODE(i: Int): Int {
             return i shr POS_OP and MAX_OP
         }
 
-        @kotlin.jvm.JvmStatic fun GETARG_A(i: Int): Int {
+         fun GETARG_A(i: Int): Int {
             return i shr POS_A and MAXARG_A
         }
 
-        @kotlin.jvm.JvmStatic fun GETARG_Ax(i: Int): Int {
+         fun GETARG_Ax(i: Int): Int {
             return i shr POS_Ax and MAXARG_Ax
         }
 
-        @kotlin.jvm.JvmStatic fun GETARG_B(i: Int): Int {
+         fun GETARG_B(i: Int): Int {
             return i shr POS_B and MAXARG_B
         }
 
-        @kotlin.jvm.JvmStatic fun GETARG_C(i: Int): Int {
+         fun GETARG_C(i: Int): Int {
             return i shr POS_C and MAXARG_C
         }
 
-        @kotlin.jvm.JvmStatic fun GETARG_Bx(i: Int): Int {
+         fun GETARG_Bx(i: Int): Int {
             return i shr POS_Bx and MAXARG_Bx
         }
 
-        @kotlin.jvm.JvmStatic fun GETARG_sBx(i: Int): Int {
+         fun GETARG_sBx(i: Int): Int {
             return (i shr POS_Bx and MAXARG_Bx) - MAXARG_sBx
         }
 
@@ -147,19 +147,19 @@ open class Lua {
         @kotlin.jvm.JvmField val BITRK = 1 shl SIZE_B - 1
 
         /** test whether value is a constant  */
-        @kotlin.jvm.JvmStatic fun ISK(x: Int): Boolean {
+         fun ISK(x: Int): Boolean {
             return 0 != x and BITRK
         }
 
         /** gets the index of the constant  */
-        @kotlin.jvm.JvmStatic fun INDEXK(r: Int): Int {
+         fun INDEXK(r: Int): Int {
             return r and BITRK.inv()
         }
 
         @kotlin.jvm.JvmField val MAXINDEXRK = BITRK - 1
 
         /** code a constant index as a RK value  */
-        @kotlin.jvm.JvmStatic fun RKASK(x: Int): Int {
+         fun RKASK(x: Int): Int {
             return x or BITRK
         }
 
@@ -327,23 +327,23 @@ open class Lua {
             0 shl 7 or (0 shl 6) or (OpArgU shl 4) or (OpArgU shl 2) or iAx
         )/* OP_EXTRAARG */
 
-        @kotlin.jvm.JvmStatic fun getOpMode(m: Int): Int {
+         fun getOpMode(m: Int): Int {
             return luaP_opmodes[m] and 3
         }
 
-        @kotlin.jvm.JvmStatic fun getBMode(m: Int): Int {
+         fun getBMode(m: Int): Int {
             return luaP_opmodes[m] shr 4 and 3
         }
 
-        @kotlin.jvm.JvmStatic fun getCMode(m: Int): Int {
+         fun getCMode(m: Int): Int {
             return luaP_opmodes[m] shr 2 and 3
         }
 
-        @kotlin.jvm.JvmStatic fun testAMode(m: Int): Boolean {
+         fun testAMode(m: Int): Boolean {
             return 0 != luaP_opmodes[m] and (1 shl 6)
         }
 
-        @kotlin.jvm.JvmStatic fun testTMode(m: Int): Boolean {
+         fun testTMode(m: Int): Boolean {
             return 0 != luaP_opmodes[m] and (1 shl 7)
         }
 
@@ -353,7 +353,7 @@ open class Lua {
 
         private val MAXSRC = 80
 
-        @kotlin.jvm.JvmStatic fun chunkid(source: String): String {
+         fun chunkid(source: String): String {
             var source = source
             if (source.startsWith("="))
                 return source.substring(1)

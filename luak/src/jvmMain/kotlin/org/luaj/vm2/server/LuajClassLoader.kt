@@ -126,7 +126,7 @@ class LuajClassLoader : ClassLoader() {
          * @param classname Class name to test.
          * @return true if this should be loaded into this class loader.
          */
-        @kotlin.jvm.JvmStatic
+
         fun isUserClass(classname: String): Boolean =
             classname.startsWith(luajPackageRoot) && !classname.startsWith(launcherInterfaceRoot)
     }

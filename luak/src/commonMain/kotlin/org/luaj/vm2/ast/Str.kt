@@ -27,21 +27,21 @@ import org.luaj.vm2.LuaString
 
 object Str {
 
-    @kotlin.jvm.JvmStatic
+
     fun quoteString(image: String): LuaString {
         val s = image.substring(1, image.length - 1)
         val bytes = unquote(s)
         return LuaString.valueUsing(bytes)
     }
 
-    @kotlin.jvm.JvmStatic
+
     fun charString(image: String): LuaString {
         val s = image.substring(1, image.length - 1)
         val bytes = unquote(s)
         return LuaString.valueUsing(bytes)
     }
 
-    @kotlin.jvm.JvmStatic
+
     fun longString(image: String): LuaString {
         val i = image.indexOf('[', image.indexOf('[') + 1) + 1
         val s = image.substring(i, image.length - i)
@@ -49,7 +49,7 @@ object Str {
         return LuaString.valueUsing(b)
     }
 
-    @kotlin.jvm.JvmStatic
+
     fun iso88591bytes(s: String): ByteArray {
         val baos = ByteArrayOutputStream()
         for (c in s) {
@@ -59,7 +59,7 @@ object Str {
     }
 
     @UseExperimental(ExperimentalStdlibApi::class)
-    @kotlin.jvm.JvmStatic
+
     fun unquote(s: String): ByteArray {
         val baos = ByteArrayOutputStream()
         val c = s.toCharArray()

@@ -159,7 +159,7 @@ internal constructor(
         private val intValues = Array(512) { LuaInteger(it - 256) }
 
         @JvmName("valueOf2")
-        @kotlin.jvm.JvmStatic
+
         fun valueOf(i: Int): LuaInteger = if (i <= 255 && i >= -256) intValues[i + 256]!! else LuaInteger(i)
 
         // TODO consider moving this to LuaValue
@@ -169,11 +169,11 @@ internal constructor(
          * @see LuaValue.valueOf
          * @see LuaValue.valueOf
          */
-        @kotlin.jvm.JvmStatic
+
         fun valueOf(l: Long): LuaNumber =
             l.toInt().let { i -> if (l == i.toLong()) if (i <= 255 && i >= -256) intValues[i + 256] else LuaInteger(i) else LuaDouble.valueOf(l.toDouble()) }
 
-        @kotlin.jvm.JvmStatic
+
         fun hashCode(x: Int): Int = x
     }
 

@@ -567,7 +567,7 @@ abstract class IoLib : TwoArgFunction() {
         val FILE_NAMES = arrayOf("close", "flush", "lines", "read", "seek", "setvbuf", "write")
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic private fun ioclose(f: File): Varargs {
+         private fun ioclose(f: File): Varargs {
             if (f.isstdfile())
                 return errorresult("cannot close standard file")
             else {
@@ -576,21 +576,21 @@ abstract class IoLib : TwoArgFunction() {
             }
         }
 
-        @kotlin.jvm.JvmStatic private fun successresult(): Varargs {
+         private fun successresult(): Varargs {
             return LuaValue.TRUE
         }
 
-        @kotlin.jvm.JvmStatic private fun errorresult(ioe: Exception): Varargs {
+         private fun errorresult(ioe: Exception): Varargs {
             val s = ioe.message
             return errorresult("io error: " + (s ?: ioe.toString()))
         }
 
-        @kotlin.jvm.JvmStatic private fun errorresult(errortext: String): Varargs {
+         private fun errorresult(errortext: String): Varargs {
             return LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf(errortext))
         }
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic private fun iowrite(f: File?, args: Varargs): Varargs {
+         private fun iowrite(f: File?, args: Varargs): Varargs {
             var i = 1
             val n = args.narg()
             while (i <= n) {
@@ -600,7 +600,7 @@ abstract class IoLib : TwoArgFunction() {
             return f!!
         }
 
-        @kotlin.jvm.JvmStatic private fun checkfile(`val`: LuaValue): File {
+         private fun checkfile(`val`: LuaValue): File {
             val f = optfile(`val`)
             if (f == null)
                 LuaValue.argerror(1, "file")
@@ -608,11 +608,11 @@ abstract class IoLib : TwoArgFunction() {
             return f
         }
 
-        @kotlin.jvm.JvmStatic private fun optfile(`val`: LuaValue): File? {
+         private fun optfile(`val`: LuaValue): File? {
             return if (`val` is File) `val` else null
         }
 
-        @kotlin.jvm.JvmStatic private fun checkopen(file: File): File {
+         private fun checkopen(file: File): File {
             if (file.isclosed())
                 LuaValue.error("attempt to use a closed file")
             return file
@@ -622,14 +622,14 @@ abstract class IoLib : TwoArgFunction() {
         // ------------- file reading utilitied ------------------
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic fun freadbytes(f: File, count: Int): LuaValue {
+         fun freadbytes(f: File, count: Int): LuaValue {
             val b = ByteArray(count)
             val r: Int
             return if ((run { r = f.read(b, 0, b.size); r }) < 0) LuaValue.NIL else LuaString.valueUsing(b, 0, r)
         }
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic fun freaduntil(f: File?, lineonly: Boolean): LuaValue {
+         fun freaduntil(f: File?, lineonly: Boolean): LuaValue {
             val baos = ByteArrayOutputStream()
             var c: Int
             try {
@@ -657,12 +657,12 @@ abstract class IoLib : TwoArgFunction() {
         }
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic fun freadline(f: File?): LuaValue {
+         fun freadline(f: File?): LuaValue {
             return freaduntil(f, true)
         }
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic fun freadall(f: File): LuaValue {
+         fun freadall(f: File): LuaValue {
             val n = f.remaining()
             return if (n >= 0) {
                 freadbytes(f, n)
@@ -672,7 +672,7 @@ abstract class IoLib : TwoArgFunction() {
         }
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic fun freadnumber(f: File?): LuaValue {
+         fun freadnumber(f: File?): LuaValue {
             val baos = ByteArrayOutputStream()
             freadchars(f!!, " \t\r\n", null)
             freadchars(f, "-+", baos)
@@ -689,7 +689,7 @@ abstract class IoLib : TwoArgFunction() {
         }
 
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic private fun freadchars(f: File, chars: String, baos: ByteArrayOutputStream?) {
+         private fun freadchars(f: File, chars: String, baos: ByteArrayOutputStream?) {
             var c: Int
             while (true) {
                 c = f.peek()

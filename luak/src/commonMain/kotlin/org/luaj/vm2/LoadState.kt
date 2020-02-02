@@ -382,7 +382,7 @@ private constructor(
         private val NOINTS = intArrayOf()
 
         /** Install this class as the standard Globals.Undumper for the supplied Globals  */
-        @kotlin.jvm.JvmStatic fun install(globals: Globals) {
+         fun install(globals: Globals) {
             globals.undumper = instance
         }
 
@@ -391,7 +391,7 @@ private constructor(
          * @param bits long value containing the bits
          * @return [LuaInteger] or [LuaDouble] whose value corresponds to the bits provided.
          */
-        @kotlin.jvm.JvmStatic fun longBitsToLuaNumber(bits: Long): LuaValue {
+         fun longBitsToLuaNumber(bits: Long): LuaValue {
             if (bits and (1L shl 63) - 1 == 0L) {
                 return LuaValue.ZERO
             }
@@ -419,7 +419,7 @@ private constructor(
          * @com.soywiz.luak.compat.java.Throws IOException if an IOException occurs
          */
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic fun undump(stream: InputStream, chunkname: String): Prototype? {
+         fun undump(stream: InputStream, chunkname: String): Prototype? {
             // check rest of signature
             if (stream.read() != LUA_SIGNATURE[0].toInt()
                 || stream.read() != LUA_SIGNATURE[1].toInt()
@@ -447,7 +447,7 @@ private constructor(
          * @param name String name that appears in the chunk
          * @return source file name
          */
-        @kotlin.jvm.JvmStatic fun getSourceName(name: String): String {
+         fun getSourceName(name: String): String {
             var sname = name
             if (name.startsWith("@") || name.startsWith("="))
                 sname = name.substring(1)

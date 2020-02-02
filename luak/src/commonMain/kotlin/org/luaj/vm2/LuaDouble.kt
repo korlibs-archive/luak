@@ -197,7 +197,7 @@ private constructor(
         @kotlin.jvm.JvmField val JSTR_NEGINF = "-inf"
 
         @JvmName("valueOf2")
-        @kotlin.jvm.JvmStatic fun valueOf(d: Double): LuaNumber =
+         fun valueOf(d: Double): LuaNumber =
             d.toInt().let { id -> if (d == id.toDouble()) LuaInteger.valueOf(id) else LuaDouble(d) }
 
 
@@ -208,7 +208,7 @@ private constructor(
          * taking into account positive and negiative infinity, and Nan
          * @see .ddiv_d
          */
-        @kotlin.jvm.JvmStatic fun ddiv(lhs: Double, rhs: Double): LuaValue =
+         fun ddiv(lhs: Double, rhs: Double): LuaValue =
             if (rhs != 0.0) valueOf(lhs / rhs) else if (lhs > 0) POSINF else if (lhs == 0.0) NAN else NEGINF
 
         /** Divide two double numbers according to lua math, and return a double result.
@@ -217,7 +217,7 @@ private constructor(
          * @return Value of the division, taking into account positive and negative infinity, and Nan
          * @see .ddiv
          */
-        @kotlin.jvm.JvmStatic fun ddiv_d(lhs: Double, rhs: Double): Double = when {
+         fun ddiv_d(lhs: Double, rhs: Double): Double = when {
             rhs != 0.0 -> lhs / rhs
             lhs > 0 -> Double.POSITIVE_INFINITY
             lhs == 0.0 -> Double.NaN
@@ -231,7 +231,7 @@ private constructor(
          * using lua's rules for modulo
          * @see .dmod_d
          */
-        @kotlin.jvm.JvmStatic fun dmod(lhs: Double, rhs: Double): LuaValue =
+         fun dmod(lhs: Double, rhs: Double): LuaValue =
             if (rhs != 0.0) valueOf(lhs - rhs * kotlin.math.floor(lhs / rhs)) else NAN
 
         /** Take modulo for double numbers according to lua math, and return a double result.
@@ -241,7 +241,7 @@ private constructor(
          * using lua's rules for modulo
          * @see .dmod
          */
-        @kotlin.jvm.JvmStatic fun dmod_d(lhs: Double, rhs: Double): Double = when {
+         fun dmod_d(lhs: Double, rhs: Double): Double = when {
             rhs != 0.0 -> lhs - rhs * kotlin.math.floor(lhs / rhs)
             else -> Double.NaN
         }

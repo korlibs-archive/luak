@@ -88,7 +88,7 @@ class Print : Lua() {
             null
         )
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printString(ps: PrintStream, s: LuaString) {
 
             ps.print('"')
@@ -121,7 +121,7 @@ class Print : Lua() {
             ps.print('"')
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printValue(ps: PrintStream, v: LuaValue) {
             when (v.type()) {
                 LuaValue.TSTRING -> printString(ps, v as LuaString)
@@ -129,12 +129,12 @@ class Print : Lua() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printConstant(ps: PrintStream, f: Prototype, i: Int) {
             printValue(ps, f.k[i])
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printUpvalue(ps: PrintStream, u: Upvaldesc) {
             ps.print(u.idx.toString() + " ")
             printValue(ps, u.name!!)
@@ -144,7 +144,7 @@ class Print : Lua() {
          * Print the code in a prototype
          * @param f the [Prototype]
          */
-        @kotlin.jvm.JvmStatic
+
         fun printCode(f: Prototype) {
             val code = f.code
             var pc: Int
@@ -162,7 +162,7 @@ class Print : Lua() {
          * @param f the [Prototype]
          * @param pc the program counter to look up and print
          */
-        @kotlin.jvm.JvmStatic
+
         fun printOpCode(f: Prototype, pc: Int) {
             printOpCode(ps, f, pc)
         }
@@ -173,7 +173,7 @@ class Print : Lua() {
          * @param f the [Prototype]
          * @param pc the program counter to look up and print
          */
-        @kotlin.jvm.JvmStatic
+
         fun printOpCode(ps: PrintStream, f: Prototype, pc: Int) {
             var pc = pc
             val code = f.code
@@ -241,11 +241,11 @@ class Print : Lua() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         private fun getline(f: Prototype, pc: Int): Int =
             if (pc > 0 && f.lineinfo != null && pc < f.lineinfo.size) f.lineinfo[pc] else -1
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printHeader(f: Prototype) {
             var s = f.source.toString()
             s = when {
@@ -259,7 +259,7 @@ class Print : Lua() {
             ps.print("${f.locvars.size} local, ${f.k.size} constant, ${f.p.size} function\n")
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printConstants(f: Prototype) {
             val n = f.k.size
             ps.print("constants ($n) for ${id(f)}:\n")
@@ -272,7 +272,7 @@ class Print : Lua() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printLocals(f: Prototype) {
             val n = f.locvars.size
             ps.print("locals ($n) for ${id(f)}:\n")
@@ -283,7 +283,7 @@ class Print : Lua() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun printUpValues(f: Prototype) {
             val n = f.upvalues.size
             ps.print("upvalues (" + n + ") for " + id(f) + ":\n")
@@ -298,7 +298,7 @@ class Print : Lua() {
          *
          * @param prototype Prototype to print.
          */
-        @kotlin.jvm.JvmStatic
+
         fun print(prototype: Prototype) {
             printFunction(prototype, true)
         }
@@ -308,7 +308,7 @@ class Print : Lua() {
          * @param prototype Prototype to print.
          * @param full true to print all fields, false to print short form.
          */
-        @kotlin.jvm.JvmStatic
+
         fun printFunction(prototype: Prototype, full: Boolean) {
             var i: Int
             val n = prototype.p.size
@@ -326,7 +326,7 @@ class Print : Lua() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         private fun format(s: String, maxcols: Int) {
             val n = s.length
             if (n > maxcols)
@@ -339,7 +339,7 @@ class Print : Lua() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         private fun id(f: Prototype): String {
             return "Proto"
         }
@@ -352,7 +352,7 @@ class Print : Lua() {
          * @param top the top of the stack
          * @param varargs any [Varargs] value that may apply
          */
-        @kotlin.jvm.JvmStatic
+
         fun printState(cl: LuaClosure, pc: Int, stack: Array<LuaValue?>, top: Int, varargs: Varargs) {
             // print opcode into buffer
             val previous = ps
@@ -367,7 +367,7 @@ class Print : Lua() {
             ps.println()
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun printStack(stack: Array<LuaValue?>, top: Int, varargs: Varargs) {
             // print stack
             ps.print('[')

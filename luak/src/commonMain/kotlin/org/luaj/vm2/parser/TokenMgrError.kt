@@ -58,7 +58,7 @@ class TokenMgrError : Error {
          * Replaces unprintable characters by their escaped (or unicode escaped)
          * equivalents in the given string
          */
-        @kotlin.jvm.JvmStatic
+
         protected fun addEscapes(str: String): String {
             val retval = StringBuffer()
             var ch: Char
@@ -103,7 +103,7 @@ class TokenMgrError : Error {
          * curchar     : the offending character
          * Note: You can customize the lexical error message by modifying this method.
          */
-        @kotlin.jvm.JvmStatic
+
         protected fun LexicalError(
             EOFSeen: Boolean, lexState: Int,
             errorLine: Int, errorColumn: Int, errorAfter: String,

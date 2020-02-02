@@ -317,7 +317,7 @@ open class MathLib : TwoArgFunction() {
         var MATHLIB: MathLib? = null
 
         /** compute power using installed math library, or default if there is no math library installed  */
-        @kotlin.jvm.JvmStatic
+
         fun dpow(a: Double, b: Double): LuaValue {
             return LuaDouble.valueOf(
                 if (MATHLIB != null)
@@ -327,7 +327,7 @@ open class MathLib : TwoArgFunction() {
             )
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun dpow_d(a: Double, b: Double): Double {
             return if (MATHLIB != null)
                 MATHLIB!!.dpow_lib(a, b)
@@ -338,7 +338,7 @@ open class MathLib : TwoArgFunction() {
         /**
          * Default JME version computes using longhand heuristics.
          */
-        @kotlin.jvm.JvmStatic
+
         protected fun dpow_default(a: Double, b: Double): Double {
             var a = a
             var b = b

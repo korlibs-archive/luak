@@ -166,27 +166,27 @@ abstract class Exp : SyntaxElement() {
 
     companion object {
 
-        @kotlin.jvm.JvmStatic
+
         fun constant(value: LuaValue): Exp {
             return Constant(value)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun numberconstant(token: String): Exp {
             return Constant(LuaValue.valueOf(token).tonumber())
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun varargs(): Exp {
             return VarargsExp()
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun tableconstructor(tc: TableConstructor): Exp {
             return tc
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun unaryexp(op: Int, rhs: Exp): Exp {
             if (rhs is BinopExp) {
                 if (precedence(op) > precedence(rhs.op))
@@ -195,7 +195,7 @@ abstract class Exp : SyntaxElement() {
             return UnopExp(op, rhs)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun binaryexp(lhs: Exp, op: Int, rhs: Exp): Exp {
             if (lhs is UnopExp) {
                 if (precedence(op) > precedence(lhs.op))
@@ -214,7 +214,7 @@ abstract class Exp : SyntaxElement() {
             return BinopExp(lhs, op, rhs)
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun isrightassoc(op: Int): Boolean {
             when (op) {
                 Lua.OP_CONCAT, Lua.OP_POW -> return true
@@ -222,7 +222,7 @@ abstract class Exp : SyntaxElement() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         internal fun precedence(op: Int): Int {
             when (op) {
                 Lua.OP_OR -> return 0
@@ -237,43 +237,43 @@ abstract class Exp : SyntaxElement() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun anonymousfunction(funcbody: FuncBody): Exp {
             return AnonFuncDef(funcbody)
         }
 
         /** foo  */
-        @kotlin.jvm.JvmStatic
+
         fun nameprefix(name: String): NameExp {
             return NameExp(name)
         }
 
         /** ( foo.bar )  */
-        @kotlin.jvm.JvmStatic
+
         fun parensprefix(exp: Exp): ParensExp {
             return ParensExp(exp)
         }
 
         /** foo[exp]  */
-        @kotlin.jvm.JvmStatic
+
         fun indexop(lhs: PrimaryExp, exp: Exp): IndexExp {
             return IndexExp(lhs, exp)
         }
 
         /** foo.bar  */
-        @kotlin.jvm.JvmStatic
+
         fun fieldop(lhs: PrimaryExp, name: String): FieldExp {
             return FieldExp(lhs, name)
         }
 
         /** foo(2,3)  */
-        @kotlin.jvm.JvmStatic
+
         fun functionop(lhs: PrimaryExp, args: FuncArgs): FuncCall {
             return FuncCall(lhs, args)
         }
 
         /** foo:bar(4,5)  */
-        @kotlin.jvm.JvmStatic
+
         fun methodop(lhs: PrimaryExp, name: String, args: FuncArgs): MethodCall {
             return MethodCall(lhs, name, args)
         }

@@ -128,7 +128,7 @@ private constructor(
      * from different contexts, it will generally show up as a cache hit and resolve
      * to the same value.   */
     object RecentShortStrings {
-        @kotlin.jvm.JvmStatic
+
         val recent_short_strings = arrayOfNulls<LuaString>(RECENT_STRINGS_CACHE_SIZE)
     }
 
@@ -543,7 +543,6 @@ private constructor(
          */
         @UseExperimental(ExperimentalStdlibApi::class)
         @JvmName("valueOf2")
-        @kotlin.jvm.JvmStatic
         fun valueOf(string: String): LuaString {
             val c = string.toCharArray()
             val b = ByteArray(lengthAsUtf8(c))
@@ -566,7 +565,7 @@ private constructor(
          * @return [LuaString] wrapping the byte buffer
          */
         @JvmName("valueOf2")
-        @kotlin.jvm.JvmStatic
+
         fun valueOf(bytes: ByteArray, off: Int, len: Int): LuaString {
             if (len > RECENT_STRINGS_MAX_LENGTH)
                 return valueFromCopy(bytes, off, len)
@@ -580,7 +579,7 @@ private constructor(
         }
 
         /** Construct a new LuaString using a copy of the bytes array supplied  */
-        @kotlin.jvm.JvmStatic
+
         private fun valueFromCopy(bytes: ByteArray, off: Int, len: Int): LuaString {
             val copy = ByteArray(len)
             for (i in 0 until len) copy[i] = bytes[off + i]
@@ -600,7 +599,7 @@ private constructor(
          * @return [LuaString] wrapping the byte buffer, or an equivalent string.
          */
         @JvmOverloads
-        @kotlin.jvm.JvmStatic
+
         fun valueUsing(bytes: ByteArray, off: Int = 0, len: Int = bytes.size): LuaString {
             if (bytes.size > RECENT_STRINGS_MAX_LENGTH)
                 return LuaString(bytes, off, len)
@@ -624,7 +623,7 @@ private constructor(
          * @return [LuaString] wrapping a copy of the byte buffer
          */
         @JvmOverloads
-        @kotlin.jvm.JvmStatic
+
         fun valueOf(bytes: CharArray, off: Int = 0, len: Int = bytes.size): LuaString {
             val b = ByteArray(len)
             for (i in 0 until len)
@@ -643,7 +642,7 @@ private constructor(
          * @return [LuaString] wrapping the byte buffer
          */
         @JvmName("valueOf2")
-        @kotlin.jvm.JvmStatic
+
         fun valueOf(bytes: ByteArray): LuaString {
             return valueOf(bytes, 0, bytes.size)
         }
@@ -655,7 +654,7 @@ private constructor(
          * @param length number of bytes starting with offset that are part of the string.
          * @return hash for the string defined by bytes, offset, and length.
          */
-        @kotlin.jvm.JvmStatic
+
         fun hashCode(bytes: ByteArray, offset: Int, length: Int): Int {
             var h = length  /* seed */
             val step = (length shr 5) + 1  /* if string is too long, don't hash all its chars */
@@ -668,12 +667,12 @@ private constructor(
             return h
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun equals(a: LuaString, i: Int, b: LuaString, j: Int, n: Int): Boolean {
             return equals(a.m_bytes, a.m_offset + i, b.m_bytes, b.m_offset + j, n)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun equals(a: ByteArray, i: Int, b: ByteArray, j: Int, n: Int): Boolean {
             var i = i
             var j = j
@@ -695,7 +694,7 @@ private constructor(
          * @see .encodeToUtf8
          * @see .isValidUtf8
          */
-        @kotlin.jvm.JvmStatic
+
         fun decodeAsUtf8(bytes: ByteArray, offset: Int, length: Int): String {
             var i: Int
             var j: Int
@@ -737,7 +736,7 @@ private constructor(
          * @see .decodeAsUtf8
          * @see .isValidUtf8
          */
-        @kotlin.jvm.JvmStatic
+
         fun lengthAsUtf8(chars: CharArray): Int {
             var i: Int
             var c: Char
@@ -763,7 +762,7 @@ private constructor(
          * @see .decodeAsUtf8
          * @see .isValidUtf8
          */
-        @kotlin.jvm.JvmStatic
+
         fun encodeToUtf8(chars: CharArray, nchars: Int, bytes: ByteArray, off: Int): Int {
             var c: Char
             var j = off

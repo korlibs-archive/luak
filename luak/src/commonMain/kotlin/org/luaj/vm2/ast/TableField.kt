@@ -33,17 +33,17 @@ class TableField(
 
     companion object {
 
-        @kotlin.jvm.JvmStatic
+
         fun keyedField(index: Exp, rhs: Exp): TableField {
             return TableField(index, null, rhs)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun namedField(name: String, rhs: Exp): TableField {
             return TableField(null, name, rhs)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun listField(rhs: Exp): TableField {
             return TableField(null, null, rhs)
         }

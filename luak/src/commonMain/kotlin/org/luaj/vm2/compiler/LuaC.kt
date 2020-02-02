@@ -164,7 +164,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
          * not already a compiled lua chunk.
          * @param globals the Globals into which this is to be installed.
          */
-        @kotlin.jvm.JvmStatic
+
         fun install(globals: Globals) {
             globals.compiler = instance
             globals.loader = instance

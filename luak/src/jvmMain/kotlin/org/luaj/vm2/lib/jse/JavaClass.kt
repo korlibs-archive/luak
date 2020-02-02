@@ -128,7 +128,7 @@ class JavaClass internal constructor(c: Class<*>) : JavaInstance(c), CoerceJavaT
 
         @kotlin.jvm.JvmField internal val NEW: LuaValue = LuaValue.valueOf("new")
 
-        @kotlin.jvm.JvmStatic fun forClass(c: Class<*>): JavaClass {
+         fun forClass(c: Class<*>): JavaClass {
             return classes[c] ?: return JavaClass(c).also { classes[c] = it }
         }
     }

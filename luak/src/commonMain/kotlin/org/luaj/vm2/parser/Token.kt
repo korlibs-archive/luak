@@ -109,7 +109,7 @@ class Token {
          * variable to the appropriate type and use sit in your lexical actions.
          */
         @JvmOverloads
-        @kotlin.jvm.JvmStatic
+
         fun newToken(ofKind: Int, image: String? = null): Token {
             when (ofKind) {
                 else -> return Token(ofKind, image)

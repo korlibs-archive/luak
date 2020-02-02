@@ -147,11 +147,11 @@ internal class JavaMethod private constructor(val method: Method) :
         @kotlin.jvm.JvmField
         val methods: MutableMap<Method, JavaMethod> = HashMap()
 
-        @kotlin.jvm.JvmStatic fun forMethod(m: Method): JavaMethod {
+         fun forMethod(m: Method): JavaMethod {
             return methods[m] ?: return JavaMethod(m).also { methods[m] = it }
         }
 
-        @kotlin.jvm.JvmStatic fun forMethods(m: Array<JavaMethod>): LuaFunction {
+         fun forMethods(m: Array<JavaMethod>): LuaFunction {
             return Overload(m)
         }
     }

@@ -29,6 +29,7 @@ import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Prototype
 import org.luaj.vm2.Upvaldesc
+import kotlin.jvm.*
 
 /**
  * Constants used by the LuaC compiler and related classes.
@@ -62,47 +63,48 @@ open class Constants protected constructor() : Lua() {
         @kotlin.jvm.JvmField val OpArgK = 3   /* argument is a constant or register/constant */
 
 
-        @kotlin.jvm.JvmStatic protected fun _assert(b: Boolean) {
+        @JvmStatic
+        protected fun _assert(b: Boolean) {
             if (!b)
                 throw LuaError("compiler assert failed")
         }
 
-        @kotlin.jvm.JvmStatic fun SET_OPCODE(i: InstructionPtr, o: Int) {
+         fun SET_OPCODE(i: InstructionPtr, o: Int) {
             i.set(i.get() and Lua.MASK_NOT_OP or (o shl Lua.POS_OP and Lua.MASK_OP))
         }
 
-        @kotlin.jvm.JvmStatic fun SETARG_A(code: IntArray, index: Int, u: Int) {
+         fun SETARG_A(code: IntArray, index: Int, u: Int) {
             code[index] = code[index] and Lua.MASK_NOT_A or (u shl Lua.POS_A and Lua.MASK_A)
         }
 
-        @kotlin.jvm.JvmStatic fun SETARG_A(i: InstructionPtr, u: Int) {
+         fun SETARG_A(i: InstructionPtr, u: Int) {
             i.set(i.get() and Lua.MASK_NOT_A or (u shl Lua.POS_A and Lua.MASK_A))
         }
 
-        @kotlin.jvm.JvmStatic fun SETARG_B(i: InstructionPtr, u: Int) {
+         fun SETARG_B(i: InstructionPtr, u: Int) {
             i.set(i.get() and Lua.MASK_NOT_B or (u shl Lua.POS_B and Lua.MASK_B))
         }
 
-        @kotlin.jvm.JvmStatic fun SETARG_C(i: InstructionPtr, u: Int) {
+         fun SETARG_C(i: InstructionPtr, u: Int) {
             i.set(i.get() and Lua.MASK_NOT_C or (u shl Lua.POS_C and Lua.MASK_C))
         }
 
-        @kotlin.jvm.JvmStatic fun SETARG_Bx(i: InstructionPtr, u: Int) {
+         fun SETARG_Bx(i: InstructionPtr, u: Int) {
             i.set(i.get() and Lua.MASK_NOT_Bx or (u shl Lua.POS_Bx and Lua.MASK_Bx))
         }
 
-        @kotlin.jvm.JvmStatic fun SETARG_sBx(i: InstructionPtr, u: Int) {
+         fun SETARG_sBx(i: InstructionPtr, u: Int) {
             SETARG_Bx(i, u + Lua.MAXARG_sBx)
         }
 
-        @kotlin.jvm.JvmStatic fun CREATE_ABC(o: Int, a: Int, b: Int, c: Int): Int {
+         fun CREATE_ABC(o: Int, a: Int, b: Int, c: Int): Int {
             return o shl Lua.POS_OP and Lua.MASK_OP or
                     (a shl Lua.POS_A and Lua.MASK_A) or
                     (b shl Lua.POS_B and Lua.MASK_B) or
                     (c shl Lua.POS_C and Lua.MASK_C)
         }
 
-        @kotlin.jvm.JvmStatic fun CREATE_ABx(o: Int, a: Int, bc: Int): Int {
+         fun CREATE_ABx(o: Int, a: Int, bc: Int): Int {
             return o shl Lua.POS_OP and Lua.MASK_OP or
                     (a shl Lua.POS_A and Lua.MASK_A) or
                     (bc shl Lua.POS_Bx and Lua.MASK_Bx)
@@ -110,74 +112,74 @@ open class Constants protected constructor() : Lua() {
 
         // vector reallocation
 
-        @kotlin.jvm.JvmStatic fun realloc(v: Array<LuaValue>?, n: Int): Array<LuaValue> {
+         fun realloc(v: Array<LuaValue>?, n: Int): Array<LuaValue> {
             val a = arrayOfNulls<LuaValue>(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LuaValue>
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: Array<Prototype>?, n: Int): Array<Prototype> {
+         fun realloc(v: Array<Prototype>?, n: Int): Array<Prototype> {
             val a = arrayOfNulls<Prototype>(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<Prototype>
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: Array<LuaString>?, n: Int): Array<LuaString> {
+         fun realloc(v: Array<LuaString>?, n: Int): Array<LuaString> {
             val a = arrayOfNulls<LuaString>(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LuaString>
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: Array<LocVars>?, n: Int): Array<LocVars> {
+         fun realloc(v: Array<LocVars>?, n: Int): Array<LocVars> {
             val a = arrayOfNulls<LocVars>(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LocVars>
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: Array<Upvaldesc>?, n: Int): Array<Upvaldesc> {
+         fun realloc(v: Array<Upvaldesc>?, n: Int): Array<Upvaldesc> {
             val a = arrayOfNulls<Upvaldesc>(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<Upvaldesc>
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: Array<LexState.Vardesc>?, n: Int): Array<LexState.Vardesc> {
+         fun realloc(v: Array<LexState.Vardesc>?, n: Int): Array<LexState.Vardesc> {
             val a = arrayOfNulls<LexState.Vardesc>(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LexState.Vardesc>
         }
 
-        @kotlin.jvm.JvmStatic fun grow(v: Array<LexState.Labeldesc>?, min_n: Int): Array<LexState.Labeldesc> {
+         fun grow(v: Array<LexState.Labeldesc>?, min_n: Int): Array<LexState.Labeldesc> {
             return (if (v == null) arrayOfNulls<LexState.Labeldesc>(2) else if (v.size < min_n) realloc(v, v.size * 2) else v) as Array<LexState.Labeldesc>
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: Array<LexState.Labeldesc>?, n: Int): Array<LexState.Labeldesc> {
+         fun realloc(v: Array<LexState.Labeldesc>?, n: Int): Array<LexState.Labeldesc> {
             val a = arrayOfNulls<LexState.Labeldesc>(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a as Array<LexState.Labeldesc>
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: IntArray?, n: Int): IntArray {
+         fun realloc(v: IntArray?, n: Int): IntArray {
             val a = IntArray(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: ByteArray?, n: Int): ByteArray {
+         fun realloc(v: ByteArray?, n: Int): ByteArray {
             val a = ByteArray(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))
             return a
         }
 
-        @kotlin.jvm.JvmStatic fun realloc(v: CharArray?, n: Int): CharArray {
+         fun realloc(v: CharArray?, n: Int): CharArray {
             val a = CharArray(n)
             if (v != null)
                 JSystem.arraycopy(v, 0, a, 0, kotlin.math.min(v.size, n))

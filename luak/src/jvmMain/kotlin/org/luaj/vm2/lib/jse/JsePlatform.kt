@@ -95,7 +95,7 @@ object JsePlatform {
      * @see JsePlatform
      * //@see org.luaj.vm2.lib.jme.JmePlatform
      */
-    @kotlin.jvm.JvmStatic fun standardGlobals(): Globals {
+     fun standardGlobals(): Globals {
         val globals = Globals()
         globals.load(JseBaseLib())
         globals.load(PackageLib())
@@ -121,7 +121,7 @@ object JsePlatform {
      *
      * @see DebugLib
      */
-    @kotlin.jvm.JvmStatic fun debugGlobals(): Globals {
+     fun debugGlobals(): Globals {
         val globals = standardGlobals()
         globals.load(DebugLib())
         return globals
@@ -132,7 +132,7 @@ object JsePlatform {
      * The supplied function is first given a new Globals object,
      * then the program is run with arguments.
      */
-    @kotlin.jvm.JvmStatic fun luaMain(mainChunk: LuaValue, args: Array<String>) {
+     fun luaMain(mainChunk: LuaValue, args: Array<String>) {
         val g = standardGlobals()
         val vargs = Array<LuaValue>(args.size) { LuaValue.valueOf(args[it]) }
         val arg = LuaValue.listOf(vargs)

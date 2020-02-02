@@ -23,6 +23,7 @@ package org.luaj.vm2
 
 import com.soywiz.luak.compat.java.*
 import com.soywiz.luak.compat.java.lang.*
+import kotlin.jvm.*
 import kotlin.reflect.*
 
 /**
@@ -3717,7 +3718,7 @@ abstract class LuaValue : Varargs() {
          * @see .type
          * @see .typename
          */
-        @kotlin.jvm.JvmField val TYPE_NAMES = arrayOf(
+        val TYPE_NAMES = arrayOf(
             "nil",
             "boolean",
             "lightuserdata",
@@ -3731,88 +3732,88 @@ abstract class LuaValue : Varargs() {
         )
 
         /** LuaValue constant corresponding to lua `#NIL`  */
-        @kotlin.jvm.JvmField val NIL: LuaValue = LuaNil._NIL
+        val NIL: LuaValue = LuaNil._NIL
 
         /** LuaBoolean constant corresponding to lua `true`  */
-        @kotlin.jvm.JvmField val TRUE = LuaBoolean._TRUE
+        val TRUE = LuaBoolean._TRUE
 
         /** LuaBoolean constant corresponding to lua `false`  */
-        @kotlin.jvm.JvmField val FALSE = LuaBoolean._FALSE
+        val FALSE = LuaBoolean._FALSE
 
         /** LuaValue constant corresponding to a [Varargs] list of no values  */
-        @kotlin.jvm.JvmField val NONE: LuaValue = None2._NONE
+        val NONE: LuaValue = None2._NONE
 
         /** LuaValue number constant equal to 0  */
-        @kotlin.jvm.JvmField val ZERO: LuaNumber = LuaInteger.valueOf(0)
+        val ZERO: LuaNumber = LuaInteger.valueOf(0)
 
         /** LuaValue number constant equal to 1  */
-        @kotlin.jvm.JvmField val ONE: LuaNumber = LuaInteger.valueOf(1)
+        val ONE: LuaNumber = LuaInteger.valueOf(1)
 
         /** LuaValue number constant equal to -1  */
-        @kotlin.jvm.JvmField val MINUSONE: LuaNumber = LuaInteger.valueOf(-1)
+        val MINUSONE: LuaNumber = LuaInteger.valueOf(-1)
 
         /** LuaValue array constant with no values  */
-        @kotlin.jvm.JvmField val NOVALS = arrayOf<LuaValue?>()
+        val NOVALS = arrayOf<LuaValue?>()
 
         /** The variable name of the environment.  */
-        @kotlin.jvm.JvmField var ENV = valueOf("_ENV")
+        val ENV: LuaString by lazy { LuaString.valueOf("_ENV") }
 
         /** LuaString constant with value "__index" for use as metatag  */
-        @kotlin.jvm.JvmField val INDEX = valueOf("__index")
+        val INDEX by lazy { LuaString.valueOf("__index") }
 
         /** LuaString constant with value "__newindex" for use as metatag  */
-        @kotlin.jvm.JvmField val NEWINDEX = valueOf("__newindex")
+        val NEWINDEX by lazy { LuaString.valueOf("__newindex") }
 
         /** LuaString constant with value "__call" for use as metatag  */
-        @kotlin.jvm.JvmField val CALL = valueOf("__call")
+        val CALL by lazy { LuaString.valueOf("__call") }
 
         /** LuaString constant with value "__mode" for use as metatag  */
-        @kotlin.jvm.JvmField val MODE = valueOf("__mode")
+        val MODE by lazy { LuaString.valueOf("__mode") }
 
         /** LuaString constant with value "__metatable" for use as metatag  */
-        @kotlin.jvm.JvmField val METATABLE = valueOf("__metatable")
+        val METATABLE by lazy { LuaString.valueOf("__metatable") }
 
         /** LuaString constant with value "__add" for use as metatag  */
-        @kotlin.jvm.JvmField val ADD = valueOf("__add")
+        val ADD by lazy { LuaString.valueOf("__add") }
 
         /** LuaString constant with value "__sub" for use as metatag  */
-        @kotlin.jvm.JvmField val SUB = valueOf("__sub")
+        val SUB by lazy { LuaString.valueOf("__sub") }
 
         /** LuaString constant with value "__div" for use as metatag  */
-        @kotlin.jvm.JvmField val DIV = valueOf("__div")
+        val DIV by lazy { LuaString.valueOf("__div") }
 
         /** LuaString constant with value "__mul" for use as metatag  */
-        @kotlin.jvm.JvmField val MUL = valueOf("__mul")
+        val MUL by lazy { LuaString.valueOf("__mul") }
 
         /** LuaString constant with value "__pow" for use as metatag  */
-        @kotlin.jvm.JvmField val POW = valueOf("__pow")
+        val POW by lazy { LuaString.valueOf("__pow") }
 
         /** LuaString constant with value "__mod" for use as metatag  */
-        @kotlin.jvm.JvmField val MOD = valueOf("__mod")
+        val MOD by lazy { LuaString.valueOf("__mod") }
 
         /** LuaString constant with value "__unm" for use as metatag  */
-        @kotlin.jvm.JvmField val UNM = valueOf("__unm")
+        val UNM by lazy { LuaString.valueOf("__unm") }
 
         /** LuaString constant with value "__len" for use as metatag  */
-        @kotlin.jvm.JvmField val LEN = valueOf("__len")
+        val LEN by lazy { LuaString.valueOf("__len") }
 
         /** LuaString constant with value "__eq" for use as metatag  */
-        @kotlin.jvm.JvmField val EQ = valueOf("__eq")
+        val EQ by lazy { LuaString.valueOf("__eq") }
 
         /** LuaString constant with value "__lt" for use as metatag  */
-        @kotlin.jvm.JvmField val LT = valueOf("__lt")
+        val LT by lazy { LuaString.valueOf("__lt") }
 
         /** LuaString constant with value "__le" for use as metatag  */
-        @kotlin.jvm.JvmField val LE = valueOf("__le")
+        val LE by lazy { LuaString.valueOf("__le") }
 
         /** LuaString constant with value "__tostring" for use as metatag  */
-        @kotlin.jvm.JvmField val TOSTRING = valueOf("__tostring")
+        val TOSTRING by lazy { LuaString.valueOf("__tostring") }
 
         /** LuaString constant with value "__concat" for use as metatag  */
-        @kotlin.jvm.JvmField val CONCAT = valueOf("__concat")
+        val CONCAT by lazy { LuaString.valueOf("__concat") }
 
         /** LuaString constant with value ""  */
-        @kotlin.jvm.JvmField val EMPTYSTRING = valueOf("")
+        val EMPTYSTRING by lazy { LuaString.valueOf("") }
 
         /** Limit on lua stack size  */
         private val MAXSTACK = 250
@@ -3820,14 +3821,14 @@ abstract class LuaValue : Varargs() {
         /** Array of [.NIL] values to optimize filling stacks using System.arraycopy().
          * Must not be modified.
          */
-        @kotlin.jvm.JvmField val NILS = Array(MAXSTACK) { NIL }
+        val NILS by lazy { Array(MAXSTACK) { NIL } }
 
         /**
          * Throw a [LuaError] with a particular message
          * @param message String providing message details
          * @com.soywiz.luak.compat.java.Throws LuaError in all cases
          */
-        @kotlin.jvm.JvmStatic fun error(message: String): LuaValue {
+         fun error(message: String): LuaValue {
             throw LuaError(message)
         }
 
@@ -3839,7 +3840,7 @@ abstract class LuaValue : Varargs() {
          * @param msg String message to produce on failure
          * @com.soywiz.luak.compat.java.Throws LuaError if b is not true
          */
-        @kotlin.jvm.JvmStatic fun assert_(b: Boolean, msg: String) {
+         fun assert_(b: Boolean, msg: String) {
             if (!b) throw LuaError(msg)
         }
 
@@ -3849,7 +3850,7 @@ abstract class LuaValue : Varargs() {
          * @param msg String providing information about the invalid argument
          * @com.soywiz.luak.compat.java.Throws LuaError in all cases
          */
-        @kotlin.jvm.JvmStatic fun argerror(iarg: Int, msg: String): Nothing {
+         fun argerror(iarg: Int, msg: String): Nothing {
             throw LuaError("bad argument #$iarg: $msg")
         }
 
@@ -3865,7 +3866,7 @@ abstract class LuaValue : Varargs() {
          * @see .raweq
          * @see .EQ
          */
-        @kotlin.jvm.JvmStatic fun eqmtcall(lhs: LuaValue, lhsmt: LuaValue, rhs: LuaValue, rhsmt: LuaValue): Boolean {
+         fun eqmtcall(lhs: LuaValue, lhsmt: LuaValue, rhs: LuaValue, rhsmt: LuaValue): Boolean {
             val h = lhsmt.rawget(EQ)
             return if (h.isnil() || h !== rhsmt.rawget(EQ)) false else h.call(lhs, rhs).toboolean()
         }
@@ -3875,7 +3876,7 @@ abstract class LuaValue : Varargs() {
          * @param b boolean value to convert
          * @return [.TRUE] if not  or [.FALSE] if false
          */
-        @kotlin.jvm.JvmStatic fun valueOf(b: Boolean): LuaBoolean {
+         fun valueOf(b: Boolean): LuaBoolean {
             return if (b) LuaValue.TRUE else FALSE
         }
 
@@ -3884,7 +3885,8 @@ abstract class LuaValue : Varargs() {
          * @param i int value to convert
          * @return [LuaInteger] instance, possibly pooled, whose value is i
          */
-        @kotlin.jvm.JvmStatic fun valueOf(i: Int): LuaInteger {
+        @JvmStatic
+         fun valueOf(i: Int): LuaInteger {
             return LuaInteger.valueOf(i)
         }
 
@@ -3895,7 +3897,7 @@ abstract class LuaValue : Varargs() {
          * @param d double value to convert
          * @return [LuaNumber] instance, possibly pooled, whose value is d
          */
-        @kotlin.jvm.JvmStatic fun valueOf(d: Double): LuaNumber {
+         fun valueOf(d: Double): LuaNumber {
             return LuaDouble.valueOf(d)
         }
 
@@ -3904,7 +3906,7 @@ abstract class LuaValue : Varargs() {
          * @param s String value to convert
          * @return [LuaString] instance, possibly pooled, whose value is s
          */
-        @kotlin.jvm.JvmStatic fun valueOf(s: String): LuaString {
+         fun valueOf(s: String): LuaString {
             return LuaString.valueOf(s)
         }
 
@@ -3913,7 +3915,7 @@ abstract class LuaValue : Varargs() {
          * @param bytes byte array to convert
          * @return [LuaString] instance, possibly pooled, whose bytes are those in the supplied array
          */
-        @kotlin.jvm.JvmStatic fun valueOf(bytes: ByteArray): LuaString {
+         fun valueOf(bytes: ByteArray): LuaString {
             return LuaString.valueOf(bytes)
         }
 
@@ -3924,14 +3926,14 @@ abstract class LuaValue : Varargs() {
          * @param len number of bytes to include in the [LuaString]
          * @return [LuaString] instance, possibly pooled, whose bytes are those in the supplied array
          */
-        @kotlin.jvm.JvmStatic fun valueOf(bytes: ByteArray, off: Int, len: Int): LuaString {
+         fun valueOf(bytes: ByteArray, off: Int, len: Int): LuaString {
             return LuaString.valueOf(bytes, off, len)
         }
 
         /** Construct an empty [LuaTable].
          * @return new [LuaTable] instance with no values and no metatable.
          */
-        @kotlin.jvm.JvmStatic fun tableOf(): LuaTable {
+         fun tableOf(): LuaTable {
             return LuaTable()
         }
 
@@ -3940,7 +3942,7 @@ abstract class LuaValue : Varargs() {
          * @param firstarg the index of the first argument to use from the varargs, 1 being the first.
          * @return new [LuaTable] instance with sequential elements coming from the varargs.
          */
-        @kotlin.jvm.JvmStatic fun tableOf(varargs: Varargs, firstarg: Int): LuaTable {
+         fun tableOf(varargs: Varargs, firstarg: Int): LuaTable {
             return LuaTable(varargs, firstarg)
         }
 
@@ -3949,7 +3951,7 @@ abstract class LuaValue : Varargs() {
          * @param nhash Number of hash elements to preallocate
          * @return new [LuaTable] instance with no values and no metatable, but preallocated for array and hashed elements.
          */
-        @kotlin.jvm.JvmStatic fun tableOf(narray: Int, nhash: Int): LuaTable {
+         fun tableOf(narray: Int, nhash: Int): LuaTable {
             return LuaTable(narray, nhash)
         }
 
@@ -3957,7 +3959,7 @@ abstract class LuaValue : Varargs() {
          * @param unnamedValues array of [LuaValue] containing the values to use in initialization
          * @return new [LuaTable] instance with sequential elements coming from the array.
          */
-        @kotlin.jvm.JvmStatic fun listOf(unnamedValues: Array<LuaValue>): LuaTable {
+         fun listOf(unnamedValues: Array<LuaValue>): LuaTable {
             return LuaTable(null, unnamedValues, null)
         }
 
@@ -3967,7 +3969,7 @@ abstract class LuaValue : Varargs() {
          * to be put after the last unnamedValues element
          * @return new [LuaTable] instance with sequential elements coming from the array and varargs.
          */
-        @kotlin.jvm.JvmStatic fun listOf(unnamedValues: Array<LuaValue>, lastarg: Varargs): LuaTable {
+         fun listOf(unnamedValues: Array<LuaValue>, lastarg: Varargs): LuaTable {
             return LuaTable(null, unnamedValues, lastarg)
         }
 
@@ -3976,7 +3978,7 @@ abstract class LuaValue : Varargs() {
          * in order `{key-a, value-a, key-b, value-b, ...} `
          * @return new [LuaTable] instance with non-sequential keys coming from the supplied array.
          */
-        @kotlin.jvm.JvmStatic fun tableOf(namedValues: Array<LuaValue>): LuaTable {
+         fun tableOf(namedValues: Array<LuaValue>): LuaTable {
             return LuaTable(namedValues, null, null)
         }
 
@@ -3989,7 +3991,7 @@ abstract class LuaValue : Varargs() {
          * in order `{value-1, value-2, ...} `, or null if there are none
          * @return new [LuaTable] instance with named and sequential values supplied.
          */
-        @kotlin.jvm.JvmStatic fun tableOf(namedValues: Array<LuaValue>, unnamedValues: Array<LuaValue>): LuaTable {
+         fun tableOf(namedValues: Array<LuaValue>, unnamedValues: Array<LuaValue>): LuaTable {
             return LuaTable(namedValues, unnamedValues, null)
         }
 
@@ -4004,7 +4006,7 @@ abstract class LuaValue : Varargs() {
          * to be put after the last unnamedValues element
          * @return new [LuaTable] instance with named and sequential values supplied.
          */
-        @kotlin.jvm.JvmStatic fun tableOf(namedValues: Array<LuaValue>, unnamedValues: Array<LuaValue>, lastarg: Varargs): LuaTable {
+         fun tableOf(namedValues: Array<LuaValue>, unnamedValues: Array<LuaValue>, lastarg: Varargs): LuaTable {
             return LuaTable(namedValues, unnamedValues, lastarg)
         }
 
@@ -4013,7 +4015,7 @@ abstract class LuaValue : Varargs() {
          * @param o The java instance to be wrapped as userdata
          * @return [LuaUserdata] value wrapping the java instance.
          */
-        @kotlin.jvm.JvmStatic fun userdataOf(o: Any): LuaUserdata {
+         fun userdataOf(o: Any): LuaUserdata {
             return LuaUserdata(o)
         }
 
@@ -4023,7 +4025,7 @@ abstract class LuaValue : Varargs() {
          * @param metatable The metatble to associate with the userdata instance.
          * @return [LuaUserdata] value wrapping the java instance.
          */
-        @kotlin.jvm.JvmStatic fun userdataOf(o: Any, metatable: LuaValue?): LuaUserdata {
+         fun userdataOf(o: Any, metatable: LuaValue?): LuaUserdata {
             return LuaUserdata(o, metatable)
         }
 
@@ -4038,7 +4040,8 @@ abstract class LuaValue : Varargs() {
          * @com.soywiz.luak.compat.java.Throws LuaError if there is a loop in metatag processing
          */
         /** get value from metatable operations, or NIL if not defined by metatables  */
-        @kotlin.jvm.JvmStatic protected fun gettable(t: LuaValue, key: LuaValue): LuaValue {
+        @JvmStatic
+         protected fun gettable(t: LuaValue, key: LuaValue): LuaValue {
             var t = t
             lateinit var tm: LuaValue
             var loop = 0
@@ -4065,7 +4068,7 @@ abstract class LuaValue : Varargs() {
          * @com.soywiz.luak.compat.java.Throws LuaError if there is a loop in metatag processing
          * @return true if assignment or metatag processing succeeded, false otherwise
          */
-        @kotlin.jvm.JvmStatic fun settable(t: LuaValue, key: LuaValue, value: LuaValue): Boolean {
+         fun settable(t: LuaValue, key: LuaValue, value: LuaValue): Boolean {
             var t = t
             lateinit var tm: LuaValue
             var loop = 0
@@ -4088,7 +4091,8 @@ abstract class LuaValue : Varargs() {
         }
 
         /** Construct a Metatable instance from the given LuaValue  */
-        @kotlin.jvm.JvmStatic protected fun metatableOf(mt: LuaValue?): Metatable? {
+        @JvmStatic
+         protected fun metatableOf(mt: LuaValue?): Metatable? {
             if (mt != null && mt.istable()) {
                 val mode = mt.rawget(MODE)
                 if (mode.isstring()) {
@@ -4114,7 +4118,7 @@ abstract class LuaValue : Varargs() {
          * @see LuaValue.varargsOf
          * @see LuaValue.varargsOf
          */
-        @kotlin.jvm.JvmStatic fun varargsOf(v: Array<LuaValue>): Varargs {
+         fun varargsOf(v: Array<LuaValue>): Varargs {
             when (v.size) {
                 0 -> return NONE
                 1 -> return v[0]
@@ -4131,7 +4135,7 @@ abstract class LuaValue : Varargs() {
          * @see LuaValue.varargsOf
          * @see LuaValue.varargsOf
          */
-        @kotlin.jvm.JvmStatic fun varargsOf(v: Array<LuaValue>, r: Varargs): Varargs {
+         fun varargsOf(v: Array<LuaValue>, r: Varargs): Varargs {
             when (v.size) {
                 0 -> return r
                 1 -> return if (r.narg() > 0)
@@ -4155,7 +4159,7 @@ abstract class LuaValue : Varargs() {
          * @see LuaValue.varargsOf
          * @see LuaValue.varargsOf
          */
-        @kotlin.jvm.JvmStatic fun varargsOf(v: Array<LuaValue>, offset: Int, length: Int): Varargs {
+         fun varargsOf(v: Array<LuaValue>, offset: Int, length: Int): Varargs {
             when (length) {
                 0 -> return NONE
                 1 -> return v[offset]
@@ -4177,7 +4181,7 @@ abstract class LuaValue : Varargs() {
          * @see LuaValue.varargsOf
          * @see LuaValue.varargsOf
          */
-        @kotlin.jvm.JvmStatic fun varargsOf(v: Array<LuaValue>, offset: Int, length: Int, more: Varargs): Varargs {
+         fun varargsOf(v: Array<LuaValue>, offset: Int, length: Int, more: Varargs): Varargs {
             when (length) {
                 0 -> return more
                 1 -> return if (more.narg() > 0)
@@ -4203,7 +4207,7 @@ abstract class LuaValue : Varargs() {
          * or [Varargs]s supplying all values beyond the first
          * @return [Varargs] wrapping the supplied values.
          */
-        @kotlin.jvm.JvmStatic fun varargsOf(v: LuaValue, r: Varargs): Varargs {
+         fun varargsOf(v: LuaValue, r: Varargs): Varargs {
             when (r.narg()) {
                 0 -> return v
                 else -> return Varargs.PairVarargs(v, r)
@@ -4222,7 +4226,7 @@ abstract class LuaValue : Varargs() {
          * or [Varargs]s supplying all values beyond the second
          * @return [Varargs] wrapping the supplied values.
          */
-        @kotlin.jvm.JvmStatic fun varargsOf(v1: LuaValue, v2: LuaValue, v3: Varargs): Varargs {
+         fun varargsOf(v1: LuaValue, v2: LuaValue, v3: Varargs): Varargs {
             when (v3.narg()) {
                 0 -> return Varargs.PairVarargs(v1, v2)
                 else -> return Varargs.ArrayPartVarargs(arrayOf(v1, v2), 0, 2, v3)
@@ -4247,7 +4251,7 @@ abstract class LuaValue : Varargs() {
          * @see LuaValue.method
          * @see LuaValue.invokemethod
          */
-        @kotlin.jvm.JvmStatic fun tailcallOf(func: LuaValue, args: Varargs): Varargs {
+         fun tailcallOf(func: LuaValue, args: Varargs): Varargs {
             return TailcallVarargs(func, args)
         }
     }

@@ -140,67 +140,67 @@ abstract class Stat : SyntaxElement() {
 
     companion object {
 
-        @kotlin.jvm.JvmStatic
+
         fun block(block: Block): Stat {
             return block
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun whiledo(exp: Exp, block: Block): Stat {
             return WhileDo(exp, block)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun repeatuntil(block: Block, exp: Exp): Stat {
             return RepeatUntil(block, exp)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun breakstat(): Stat {
             return Break()
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun returnstat(exps: List<Exp>?): Stat {
             return Return(exps)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun assignment(vars: List<VarExp>, exps: List<Exp>): Stat {
             return Assign(vars, exps)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun functioncall(funccall: Exp.FuncCall): Stat {
             return FuncCallStat(funccall)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun localfunctiondef(name: String, funcbody: FuncBody): Stat {
             return LocalFuncDef(name, funcbody)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun fornumeric(name: String, initial: Exp, limit: Exp, step: Exp?, block: Block): Stat {
             return NumericFor(name, initial, limit, step, block)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun functiondef(funcname: FuncName, funcbody: FuncBody): Stat {
             return FuncDef(funcname, funcbody)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun forgeneric(names: List<Name>, exps: List<Exp>, block: Block): Stat {
             return GenericFor(names, exps, block)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun localassignment(names: List<Name>, values: List<Exp>?): Stat {
             return LocalAssign(names, values)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun ifthenelse(
             ifexp: Exp,
             ifblock: Block,
@@ -211,12 +211,12 @@ abstract class Stat : SyntaxElement() {
             return IfThenElse(ifexp, ifblock, elseifexps, elseifblocks, elseblock)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun gotostat(name: String): Stat {
             return Goto(name)
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun labelstat(name: String): Stat {
             return Label(name)
         }

@@ -31,9 +31,9 @@ class ParList(
     }
 
     companion object {
-        @kotlin.jvm.JvmStatic
+
         val EMPTY_NAMELIST: List<Name> = listOf()
-        @kotlin.jvm.JvmStatic
+
         val EMPTY_PARLIST = ParList(EMPTY_NAMELIST, false)
     }
 }

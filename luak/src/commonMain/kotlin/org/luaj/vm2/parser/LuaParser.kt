@@ -1874,7 +1874,7 @@ class LuaParser : LuaParserConstants {
         }
 
         @com.soywiz.luak.compat.java.Throws(ParseException::class)
-        @kotlin.jvm.JvmStatic
+
         fun main(args: Array<String>) {
             val parser = LuaParser(JSystem.`in`)
             parser.Chunk()

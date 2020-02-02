@@ -279,7 +279,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
 	** dump Lua function as precompiled chunk
 	*/
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic
+
         fun dump(f: Prototype, w: OutputStream, strip: Boolean): Int {
             val D = DumpState(w, strip)
             D.dumpHeader()
@@ -299,7 +299,7 @@ class DumpState(w: OutputStream, internal var strip: Boolean) {
          * @com.soywiz.luak.compat.java.Throws IllegalArgumentException if the number format it not supported
          */
         @com.soywiz.luak.compat.java.Throws(IOException::class)
-        @kotlin.jvm.JvmStatic
+
         fun dump(f: Prototype, w: OutputStream, stripDebug: Boolean, numberFormat: Int, littleendian: Boolean): Int {
             when (numberFormat) {
                 NUMBER_FORMAT_FLOATS_OR_DOUBLES, NUMBER_FORMAT_INTS_ONLY, NUMBER_FORMAT_NUM_PATCH_INT32 -> {

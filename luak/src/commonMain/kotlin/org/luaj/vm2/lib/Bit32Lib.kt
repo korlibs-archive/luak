@@ -107,7 +107,7 @@ class Bit32Lib : TwoArgFunction() {
 
     companion object {
 
-        @kotlin.jvm.JvmStatic internal fun arshift(x: Int, disp: Int): LuaValue {
+         internal fun arshift(x: Int, disp: Int): LuaValue {
             return if (disp >= 0) {
                 bitsToValue(x shr disp)
             } else {
@@ -115,7 +115,7 @@ class Bit32Lib : TwoArgFunction() {
             }
         }
 
-        @kotlin.jvm.JvmStatic internal fun rshift(x: Int, disp: Int): LuaValue {
+         internal fun rshift(x: Int, disp: Int): LuaValue {
             return if (disp >= 32 || disp <= -32) {
                 LuaValue.ZERO
             } else if (disp >= 0) {
@@ -125,7 +125,7 @@ class Bit32Lib : TwoArgFunction() {
             }
         }
 
-        @kotlin.jvm.JvmStatic internal fun lshift(x: Int, disp: Int): LuaValue {
+         internal fun lshift(x: Int, disp: Int): LuaValue {
             return if (disp >= 32 || disp <= -32) {
                 LuaValue.ZERO
             } else if (disp >= 0) {
@@ -135,7 +135,7 @@ class Bit32Lib : TwoArgFunction() {
             }
         }
 
-        @kotlin.jvm.JvmStatic internal fun band(args: Varargs): Varargs {
+         internal fun band(args: Varargs): Varargs {
             var result = -1
             for (i in 1..args.narg()) {
                 result = result and args.checkint(i)
@@ -143,11 +143,11 @@ class Bit32Lib : TwoArgFunction() {
             return bitsToValue(result)
         }
 
-        @kotlin.jvm.JvmStatic internal fun bnot(args: Varargs): Varargs {
+         internal fun bnot(args: Varargs): Varargs {
             return bitsToValue(args.checkint(1).inv())
         }
 
-        @kotlin.jvm.JvmStatic internal fun bor(args: Varargs): Varargs {
+         internal fun bor(args: Varargs): Varargs {
             var result = 0
             for (i in 1..args.narg()) {
                 result = result or args.checkint(i)
@@ -155,7 +155,7 @@ class Bit32Lib : TwoArgFunction() {
             return bitsToValue(result)
         }
 
-        @kotlin.jvm.JvmStatic internal fun btest(args: Varargs): Varargs {
+         internal fun btest(args: Varargs): Varargs {
             var bits = -1
             for (i in 1..args.narg()) {
                 bits = bits and args.checkint(i)
@@ -163,7 +163,7 @@ class Bit32Lib : TwoArgFunction() {
             return LuaValue.valueOf(bits != 0)
         }
 
-        @kotlin.jvm.JvmStatic internal fun bxor(args: Varargs): Varargs {
+         internal fun bxor(args: Varargs): Varargs {
             var result = 0
             for (i in 1..args.narg()) {
                 result = result xor args.checkint(i)
@@ -171,7 +171,7 @@ class Bit32Lib : TwoArgFunction() {
             return bitsToValue(result)
         }
 
-        @kotlin.jvm.JvmStatic internal fun lrotate(x: Int, disp: Int): LuaValue {
+         internal fun lrotate(x: Int, disp: Int): LuaValue {
             var disp = disp
             if (disp < 0) {
                 return rrotate(x, -disp)
@@ -181,7 +181,7 @@ class Bit32Lib : TwoArgFunction() {
             }
         }
 
-        @kotlin.jvm.JvmStatic internal fun rrotate(x: Int, disp: Int): LuaValue {
+         internal fun rrotate(x: Int, disp: Int): LuaValue {
             var disp = disp
             if (disp < 0) {
                 return lrotate(x, -disp)
@@ -191,7 +191,7 @@ class Bit32Lib : TwoArgFunction() {
             }
         }
 
-        @kotlin.jvm.JvmStatic internal fun extract(n: Int, field: Int, width: Int): LuaValue {
+         internal fun extract(n: Int, field: Int, width: Int): LuaValue {
             if (field < 0) {
                 LuaValue.argerror(2, "field cannot be negative")
             }
@@ -204,7 +204,7 @@ class Bit32Lib : TwoArgFunction() {
             return bitsToValue(n.ushr(field) and (-1).ushr(32 - width))
         }
 
-        @kotlin.jvm.JvmStatic internal fun replace(n: Int, v: Int, field: Int, width: Int): LuaValue {
+         internal fun replace(n: Int, v: Int, field: Int, width: Int): LuaValue {
             var n = n
             if (field < 0) {
                 LuaValue.argerror(3, "field cannot be negative")
@@ -220,7 +220,7 @@ class Bit32Lib : TwoArgFunction() {
             return bitsToValue(n)
         }
 
-        @kotlin.jvm.JvmStatic private fun bitsToValue(x: Int): LuaValue {
+         private fun bitsToValue(x: Int): LuaValue {
             return if (x < 0) LuaValue.valueOf((x.toLong() and 0xFFFFFFFFL).toDouble()) else LuaValue.valueOf(x)
         }
     }

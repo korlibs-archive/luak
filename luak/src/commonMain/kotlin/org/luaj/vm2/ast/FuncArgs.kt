@@ -49,19 +49,19 @@ class FuncArgs : SyntaxElement {
     companion object {
 
         /** exp1,exp2...  */
-        @kotlin.jvm.JvmStatic
+
         fun explist(explist: MutableList<Exp>?): FuncArgs {
             return FuncArgs(explist)
         }
 
         /** {...}  */
-        @kotlin.jvm.JvmStatic
+
         fun tableconstructor(table: TableConstructor): FuncArgs {
             return FuncArgs(table)
         }
 
         /** "mylib"  */
-        @kotlin.jvm.JvmStatic
+
         fun string(string: LuaString): FuncArgs {
             return FuncArgs(string)
         }

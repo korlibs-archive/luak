@@ -119,7 +119,7 @@ class FuncState constructor() : Constants() {
 
     fun getlocvar(i: Int): LocVars {
         val idx = ls!!.dyd!!.actvar!![firstlocal + i].idx.toInt()
-        Constants._assert(idx < nlocvars)
+        _assert(idx < nlocvars)
         return f!!.locvars[idx]
     }
 
@@ -199,7 +199,7 @@ class FuncState constructor() : Constants() {
         bl.upval = false
         bl.previous = this.bl
         this.bl = bl
-        Constants._assert(this.freereg == this.nactvar)
+        _assert(this.freereg == this.nactvar)
     }
 
     fun leaveblock() {
@@ -214,7 +214,7 @@ class FuncState constructor() : Constants() {
             ls!!.breaklabel()  /* close pending breaks */
         this.bl = bl.previous
         this.removevars(bl.nactvar.toInt())
-        Constants._assert(bl.nactvar == this.nactvar)
+        _assert(bl.nactvar == this.nactvar)
         this.freereg = this.nactvar  /* free registers */
         ls!!.dyd.n_label = bl.firstlabel.toInt()  /* remove local labels */
         if (bl.previous != null)
@@ -303,10 +303,10 @@ class FuncState constructor() : Constants() {
     fun fixjump(pc: Int, dest: Int) {
         val jmp = InstructionPtr(this.f!!.code, pc)
         val offset = dest - (pc + 1)
-        Constants._assert(dest != LexState.NO_JUMP)
-        if (Math.abs(offset) > Lua.MAXARG_sBx)
+        _assert(dest != LexState.NO_JUMP)
+        if (kotlin.math.abs(offset) > Lua.MAXARG_sBx)
             ls!!.syntaxerror("control structure too long")
-        Constants.SETARG_sBx(jmp, offset)
+        SETARG_sBx(jmp, offset)
     }
 
 
@@ -401,7 +401,7 @@ class FuncState constructor() : Constants() {
         if (target == this.pc)
             this.patchtohere(list)
         else {
-            Constants._assert(target < this.pc)
+            _assert(target < this.pc)
             this.patchlistaux(list, target, Constants.NO_REG, target)
         }
     }
@@ -412,7 +412,7 @@ class FuncState constructor() : Constants() {
         level++ /* argument is +1 to reserve 0 as non-op */
         while (list != LexState.NO_JUMP) {
             val next = getjump(list)
-            Constants._assert(
+            _assert(
                 Lua.GET_OPCODE(f!!.code[list]) == Lua.OP_JMP && (Lua.GETARG_A(f!!.code[list]) == 0 || Lua.GETARG_A(
                     f!!.code[list]
                 ) >= level)
@@ -462,7 +462,7 @@ class FuncState constructor() : Constants() {
     fun freereg(reg: Int) {
         if (!Lua.ISK(reg) && reg >= this.nactvar) {
             this.freereg--
-            Constants._assert(reg == this.freereg.toInt())
+            _assert(reg == this.freereg.toInt())
         }
     }
 
@@ -588,7 +588,7 @@ class FuncState constructor() : Constants() {
                     this.codeABC(Lua.OP_MOVE, reg, e.u.info, 0)
             }
             else -> {
-                Constants._assert(e.k == LexState.VVOID || e.k == LexState.VJMP)
+                _assert(e.k == LexState.VVOID || e.k == LexState.VJMP)
                 return  /* nothing to do... */
             }
         }
@@ -717,7 +717,7 @@ class FuncState constructor() : Constants() {
                 this.codeABC(op, `var`.u.ind_t.toInt(), `var`.u.ind_idx.toInt(), e)
             }
             else -> {
-                Constants._assert(false) /* invalid var kind to store */
+                _assert(false) /* invalid var kind to store */
             }
         }
         this.freeexp(ex)
@@ -737,7 +737,7 @@ class FuncState constructor() : Constants() {
 
     fun invertjump(e: expdesc) {
         val pc = this.getjumpcontrol(e.u.info)
-        Constants._assert(
+        _assert(
             Lua.testTMode(Lua.GET_OPCODE(pc.get()))
                     && Lua.GET_OPCODE(pc.get()) != Lua.OP_TESTSET && Lua
                 .GET_OPCODE(pc.get()) != Lua.OP_TEST
@@ -820,7 +820,7 @@ class FuncState constructor() : Constants() {
                 e.k = LexState.VRELOCABLE
             }
             else -> {
-                Constants._assert(false) /* cannot happen */
+                _assert(false) /* cannot happen */
             }
         }
         /* interchange true and false lists */
@@ -836,7 +836,7 @@ class FuncState constructor() : Constants() {
     fun indexed(t: expdesc, k: expdesc) {
         t.u.ind_t = t.u.info.toShort()
         t.u.ind_idx = this.exp2RK(k).toShort()
-        Constants._assert(t.k == LexState.VUPVAL || vkisinreg(t.k))
+        _assert(t.k == LexState.VUPVAL || vkisinreg(t.k))
         t.u.ind_vt = (if (t.k == LexState.VUPVAL) LexState.VUPVAL else LexState.VLOCAL).toShort()
         t.k = LexState.VINDEXED
     }
@@ -864,7 +864,7 @@ class FuncState constructor() : Constants() {
                 // break;
                 return false /* no constant folding for 'len' */
             else -> {
-                Constants._assert(false)
+                _assert(false)
                 r = null
             }
         }
@@ -931,7 +931,7 @@ class FuncState constructor() : Constants() {
                 this.exp2anyreg(e) /* cannot operate on constants */
                 this.codearith(Lua.OP_LEN, e, e2, line)
             }
-            else -> Constants._assert(false)
+            else -> _assert(false)
         }
     }
 
@@ -960,14 +960,14 @@ class FuncState constructor() : Constants() {
     fun posfix(op: Int, e1: expdesc, e2: expdesc, line: Int) {
         when (op) {
             LexState.OPR_AND -> {
-                Constants._assert(e1.t.i == LexState.NO_JUMP) /* list must be closed */
+                _assert(e1.t.i == LexState.NO_JUMP) /* list must be closed */
                 this.dischargevars(e2)
                 this.concat(e2.f, e1.f.i)
                 // *e1 = *e2;
                 e1.setvalue(e2)
             }
             LexState.OPR_OR -> {
-                Constants._assert(e1.f.i == LexState.NO_JUMP) /* list must be closed */
+                _assert(e1.f.i == LexState.NO_JUMP) /* list must be closed */
                 this.dischargevars(e2)
                 this.concat(e2.t, e1.t.i)
                 // *e1 = *e2;
@@ -976,7 +976,7 @@ class FuncState constructor() : Constants() {
             LexState.OPR_CONCAT -> {
                 this.exp2val(e2)
                 if (e2.k == LexState.VRELOCABLE && Lua.GET_OPCODE(this.getcode(e2)) == Lua.OP_CONCAT) {
-                    Constants._assert(e1.u.info == Lua.GETARG_B(this.getcode(e2)) - 1)
+                    _assert(e1.u.info == Lua.GETARG_B(this.getcode(e2)) - 1)
                     this.freeexp(e1)
                     Constants.SETARG_B(this.getcodePtr(e2), e1.u.info)
                     e1.k = LexState.VRELOCABLE
@@ -998,7 +998,7 @@ class FuncState constructor() : Constants() {
             LexState.OPR_LE -> this.codecomp(Lua.OP_LE, 1, e1, e2)
             LexState.OPR_GT -> this.codecomp(Lua.OP_LT, 0, e1, e2)
             LexState.OPR_GE -> this.codecomp(Lua.OP_LE, 0, e1, e2)
-            else -> Constants._assert(false)
+            else -> _assert(false)
         }
     }
 
@@ -1027,17 +1027,17 @@ class FuncState constructor() : Constants() {
 
 
     fun codeABC(o: Int, a: Int, b: Int, c: Int): Int {
-        Constants._assert(Lua.getOpMode(o) == Constants.iABC)
-        Constants._assert(Lua.getBMode(o) != Constants.OpArgN || b == 0)
-        Constants._assert(Lua.getCMode(o) != Constants.OpArgN || c == 0)
+        _assert(Lua.getOpMode(o) == Constants.iABC)
+        _assert(Lua.getBMode(o) != Constants.OpArgN || b == 0)
+        _assert(Lua.getCMode(o) != Constants.OpArgN || c == 0)
         return this.code(Constants.CREATE_ABC(o, a, b, c), this.ls!!.lastline)
     }
 
 
     fun codeABx(o: Int, a: Int, bc: Int): Int {
-        Constants._assert(Lua.getOpMode(o) == Constants.iABx || Lua.getOpMode(o) == Constants.iAsBx)
-        Constants._assert(Lua.getCMode(o) == Constants.OpArgN)
-        Constants._assert(bc >= 0 && bc <= Lua.MAXARG_Bx)
+        _assert(Lua.getOpMode(o) == Constants.iABx || Lua.getOpMode(o) == Constants.iAsBx)
+        _assert(Lua.getCMode(o) == Constants.OpArgN)
+        _assert(bc >= 0 && bc <= Lua.MAXARG_Bx)
         return this.code(Constants.CREATE_ABx(o, a, bc), this.ls!!.lastline)
     }
 
@@ -1045,7 +1045,7 @@ class FuncState constructor() : Constants() {
     fun setlist(base: Int, nelems: Int, tostore: Int) {
         val c = (nelems - 1) / Lua.LFIELDS_PER_FLUSH + 1
         val b = if (tostore == Lua.LUA_MULTRET) 0 else tostore
-        Constants._assert(tostore != 0)
+        _assert(tostore != 0)
         if (c <= Lua.MAXARG_C)
             this.codeABC(Lua.OP_SETLIST, base, b, c)
         else {
@@ -1057,7 +1057,7 @@ class FuncState constructor() : Constants() {
 
     companion object {
 
-        @kotlin.jvm.JvmStatic
+
         fun singlevaraux(fs: FuncState?, n: LuaString, `var`: expdesc, base: Int): Int {
             if (fs == null)
             /* no more levels? */
@@ -1082,7 +1082,7 @@ class FuncState constructor() : Constants() {
             }
         }
 
-        @kotlin.jvm.JvmStatic
+
         fun vkisinreg(k: Int): Boolean {
             return k == LexState.VNONRELOC || k == LexState.VLOCAL
         }
