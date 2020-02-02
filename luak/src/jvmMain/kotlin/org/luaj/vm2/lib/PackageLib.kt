@@ -220,7 +220,7 @@ class PackageLib : TwoArgFunction() {
     }
 
     class loadlib : VarArgFunction() {
-        fun loadlib(args: Varargs): Varargs {
+        override fun invoke(args: Varargs): Varargs {
             args.checkstring(1)
             return LuaValue.varargsOf(
                 LuaValue.NIL,
