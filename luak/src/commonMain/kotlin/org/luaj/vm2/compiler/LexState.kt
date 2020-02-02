@@ -33,7 +33,7 @@ import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Prototype
 import org.luaj.vm2.compiler.FuncState.BlockCnt
 import org.luaj.vm2.lib.MathLib
-
+import kotlin.js.*
 
 @Suppress("MemberVisibilityCanBePrivate")
 class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /* input stream */) : Constants() {
@@ -42,6 +42,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: InputStream  /
     internal var linenumber: Int = 0  /* input line counter */
     internal var lastline: Int = 0  /* line of last token `consumed' */
     internal val t = Token()  /* current token */
+    @JsName("lookahead_field")
     internal val lookahead = Token()  /* look ahead token */
     internal var fs: FuncState? = null  /* `FuncState' is private to the parser */
     internal var buff: CharArray? = null  /* buffer for tokens */

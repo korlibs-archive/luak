@@ -10,6 +10,7 @@ expect abstract class InputStream() : Closeable {
     open fun read(b: ByteArray, i0: Int, n: Int): Int
     open fun skip(n: Long): Long
     open fun available(): Int
+    override fun close(): Unit
 }
 
 expect open class FilterInputStream : InputStream {

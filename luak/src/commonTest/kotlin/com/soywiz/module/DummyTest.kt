@@ -1,4 +1,3 @@
-/*
 import kotlin.test.*
 
 class DummyTest {
@@ -6,4 +5,3 @@ class DummyTest {
     fun test() {
     }
 }
-*/

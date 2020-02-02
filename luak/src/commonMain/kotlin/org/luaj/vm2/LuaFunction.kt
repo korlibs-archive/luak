@@ -22,6 +22,7 @@
 package org.luaj.vm2
 
 import com.soywiz.luak.compat.java.*
+import kotlin.js.*
 
 /**
  * Base class for functions implemented in Java.
@@ -84,6 +85,7 @@ abstract class LuaFunction : LuaValue() {
      * Is overridden by LuaClosure to return the source file and line, and by LibFunctions to return the name.
      * @return common name for this function.
      */
+    @JsName("fname")
     open fun name(): String {
         return classnamestub()
     }
