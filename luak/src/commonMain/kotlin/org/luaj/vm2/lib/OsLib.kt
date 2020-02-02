@@ -28,6 +28,7 @@ import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
 import org.luaj.vm2.internal.*
+import kotlin.jvm.*
 import kotlin.time.*
 
 /**
@@ -441,11 +442,8 @@ open class OsLib : TwoArgFunction() {
      *
      * @return String filename to use
      */
-    protected open fun tmpname(): String {
-        synchronized(OsLib::class) {
-            return TMP_PREFIX + tmpnames++ + TMP_SUFFIX
-        }
-    }
+    @Synchronized
+    protected open fun tmpname(): String = TMP_PREFIX + tmpnames++ + TMP_SUFFIX
 
     companion object {
         @kotlin.jvm.JvmField var TMP_PREFIX = ".luaj"
