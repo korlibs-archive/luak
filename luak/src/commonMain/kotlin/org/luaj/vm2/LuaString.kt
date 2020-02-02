@@ -119,16 +119,6 @@ private constructor(
             return true
         }
 
-    /** Simple cache of recently created strings that are short.
-     * This is simply a list of strings, indexed by their hash codes modulo the cache size
-     * that have been recently constructed.  If a string is being constructed frequently
-     * from different contexts, it will generally show up as a cache hit and resolve
-     * to the same value.   */
-    object RecentShortStrings {
-
-        val recent_short_strings = arrayOfNulls<LuaString>(RECENT_STRINGS_CACHE_SIZE)
-    }
-
     override fun isstring(): Boolean = true
     override fun getmetatable(): LuaValue? = s_metatable
     override fun type(): Int = LuaValue.TSTRING
@@ -563,16 +553,16 @@ private constructor(
          */
         @JvmName("valueOf2")
 
-        fun valueOf(bytes: ByteArray, off: Int, len: Int): LuaString {
+        fun valueOf(bytes: ByteArray, off: Int, len: Int, runtime: LuaRuntime? = null): LuaString {
             if (len > RECENT_STRINGS_MAX_LENGTH)
                 return valueFromCopy(bytes, off, len)
             val hash = hashCode(bytes, off, len)
             val bucket = hash and RECENT_STRINGS_CACHE_SIZE - 1
-            val t = RecentShortStrings.recent_short_strings[bucket]
+            val t = runtime?.recent_short_strings?.get(bucket)
             if (t != null && t.m_hashcode == hash && t.byteseq(bytes, off, len)) return t
-            val s = valueFromCopy(bytes, off, len)
-            RecentShortStrings.recent_short_strings[bucket] = s
-            return s
+            return valueFromCopy(bytes, off, len).also {
+                if (runtime != null) runtime.recent_short_strings[bucket] = it
+            }
         }
 
         /** Construct a new LuaString using a copy of the bytes array supplied  */
@@ -597,16 +587,18 @@ private constructor(
          */
         @JvmOverloads
 
-        fun valueUsing(bytes: ByteArray, off: Int = 0, len: Int = bytes.size): LuaString {
+        fun valueUsing(bytes: ByteArray, off: Int = 0, len: Int = bytes.size, runtime: LuaRuntime? = null): LuaString {
             if (bytes.size > RECENT_STRINGS_MAX_LENGTH)
                 return LuaString(bytes, off, len)
             val hash = hashCode(bytes, off, len)
             val bucket = hash and RECENT_STRINGS_CACHE_SIZE - 1
-            val t = RecentShortStrings.recent_short_strings[bucket]
+            val t = runtime?.recent_short_strings?.get(bucket)
             if (t != null && t.m_hashcode == hash && t.byteseq(bytes, off, len)) return t
-            val s = LuaString(bytes, off, len)
-            RecentShortStrings.recent_short_strings[bucket] = s
-            return s
+            return LuaString(bytes, off, len).also {
+                if (runtime != null) {
+                    runtime.recent_short_strings[bucket] = it
+                }
+            }
         }
 
         /** Construct a [LuaString] using the supplied characters as byte values.

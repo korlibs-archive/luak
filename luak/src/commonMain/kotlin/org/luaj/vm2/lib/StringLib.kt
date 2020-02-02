@@ -102,6 +102,7 @@ class StringLib : TwoArgFunction() {
         )
         env["string"] = string
         env["package"]["loaded"]["string"] = string
+        //env.checkglobals().runtime
         if (LuaString.s_metatable == null)
             LuaString.s_metatable = mt
         return string

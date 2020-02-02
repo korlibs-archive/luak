@@ -16,7 +16,7 @@ class RuntimeTest {
         load(PackageLib())
         load(Bit32Lib())
         load(TableLib())
-        load(StringLib())
+        //load(StringLib()) // Mutates metatable
         load(CoroutineLib())
         LoadState.install(this)
         LuaC.install(this)

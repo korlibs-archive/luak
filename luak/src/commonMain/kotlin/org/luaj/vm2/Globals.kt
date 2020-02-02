@@ -120,7 +120,9 @@ import kotlin.jvm.*
  *
  * @see org.luaj.vm2.luajc.LuaJC
  */
-open class Globals : LuaTable() {
+open class Globals(
+    val runtime: LuaRuntime = LuaRuntime()
+) : LuaTable() {
 
     /** The current default input stream.  */
     @kotlin.jvm.JvmField var STDIN: LuaBinInput = JSystem.`in`
