@@ -10,3 +10,27 @@ internal fun arraycopy(src: Array<*>, srcPos: Int, dst: Array<*>, dstPos: Int, c
 internal fun Throwable.printStackTrace() {
     println(this)
 }
+
+internal fun Int.toHexString() = toString(16)
+internal fun Char.isDigit() = this in '0'..'9'
+internal fun Char.isLowerCase() = this.toLowerCase() == this
+internal fun Char.isUpperCase() = this.toUpperCase() == this
+
+internal class LuaDate(val time: Long) {
+    constructor() : this(TODO())
+
+    constructor(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, ms: Int) : this() {
+        TODO()
+    }
+
+    val year: Int get() = TODO()
+    val month: Int get() = TODO()
+    val month1: Int get() = TODO()
+    val day: Int get() = TODO()
+    val wday: Int get() = TODO()
+    val yday: Int get() = TODO()
+    val hour: Int get() = TODO()
+    val minute: Int get() = TODO()
+    val second: Int get() = TODO()
+    val ms: Int get() = TODO()
+}

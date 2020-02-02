@@ -215,7 +215,7 @@ class LuaThread : LuaValue {
                 this.args = args
                 if (this.status == STATUS_INITIAL) {
                     this.status = STATUS_RUNNING
-                    Thread(this, "Coroutine-" + ++coroutine_count).start()
+                    NativeThread(this, "Coroutine-" + ++coroutine_count).start()
                 } else {
                     (this )._notify()
                 }
