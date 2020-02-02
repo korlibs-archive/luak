@@ -108,7 +108,7 @@ private constructor(
     private var luacNumberFormat: Int = 0
 
     /** input stream from which we are loading  */
-    val `is`: DataInputStream
+    val `is`: DataInputStream = DataInputStream(stream)
 
     /** Read buffer  */
     private var buf = ByteArray(512)
@@ -311,9 +311,6 @@ private constructor(
                 throw LuaError("Unexpeted byte in luac tail of header, index=$i")
     }
 
-    init {
-        this.`is` = DataInputStream(stream)
-    }
 
     private class GlobalsUndumper : Globals.Undumper {
 

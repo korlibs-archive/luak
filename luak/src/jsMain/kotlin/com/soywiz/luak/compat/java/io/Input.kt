@@ -42,14 +42,3 @@ actual open class DataInputStream actual constructor(iss: InputStream) : FilterI
     actual fun readByte(): Byte = iss.read().let { c -> if (c < 0) throw EOFException() else c.toByte() }
     actual fun readUnsignedByte(): Int = readByte().toInt() and 0xFF
 }
-
-actual open class ByteArrayInputStream actual constructor(val buf: ByteArray, val start: Int, val size: Int) : InputStream() {
-    var current = 0
-
-    override fun read(): Int {
-        if (current >= size) return -1
-        return buf[start + current++].toInt() and 0xFF
-    }
-
-    override fun close() = Unit
-}

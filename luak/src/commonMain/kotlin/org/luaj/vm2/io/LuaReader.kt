@@ -38,7 +38,6 @@ open class StrLuaReader(val s: String) : LuaReader() {
 // @TODO: Move to Java. Use UTF-8
 open class InputStreamLuaReader(val iss: InputStream, val encoding: String? = null) : LuaReader() {
     init {
-        error("Unsupported InputStreamLuaReader")
         if (encoding != null) {
             error("Unsupported encoding $encoding")
         }

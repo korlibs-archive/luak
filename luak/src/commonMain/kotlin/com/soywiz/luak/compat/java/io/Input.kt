@@ -22,5 +22,3 @@ expect open class DataInputStream(iss: InputStream) : FilterInputStream {
     fun readFully(b: ByteArray, off: Int, len: Int)
 }
 
-expect open class ByteArrayInputStream(buf: ByteArray, start: Int, size: Int) : InputStream {
-}

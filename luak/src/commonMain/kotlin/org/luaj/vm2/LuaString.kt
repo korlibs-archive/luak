@@ -22,12 +22,11 @@
 package org.luaj.vm2
 
 
-import com.soywiz.luak.compat.java.io.ByteArrayInputStream
 import com.soywiz.luak.compat.java.io.DataOutputStream
 import com.soywiz.luak.compat.java.io.InputStream
 import com.soywiz.luak.compat.java.io.PrintStream
-import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 import org.luaj.vm2.lib.MathLib
 import kotlin.jvm.*
@@ -326,7 +325,7 @@ private constructor(
      *
      * @return [InputStream] whose data matches the bytes in this [LuaString]
      */
-    fun toInputStream(): InputStream = ByteArrayInputStream(m_bytes, m_offset, m_length)
+    fun toLuaBinInput(): BytesLuaBinInput = BytesLuaBinInput(m_bytes, m_offset, m_length)
 
     /**
      * Copy the bytes of the string into the given byte array.
