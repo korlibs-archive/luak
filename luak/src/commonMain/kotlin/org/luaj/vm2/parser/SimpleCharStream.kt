@@ -5,6 +5,7 @@ package org.luaj.vm2.parser
 import com.soywiz.luak.compat.java.io.*
 import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 import kotlin.jvm.*
 
 /**
@@ -15,7 +16,7 @@ import kotlin.jvm.*
 class SimpleCharStream
 /** Constructor.  */
 @JvmOverloads constructor(
-    protected var inputStream: Reader,
+    protected var inputStream: LuaReader,
     startline: Int = 1,
     startcolumn: Int = 1, buffersize: Int = 4096
 ) {
@@ -229,7 +230,7 @@ class SimpleCharStream
     /** Reinitialise.  */
     @JvmOverloads
     fun ReInit(
-        dstream: Reader, startline: Int = 1,
+        dstream: LuaReader, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) {
         inputStream = dstream
@@ -258,7 +259,7 @@ class SimpleCharStream
         dstream: InputStream, encoding: String?, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) : this(
-        if (encoding == null) InputStreamReader(dstream) else InputStreamReader(dstream, encoding),
+        if (encoding == null) InputStreamLuaReader(dstream) else InputStreamLuaReader(dstream, encoding),
         startline,
         startcolumn,
         buffersize
@@ -269,7 +270,7 @@ class SimpleCharStream
     constructor(
         dstream: InputStream, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
-    ) : this(InputStreamReader(dstream), startline, startcolumn, buffersize) {
+    ) : this(InputStreamLuaReader(dstream), startline, startcolumn, buffersize) {
     }
 
     /** Reinitialise.  */
@@ -279,7 +280,7 @@ class SimpleCharStream
         dstream: InputStream, encoding: String?, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) {
-        ReInit(if (encoding == null) InputStreamReader(dstream) else InputStreamReader(dstream, encoding), startline, startcolumn, buffersize)
+        ReInit(if (encoding == null) InputStreamLuaReader(dstream) else InputStreamLuaReader(dstream, encoding), startline, startcolumn, buffersize)
     }
 
     /** Reinitialise.  */
@@ -288,7 +289,7 @@ class SimpleCharStream
         dstream: InputStream, startline: Int = 1,
         startcolumn: Int = 1, buffersize: Int = 4096
     ) {
-        ReInit(InputStreamReader(dstream), startline, startcolumn, buffersize)
+        ReInit(InputStreamLuaReader(dstream), startline, startcolumn, buffersize)
     }
 
     /** Get token literal value.  */

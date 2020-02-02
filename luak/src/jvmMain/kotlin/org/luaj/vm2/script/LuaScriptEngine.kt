@@ -24,6 +24,7 @@ package org.luaj.vm2.script
 import javax.script.*
 
 import org.luaj.vm2.*
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.ThreeArgFunction
 import org.luaj.vm2.lib.TwoArgFunction
 import org.luaj.vm2.lib.jse.CoerceJavaToLua
@@ -67,7 +68,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
             val `is` = Utf8Encoder(script)
             try {
                 val g = ctx.globals
-                val f = g.load(script, "script").checkfunction()
+                val f = g.load(script.toLuaReader(), "script").checkfunction()
                 return LuajCompiledScript(f!!, g)
             } catch (lee: LuaError) {
                 throw ScriptException(lee.message)

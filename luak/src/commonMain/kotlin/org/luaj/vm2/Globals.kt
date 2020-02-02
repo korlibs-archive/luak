@@ -24,6 +24,7 @@ package org.luaj.vm2
 import com.soywiz.luak.compat.java.io.*
 import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.internal.*
+import org.luaj.vm2.io.*
 
 import org.luaj.vm2.lib.BaseLib
 import org.luaj.vm2.lib.DebugLib
@@ -200,14 +201,14 @@ open class Globals : LuaTable() {
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @com.soywiz.luak.compat.java.Throws LuaError if the script could not be compiled.
      */
-    open fun load(script: String, chunkname: String): LuaValue = load(StrReader(script), chunkname)
+    open fun load(script: String, chunkname: String): LuaValue = load(StrLuaReader(script), chunkname)
 
     /** Convenience function to load a string value as a script.  Must be lua source.
      * @param script Contents of a lua script, such as "print 'hello, world.'"
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @com.soywiz.luak.compat.java.Throws LuaError if the script could not be compiled.
      */
-    open fun load(script: String): LuaValue = load(StrReader(script), script)
+    open fun load(script: String): LuaValue = load(StrLuaReader(script), script)
 
     /** Convenience function to load a string value as a script with a custom environment.
      * Must be lua source.
@@ -218,7 +219,7 @@ open class Globals : LuaTable() {
      * @com.soywiz.luak.compat.java.Throws LuaError if the script could not be compiled.
      */
     fun load(script: String, chunkname: String, environment: LuaTable): LuaValue =
-        load(StrReader(script), chunkname, environment)
+        load(StrLuaReader(script), chunkname, environment)
 
     /** Load the content form a reader as a text file.  Must be lua source.
      * The source is converted to UTF-8, so any characters appearing in quoted literals
@@ -228,7 +229,7 @@ open class Globals : LuaTable() {
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @com.soywiz.luak.compat.java.Throws LuaError if the script could not be compiled.
      */
-    fun load(reader: Reader, chunkname: String): LuaValue = load(UTF8Stream(reader), chunkname, "t", this)
+    fun load(reader: LuaReader, chunkname: String): LuaValue = load(UTF8Stream(reader), chunkname, "t", this)
 
     /** Load the content form a reader as a text file, supplying a custom environment.
      * Must be lua source. The source is converted to UTF-8, so any characters
@@ -240,7 +241,7 @@ open class Globals : LuaTable() {
      * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
      * @com.soywiz.luak.compat.java.Throws LuaError if the script could not be compiled.
      */
-    fun load(reader: Reader, chunkname: String, environment: LuaTable): LuaValue =
+    fun load(reader: LuaReader, chunkname: String, environment: LuaTable): LuaValue =
         load(UTF8Stream(reader), chunkname, "t", environment)
 
     /** Load the content form an input stream as a binary chunk or text file.
@@ -287,7 +288,7 @@ open class Globals : LuaTable() {
      * are converted to bytes using the UTF-8 encoding, so a string literal containing
      * characters with codepoints 128 or above will be converted into multiple bytes.
      */
-    fun compilePrototype(reader: Reader, chunkname: String): Prototype = compilePrototype(UTF8Stream(reader), chunkname)
+    fun compilePrototype(reader: LuaReader, chunkname: String): Prototype = compilePrototype(UTF8Stream(reader), chunkname)
 
     /** Compile lua source from an InputStream into a Prototype.
      * The input is assumed to be UTf-8, but since bytes in the range 128-255 are passed along as
@@ -303,24 +304,9 @@ open class Globals : LuaTable() {
      * @return Values supplied as arguments to the resume() call that reactivates this thread.
      */
     fun yield(args: Varargs): Varargs {
-        if (running == null || running!!.isMainThread) throw LuaError("cannot yield main thread")
-        val s = running!!.state
+        if (running.isMainThread) throw LuaError("cannot yield main thread")
+        val s = running.state
         return s.lua_yield(args)
-    }
-
-    /** Reader implementation to read chars from a String in JME or JSE.  */
-    internal class StrReader(val s: String) : Reader() {
-        var i = 0
-        val n: Int = s.length
-
-        override fun close() = run { i = n }
-        override fun read(): Int = if (i < n) s[i++].toInt() and 0xFF else -1
-
-        override fun read(cbuf: CharArray, off: Int, len: Int): Int {
-            var j = 0
-            while (j < len && i < n) cbuf[off + j++] = s[i++]
-            return if (j > 0 || len == 0) j else -1
-        }
     }
 
     /* Abstract base class to provide basic buffered input storage and delivery.
@@ -351,7 +337,7 @@ open class Globals : LuaTable() {
      * on both JME and JSE.
      * This class may be moved to its own package in the future.
      */
-    internal class UTF8Stream(private val r: Reader) : AbstractBufferedStream(96) {
+    internal class UTF8Stream(private val r: LuaReader) : AbstractBufferedStream(96) {
         private val c = CharArray(32)
 
         override fun avail(): Int {

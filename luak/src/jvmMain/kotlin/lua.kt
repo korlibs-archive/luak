@@ -21,6 +21,7 @@
  */
 
 import org.luaj.vm2.*
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.JsePlatform
 import java.io.*
 import java.util.*
@@ -179,7 +180,7 @@ object lua {
             try {
                 script = BufferedInputStream(script)
                 c = if (encoding != null)
-                    globals!!.load(InputStreamReader(script, encoding!!), chunkname)
+                    globals!!.load(InputStreamReader(script, encoding!!).toLuaReader(), chunkname)
                 else
                     globals!!.load(script, chunkname, "bt", globals)
             } finally {

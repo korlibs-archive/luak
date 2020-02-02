@@ -24,6 +24,7 @@ import org.luaj.vm2.Globals
 import org.luaj.vm2.Lua
 import org.luaj.vm2.Print
 import org.luaj.vm2.compiler.DumpState
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.JsePlatform
 import java.io.*
 
@@ -134,7 +135,7 @@ private constructor(args: Array<String>) {
             // create the chunk
             script = BufferedInputStream(script)
             val chunk = if (encoding != null)
-                globals.compilePrototype(InputStreamReader(script, encoding!!), chunkname)
+                globals.compilePrototype(InputStreamReader(script, encoding!!).toLuaReader(), chunkname)
             else
                 globals.compilePrototype(script, chunkname)
 

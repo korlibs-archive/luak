@@ -21,8 +21,8 @@
  */
 package org.luaj.vm2.server
 
-import com.soywiz.luak.compat.java.io.InputStream
-import com.soywiz.luak.compat.java.io.Reader
+import org.luaj.vm2.io.*
+import java.io.*
 
 /** Interface to launch lua scripts using the [LuajClassLoader].
  * <P>
@@ -68,5 +68,5 @@ interface Launcher {
      * @param arg Optional arguments supplied to the script.
      * @return return values from the script.
      */
-    fun launch(script: Reader, arg: Array<Any>?): Array<Any?>?
+    fun launch(script: LuaReader, arg: Array<Any>?): Array<Any?>?
 }

@@ -1,6 +1,7 @@
 package org.luaj.vm2.compiler
 
 import org.luaj.vm2.*
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.*
 import java.io.*
 import kotlin.test.*
@@ -93,7 +94,7 @@ class DumpLoadEndianIntTest {
         try {
 
             // compile into prototype
-            val reader = StringReader(script)
+            val reader = StrLuaReader(script)
             val p = globals!!.compilePrototype(reader, "script")
 
             // double check script result before dumping

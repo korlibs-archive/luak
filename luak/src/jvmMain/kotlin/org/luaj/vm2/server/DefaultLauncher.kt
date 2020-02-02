@@ -22,13 +22,14 @@
 package org.luaj.vm2.server
 
 import com.soywiz.luak.compat.java.io.InputStream
-import com.soywiz.luak.compat.java.io.Reader
 
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Varargs
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.CoerceJavaToLua
 import org.luaj.vm2.lib.jse.JsePlatform
+import java.io.*
 
 /**
  * Default [Launcher] instance that creates standard globals
@@ -58,7 +59,7 @@ class DefaultLauncher : Launcher {
         launchChunk(g.load(script, "main", "bt", g), arg!!)
 
     /** Launches the script with chunk name 'main'  */
-    override fun launch(script: Reader, arg: Array<Any>?): Array<Any?> = launchChunk(g.load(script, "main"), arg!!)
+    override fun launch(script: LuaReader, arg: Array<Any>?): Array<Any?> = launchChunk(g.load(script, "main"), arg!!)
 
     private fun launchChunk(chunk: LuaValue, arg: Array<Any>): Array<Any?> {
         val args = Array(arg.size) { CoerceJavaToLua.coerce(arg[it]) }

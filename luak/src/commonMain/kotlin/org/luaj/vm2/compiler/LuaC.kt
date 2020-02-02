@@ -99,8 +99,7 @@ class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Load
 
 
     @Deprecated(
-        " Use Globals.load(InputString, String, String) instead, \n" +
-                "\t  or LuaC.compile(InputStream, String) and construct LuaClosure directly."
+        " Use Globals.load(InputString, String, String) instead, \n\t  or LuaC.compile(InputStream, String) and construct LuaClosure directly.", ReplaceWith("LuaClosure(compile(stream, chunkname), globals)", "org.luaj.vm2.LuaClosure")
     )
 
     fun load(stream: InputStream, chunkname: String, globals: Globals): LuaValue {

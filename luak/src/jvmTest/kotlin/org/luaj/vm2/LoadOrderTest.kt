@@ -21,6 +21,7 @@
  */
 package org.luaj.vm2
 
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.jse.*
 import org.luaj.vm2.server.*
 import java.io.*
@@ -52,7 +53,7 @@ class LoadOrderTest {
             return null
         }
 
-        override fun launch(script: Reader, arg: Array<Any>?): Array<Any?>? {
+        override fun launch(script: LuaReader, arg: Array<Any>?): Array<Any?>? {
             return null
         }
 

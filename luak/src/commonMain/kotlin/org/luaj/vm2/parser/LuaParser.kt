@@ -4,6 +4,7 @@ package org.luaj.vm2.parser
 import com.soywiz.luak.compat.java.lang.*
 import org.luaj.vm2.*
 import org.luaj.vm2.ast.*
+import org.luaj.vm2.io.*
 import kotlin.jvm.*
 
 class LuaParser : LuaParserConstants {
@@ -1611,7 +1612,7 @@ class LuaParser : LuaParserConstants {
     }
 
     /** Constructor.  */
-    constructor(stream: com.soywiz.luak.compat.java.io.Reader) {
+    constructor(stream: LuaReader) {
         charStream = SimpleCharStream(stream, 1, 1)
         token_source = LuaParserTokenManager(charStream)
         token = Token()
@@ -1622,7 +1623,7 @@ class LuaParser : LuaParserConstants {
     }
 
     /** Reinitialise.  */
-    fun ReInit(stream: com.soywiz.luak.compat.java.io.Reader) {
+    fun ReInit(stream: LuaReader) {
         charStream.ReInit(stream, 1, 1)
         token_source.ReInit(charStream)
         token = Token()

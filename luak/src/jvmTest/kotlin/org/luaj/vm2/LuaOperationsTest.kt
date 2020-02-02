@@ -22,6 +22,7 @@
 package org.luaj.vm2
 
 import org.luaj.vm2.TypeTest.*
+import org.luaj.vm2.io.*
 import org.luaj.vm2.lib.*
 import java.io.*
 import java.lang.reflect.*
@@ -135,7 +136,7 @@ class LuaOperationsTest {
     fun createPrototype(script: String, name: String): Prototype? {
         try {
             val globals = org.luaj.vm2.lib.jse.JsePlatform.standardGlobals()
-            val reader = StringReader(script)
+            val reader = StrLuaReader(script)
             return globals.compilePrototype(reader, name)
         } catch (e: Exception) {
             // TODO Auto-generated catch block
