@@ -24,19 +24,6 @@ actual open class FilterInputStream(val iss: InputStream) : InputStream() {
     }
 }
 
-actual open class BufferedInputStream actual constructor(iss: InputStream) : FilterInputStream(iss) {
-}
-
-actual open class FileInputStream actual constructor(file: String) : InputStream() {
-    override fun read(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun close() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-}
-
 actual open class DataInputStream actual constructor(iss: InputStream) : FilterInputStream(iss) {
     actual fun readFully(buf: ByteArray, i: Int, i1: Int) {
     }

@@ -10,7 +10,3 @@ actual open class EOFException : IOException {
     actual constructor(message: String) : super(message)
 }
 
-actual open class UnsupportedEncodingException : IOException {
-    actual constructor() : super()
-    actual constructor(message: String) : super(message)
-}

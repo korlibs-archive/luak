@@ -126,7 +126,7 @@ open class BaseLib : TwoArgFunction(), ResourceFinder {
      * Tries to open the file as a resource, which can work for JSE and JME.
      */
     override fun findResource(filename: String): InputStream? {
-        return this::class.getResourceAsStream(if (filename.startsWith("/")) filename else "/$filename")
+        return this::class.getResourceAsStreamPortable(if (filename.startsWith("/")) filename else "/$filename")
     }
 
 

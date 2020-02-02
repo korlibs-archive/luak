@@ -10,7 +10,3 @@ expect open class EOFException : IOException {
     constructor(message: String)
 }
 
-expect open class UnsupportedEncodingException : IOException {
-    constructor()
-    constructor(message: String)
-}

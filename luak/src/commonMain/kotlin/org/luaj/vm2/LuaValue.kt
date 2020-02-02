@@ -760,7 +760,7 @@ abstract class LuaValue : Varargs() {
      * @see .TUSERDATA
      */
     open fun optuserdata(c: KClass<*>, defval: Any?): Any? {
-        argerror(c.name)
+        argerror(c.portableName)
     }
 
     /** Perform argument check that this is not nil or none.

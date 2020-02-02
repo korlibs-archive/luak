@@ -16,12 +16,6 @@ expect abstract class InputStream() : Closeable {
 expect open class FilterInputStream : InputStream {
 }
 
-expect open class BufferedInputStream(iss: InputStream) : FilterInputStream {
-}
-
-expect open class FileInputStream(file: String) : InputStream {
-}
-
 expect open class DataInputStream(iss: InputStream) : FilterInputStream {
     fun readByte(): Byte
     fun readUnsignedByte(): Int

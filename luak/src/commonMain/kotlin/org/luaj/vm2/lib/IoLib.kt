@@ -297,7 +297,7 @@ abstract class IoLib : TwoArgFunction() {
     fun _io_flush(): Varargs {
         checkopen(output())
         outfile!!.flush()
-        return LuaValue.TRUE
+        return TRUE
     }
 
     //	io.tmpfile() -> file
@@ -368,7 +368,7 @@ abstract class IoLib : TwoArgFunction() {
 
     fun _io_read(args: Varargs): Varargs {
         checkopen(input())
-        return ioread(infile, args)
+        return ioread(infile!!, args)
     }
 
     //	io.write(...) -> void
@@ -388,13 +388,13 @@ abstract class IoLib : TwoArgFunction() {
 
     fun _file_flush(file: LuaValue): Varargs {
         checkfile(file).flush()
-        return LuaValue.TRUE
+        return TRUE
     }
 
     // file:setvbuf(mode,[size]) -> void
     fun _file_setvbuf(file: LuaValue, mode: String?, size: Int): Varargs {
         checkfile(file).setvbuf(mode, size)
-        return LuaValue.TRUE
+        return TRUE
     }
 
     // file:lines() -> iterator
@@ -463,7 +463,7 @@ abstract class IoLib : TwoArgFunction() {
     }
 
 
-    private fun ioread(f: File?, args: Varargs): Varargs {
+    private fun ioread(f: File, args: Varargs): Varargs {
         var i: Int
         val n = args.narg()
         val v = arrayOfNulls<LuaValue>(n)
@@ -475,12 +475,12 @@ abstract class IoLib : TwoArgFunction() {
             item@do {
                 when ((run { ai = args.arg(i + 1); ai }).type()) {
                     LuaValue.TNUMBER -> {
-                        vi = freadbytes(f!!, ai.toint())
+                        vi = freadbytes(f, ai.toint())
                         break@item
                     }
                     LuaValue.TSTRING -> {
                         fmt = ai.checkstring()
-                        if (fmt!!.m_length == 2 && fmt.m_bytes[fmt.m_offset] == '*'.toByte()) {
+                        if (fmt.m_length == 2 && fmt.m_bytes[fmt.m_offset] == '*'.toByte()) {
                             when (fmt.m_bytes[fmt.m_offset + 1].toChar()) {
                                 'n' -> {
                                     vi = freadnumber(f)
@@ -491,7 +491,7 @@ abstract class IoLib : TwoArgFunction() {
                                     break@item
                                 }
                                 'a' -> {
-                                    vi = freadall(f!!)
+                                    vi = freadall(f)
                                     break@item
                                 }
                             }
@@ -577,7 +577,7 @@ abstract class IoLib : TwoArgFunction() {
         }
 
          private fun successresult(): Varargs {
-            return LuaValue.TRUE
+            return TRUE
         }
 
          private fun errorresult(ioe: Exception): Varargs {
@@ -629,21 +629,20 @@ abstract class IoLib : TwoArgFunction() {
         }
 
 
-         fun freaduntil(f: File?, lineonly: Boolean): LuaValue {
+         fun freaduntil(f: File, lineonly: Boolean): LuaValue {
             val baos = ByteArrayOutputStream()
             var c: Int
             try {
                 if (lineonly) {
-                    loop@ while ((run { c = f!!.read(); c }) > 0) {
+                    loop@ while ((run { c = f.read(); c }) > 0) {
                         when (c.toChar()) {
-                            '\r' -> {
-                            }
+                            '\r' -> Unit
                             '\n' -> break@loop
                             else -> baos.write(c)
                         }
                     }
                 } else {
-                    while ((run { c = f!!.read(); c }) > 0)
+                    while ((run { c = f.read(); c }) > 0)
                         baos.write(c)
                 }
             } catch (e: EOFException) {
@@ -657,7 +656,7 @@ abstract class IoLib : TwoArgFunction() {
         }
 
 
-         fun freadline(f: File?): LuaValue {
+         fun freadline(f: File): LuaValue {
             return freaduntil(f, true)
         }
 

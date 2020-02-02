@@ -234,7 +234,7 @@ class Print : Lua() {
                     if (Lua.ISK(c)) printConstant(ps, f, Lua.INDEXK(c)) else ps.print("-")
                 }
                 Lua.OP_JMP, Lua.OP_FORLOOP, Lua.OP_FORPREP -> ps.print("  ; to " + (sbx + pc + 2))
-                Lua.OP_CLOSURE -> ps.print("  ; " + f.p[bx]::class.name)
+                Lua.OP_CLOSURE -> ps.print("  ; " + f.p[bx]::class.portableName)
                 Lua.OP_SETLIST -> if (c == 0) ps.print("  ; " + code[++pc]) else ps.print("  ; $c")
                 Lua.OP_VARARG -> ps.print("  ; is_vararg=" + f.is_vararg)
                 else -> Unit
@@ -390,7 +390,7 @@ class Print : Lua() {
                         LuaValue.TUSERDATA -> {
                             val o = v.touserdata()
                             if (o != null) {
-                                var n = o::class.name
+                                var n = o::class.portableName
                                 n = n.substring(n.lastIndexOf('.') + 1)
                                 ps.print(n + ": " + Integer.toHexString(o.hashCode()))
                             } else {

@@ -17,7 +17,7 @@ expect open class DataOutputStream(out: OutputStream) : FilterOutputStream {
     fun writeInt(x: Int): Unit
 }
 
-expect open class ByteArrayOutputStream : OutputStream {
+expect open class ByteArrayOutputStream() : OutputStream {
     open fun size(): Int
     fun toByteArray(): ByteArray
 }

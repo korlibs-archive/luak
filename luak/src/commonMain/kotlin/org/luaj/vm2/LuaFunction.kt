@@ -77,7 +77,7 @@ abstract class LuaFunction : LuaValue() {
      * @return String naming the last part of the class name after the last dot (.) or dollar sign ($).
      */
     fun classnamestub(): String {
-        val s = this::class.name
+        val s = this::class.portableName
         return s.substring(kotlin.math.max(s.lastIndexOf('.'), s.lastIndexOf('$')) + 1)
     }
 

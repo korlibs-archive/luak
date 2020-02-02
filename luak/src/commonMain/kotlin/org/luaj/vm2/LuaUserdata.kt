@@ -65,7 +65,7 @@ open class LuaUserdata : LuaValue {
     }
 
     override fun isuserdata(c: KClass<*>): Boolean {
-        return c.isInstance2(m_instance)
+        return c.isInstancePortable(m_instance)
     }
 
     override fun touserdata(): Any {
@@ -73,7 +73,7 @@ open class LuaUserdata : LuaValue {
     }
 
     override fun touserdata(c: KClass<*>): Any? {
-        return if (c.isInstance2(m_instance)) m_instance else null
+        return if (c.isInstancePortable(m_instance)) m_instance else null
     }
 
     override fun optuserdata(defval: Any?): Any? {
@@ -81,8 +81,8 @@ open class LuaUserdata : LuaValue {
     }
 
     override fun optuserdata(c: KClass<*>, defval: Any?): Any? {
-        if (!c.isInstance2(m_instance))
-            typerror(c.name)
+        if (!c.isInstancePortable(m_instance))
+            typerror(c.portableName)
         return m_instance
     }
 
@@ -101,7 +101,7 @@ open class LuaUserdata : LuaValue {
 
     override fun checkuserdata(c: KClass<*>): Any? {
 
-        return if (c.isInstance2(m_instance)) m_instance else typerror(c.name)
+        return if (c.isInstancePortable(m_instance)) m_instance else typerror(c.portableName)
     }
 
     override fun get(key: LuaValue): LuaValue {

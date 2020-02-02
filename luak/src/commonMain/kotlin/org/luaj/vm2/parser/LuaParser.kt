@@ -1589,12 +1589,7 @@ class LuaParser : LuaParserConstants {
     /** Constructor with InputStream and supplied encoding  */
     @JvmOverloads
     constructor(stream: com.soywiz.luak.compat.java.io.InputStream, encoding: String? = null) {
-        try {
-            charStream = SimpleCharStream(stream, encoding, 1, 1)
-        } catch (e: com.soywiz.luak.compat.java.io.UnsupportedEncodingException) {
-            throw RuntimeException(e.message)
-        }
-
+        charStream = SimpleCharStream(stream, encoding, 1, 1)
         token_source = LuaParserTokenManager(charStream)
         token = Token()
         jj_ntk = -1
@@ -1606,12 +1601,7 @@ class LuaParser : LuaParserConstants {
     /** Reinitialise.  */
     @JvmOverloads
     fun ReInit(stream: com.soywiz.luak.compat.java.io.InputStream, encoding: String? = null) {
-        try {
-            charStream.ReInit(stream, encoding, 1, 1)
-        } catch (e: com.soywiz.luak.compat.java.io.UnsupportedEncodingException) {
-            throw RuntimeException(e.message)
-        }
-
+        charStream.ReInit(stream, encoding, 1, 1)
         token_source.ReInit(charStream)
         token = Token()
         jj_ntk = -1

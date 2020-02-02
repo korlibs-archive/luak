@@ -20,11 +20,10 @@
  * THE SOFTWARE.
  */
 
-import com.soywiz.luak.compat.java.io.*
-import com.soywiz.luak.compat.java.lang.*
-import com.soywiz.luak.compat.java.util.*
 import org.luaj.vm2.*
 import org.luaj.vm2.lib.jse.JsePlatform
+import java.io.*
+import java.util.*
 import kotlin.jvm.*
 
 /**
@@ -52,10 +51,9 @@ object lua {
 
     private fun usageExit() {
         println(usage)
-        JSystem.exit(-1)
+        System.exit(-1)
     }
 
-    @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
         // process args
@@ -129,7 +127,7 @@ object lua {
                     processScript(FileInputStream(args[i]), args[i], args, i)
                     break
                 } else if ("-" == args[i]) {
-                    processScript(JSystem.`in`, "=stdin", args, i)
+                    processScript(System.`in`, "=stdin", args, i)
                     break
                 } else {
                     when (args[i][1]) {
@@ -148,8 +146,8 @@ object lua {
                 interactiveMode()
 
         } catch (ioe: IOException) {
-            JSystem.err.println(ioe.toString())
-            JSystem.exit(-2)
+            System.err.println(ioe.toString())
+            System.exit(-2)
         }
 
     }
@@ -192,7 +190,7 @@ object lua {
             val scriptargs = setGlobalArg(chunkname, args, firstarg, globals)
             c.invoke(scriptargs)
         } catch (e: Exception) {
-            e.printStackTrace(JSystem.err)
+            e.printStackTrace(System.err)
         }
 
     }
@@ -211,10 +209,10 @@ object lua {
 
     @Throws(IOException::class)
     private fun interactiveMode() {
-        val reader = BufferedReader(InputStreamReader(JSystem.`in`))
+        val reader = BufferedReader(InputStreamReader(System.`in`))
         while (true) {
             print("> ")
-            JSystem.out.flush()
+            System.out.flush()
             val line = reader.readLine() ?: return
             processScript(ByteArrayInputStream(line.toByteArray()), "=stdin", null, 0)
         }
