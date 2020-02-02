@@ -254,6 +254,7 @@ open class Globals : LuaTable() {
         } catch (l: LuaError) {
             throw l
         } catch (e: Exception) {
+            e.printStackTrace()
             return LuaValue.error("load $chunkname: $e")
         }
     }
