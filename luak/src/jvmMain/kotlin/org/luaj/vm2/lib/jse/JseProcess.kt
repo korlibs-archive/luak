@@ -21,9 +21,9 @@
  */
 package org.luaj.vm2.lib.jse
 
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import com.soywiz.luak.compat.java.io.InputStream
+import com.soywiz.luak.compat.java.io.OutputStream
+import java.io.*
 
 /** Analog of Process that pipes input and output to client-specified streams.
  */
@@ -33,9 +33,9 @@ class JseProcess private constructor(
     stdout: OutputStream?,
     stderr: OutputStream?
 ) {
-    @JvmField internal val input: Thread? = if (stdin == null) null else copyBytes(stdin, process.outputStream, null, process.outputStream)
-    @JvmField internal val output: Thread? = if (stdout == null) null else copyBytes(process.inputStream, stdout, process.inputStream, null)
-    @JvmField internal val error: Thread? = if (stderr == null) null else copyBytes(process.errorStream, stderr, process.errorStream, null)
+    @kotlin.jvm.JvmField internal val input: Thread? = if (stdin == null) null else copyBytes(stdin, process.outputStream, null, process.outputStream)
+    @kotlin.jvm.JvmField internal val output: Thread? = if (stdout == null) null else copyBytes(process.inputStream, stdout, process.inputStream, null)
+    @kotlin.jvm.JvmField internal val error: Thread? = if (stderr == null) null else copyBytes(process.errorStream, stderr, process.errorStream, null)
 
     /** Construct a process around a command, with specified streams to redirect input and output to.
      *
@@ -43,10 +43,10 @@ class JseProcess private constructor(
      * @param stdin Optional InputStream to read from as process input, or null if input is not needed.
      * @param stdout Optional OutputStream to copy process output to, or null if output is ignored.
      * @param stderr Optinoal OutputStream to copy process stderr output to, or null if output is ignored.
-     * @throws IOException If the system process could not be created.
+     * @com.soywiz.luak.compat.java.Throws IOException If the system process could not be created.
      * @see Process
      */
-    @Throws(IOException::class)
+    @com.soywiz.luak.compat.java.Throws(IOException::class)
     constructor(
         cmd: Array<String>,
         stdin: InputStream,
@@ -61,10 +61,10 @@ class JseProcess private constructor(
      * @param stdin Optional InputStream to read from as process input, or null if input is not needed.
      * @param stdout Optional OutputStream to copy process output to, or null if output is ignored.
      * @param stderr Optinoal OutputStream to copy process stderr output to, or null if output is ignored.
-     * @throws IOException If the system process could not be created.
+     * @com.soywiz.luak.compat.java.Throws IOException If the system process could not be created.
      * @see Process
      */
-    @Throws(IOException::class)
+    @com.soywiz.luak.compat.java.Throws(IOException::class)
     constructor(
         cmd: String,
         stdin: InputStream?,
@@ -80,9 +80,9 @@ class JseProcess private constructor(
 
     /** Wait for the process to complete, and all pending output to finish.
      * @return The exit status.
-     * @throws InterruptedException
+     * @com.soywiz.luak.compat.java.Throws InterruptedException
      */
-    @Throws(InterruptedException::class)
+    @com.soywiz.luak.compat.java.Throws(InterruptedException::class)
     fun waitFor(): Int {
         val r = process.waitFor()
         input?.join()

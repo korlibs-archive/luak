@@ -22,12 +22,6 @@
 package org.luaj.vm2.lib.jse
 
 
-import java.lang.reflect.Array
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
-
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaError
 import org.luaj.vm2.LuaTable
@@ -36,6 +30,7 @@ import org.luaj.vm2.Varargs
 import org.luaj.vm2.compiler.LuaC
 import org.luaj.vm2.lib.LibFunction
 import org.luaj.vm2.lib.VarArgFunction
+import java.lang.reflect.*
 
 /**
  * Subclass of [LibFunction] which implements the features of the luajava package.
@@ -98,7 +93,7 @@ class LuajavaLib : VarArgFunction() {
                     // LuaValue modname = args.arg1();
                     val env = args.arg(2)
                     val t = LuaTable()
-                    bind(t, this.javaClass, NAMES, BINDCLASS)
+                    bind(t, { LuajavaLib() }, NAMES, BINDCLASS)
                     env["luajava"] = t
                     env["package"]["loaded"]["luajava"] = t
                     return t
@@ -111,7 +106,7 @@ class LuajavaLib : VarArgFunction() {
                     // get constructor
                     val c = args.checkvalue(1)
                     val clazz =
-                        if (opcode == NEWINSTANCE) classForName(c.tojstring()) else c.checkuserdata(Class::class.java) as Class<*>?
+                        if (opcode == NEWINSTANCE) classForName(c.tojstring()) else c.checkuserdata(Class::class) as Class<*>?
                     val consargs = args.subargs(2)
                     return JavaClass.forClass(clazz!!).getConstructor()!!.invoke(consargs)
                 }
@@ -156,14 +151,14 @@ class LuajavaLib : VarArgFunction() {
     }
 
     // load classes using app loader to allow luaj to be used as an extension
-    @Throws(ClassNotFoundException::class)
+    @com.soywiz.luak.compat.java.Throws(ClassNotFoundException::class)
     protected fun classForName(name: String?): Class<*> {
         return Class.forName(name, true, ClassLoader.getSystemClassLoader())
     }
 
     class ProxyInvocationHandler constructor(private val lobj: LuaValue) : InvocationHandler {
 
-        @Throws(Throwable::class)
+        @com.soywiz.luak.compat.java.Throws(Throwable::class)
         override fun invoke(proxy: Any, method: Method, args: kotlin.Array<Any>?): Any? {
             val name = method.name
             val func = lobj[name]
@@ -174,10 +169,10 @@ class LuajavaLib : VarArgFunction() {
             val v: kotlin.Array<LuaValue>
             if (isvarargs) {
                 val o = args!![--n]
-                val m = Array.getLength(o)
+                val m = java.lang.reflect.Array.getLength(o)
                 v = arrayOfNulls<LuaValue>(n + m) as kotlin.Array<LuaValue>
                 for (i in 0 until n) v[i] = CoerceJavaToLua.coerce(args!![i])
-                for (i in 0 until m) v[i + n] = CoerceJavaToLua.coerce(Array.get(o, i))
+                for (i in 0 until m) v[i + n] = CoerceJavaToLua.coerce(java.lang.reflect.Array.get(o, i))
             } else {
                 v = Array<LuaValue>(n) { CoerceJavaToLua.coerce(args!![it]) }
             }
@@ -195,7 +190,7 @@ class LuajavaLib : VarArgFunction() {
         internal const val CREATEPROXY = 4
         internal const val LOADLIB = 5
 
-        @JvmField
+        @kotlin.jvm.JvmField
         internal val NAMES = arrayOf("bindClass", "newInstance", "new", "createProxy", "loadLib")
 
         internal const val METHOD_MODIFIERS_VARARGS = 0x80

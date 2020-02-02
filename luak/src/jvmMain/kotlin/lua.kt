@@ -20,11 +20,12 @@
  * THE SOFTWARE.
  */
 
+import com.soywiz.luak.compat.java.io.*
+import com.soywiz.luak.compat.java.lang.*
+import com.soywiz.luak.compat.java.util.*
 import org.luaj.vm2.*
 import org.luaj.vm2.lib.jse.JsePlatform
-import java.io.*
-import java.util.*
-
+import kotlin.jvm.*
 
 /**
  * lua command for use in JSE environments.
@@ -51,13 +52,12 @@ object lua {
 
     private fun usageExit() {
         println(usage)
-        System.exit(-1)
+        JSystem.exit(-1)
     }
 
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
-
         // process args
         var interactive = args.size == 0
         var versioninfo = false
@@ -129,7 +129,7 @@ object lua {
                     processScript(FileInputStream(args[i]), args[i], args, i)
                     break
                 } else if ("-" == args[i]) {
-                    processScript(System.`in`, "=stdin", args, i)
+                    processScript(JSystem.`in`, "=stdin", args, i)
                     break
                 } else {
                     when (args[i][1]) {
@@ -148,8 +148,8 @@ object lua {
                 interactiveMode()
 
         } catch (ioe: IOException) {
-            System.err.println(ioe.toString())
-            System.exit(-2)
+            JSystem.err.println(ioe.toString())
+            JSystem.exit(-2)
         }
 
     }
@@ -192,7 +192,7 @@ object lua {
             val scriptargs = setGlobalArg(chunkname, args, firstarg, globals)
             c.invoke(scriptargs)
         } catch (e: Exception) {
-            e.printStackTrace(System.err)
+            e.printStackTrace(JSystem.err)
         }
 
     }
@@ -211,10 +211,10 @@ object lua {
 
     @Throws(IOException::class)
     private fun interactiveMode() {
-        val reader = BufferedReader(InputStreamReader(System.`in`))
+        val reader = BufferedReader(InputStreamReader(JSystem.`in`))
         while (true) {
             print("> ")
-            System.out.flush()
+            JSystem.out.flush()
             val line = reader.readLine() ?: return
             processScript(ByteArrayInputStream(line.toByteArray()), "=stdin", null, 0)
         }

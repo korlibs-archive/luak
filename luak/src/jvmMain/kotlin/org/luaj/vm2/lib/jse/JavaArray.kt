@@ -25,7 +25,6 @@ import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaUserdata
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.lib.OneArgFunction
-import java.lang.reflect.Array
 
 /**
  * LuaValue that represents a Java instance of array type.
@@ -45,7 +44,7 @@ internal class JavaArray(instance: Any) : LuaUserdata(instance) {
 
     private class LenFunction : OneArgFunction() {
         override fun call(u: LuaValue): LuaValue {
-            return LuaValue.valueOf(Array.getLength((u as LuaUserdata).m_instance))
+            return LuaValue.valueOf(java.lang.reflect.Array.getLength((u as LuaUserdata).m_instance))
         }
     }
 
@@ -55,11 +54,11 @@ internal class JavaArray(instance: Any) : LuaUserdata(instance) {
 
     override fun get(key: LuaValue): LuaValue {
         return when {
-            key == LENGTH -> LuaValue.valueOf(Array.getLength(m_instance))
+            key == LENGTH -> LuaValue.valueOf(java.lang.reflect.Array.getLength(m_instance))
             key.isint() -> {
                 val i = key.toint() - 1
-                if (i >= 0 && i < Array.getLength(m_instance))
-                    CoerceJavaToLua.coerce(Array.get(m_instance, key.toint() - 1))
+                if (i >= 0 && i < java.lang.reflect.Array.getLength(m_instance))
+                    CoerceJavaToLua.coerce(java.lang.reflect.Array.get(m_instance, key.toint() - 1))
                 else
                     LuaValue.NIL
             }
@@ -70,8 +69,8 @@ internal class JavaArray(instance: Any) : LuaUserdata(instance) {
     override fun set(key: LuaValue, value: LuaValue) {
         if (key.isint()) {
             val i = key.toint() - 1
-            if (i >= 0 && i < Array.getLength(m_instance))
-                Array.set(m_instance, i, CoerceLuaToJava.coerce(value, m_instance.javaClass.componentType))
+            if (i >= 0 && i < java.lang.reflect.Array.getLength(m_instance))
+                java.lang.reflect.Array.set(m_instance, i, CoerceLuaToJava.coerce(value, m_instance.javaClass.componentType))
             else if (m_metatable == null || !LuaValue.settable(this, key, value))
                 LuaValue.error("array index out of bounds")
         } else
@@ -79,10 +78,10 @@ internal class JavaArray(instance: Any) : LuaUserdata(instance) {
     }
 
     companion object {
-        @JvmField
+        @kotlin.jvm.JvmField
         val LENGTH: LuaValue = LuaValue.valueOf("length")
 
-        @JvmField
+        @kotlin.jvm.JvmField
         val array_metatable: LuaTable = LuaTable().apply {
             rawset(LuaValue.LEN, LenFunction())
         }

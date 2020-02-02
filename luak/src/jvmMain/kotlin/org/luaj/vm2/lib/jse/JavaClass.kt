@@ -22,8 +22,7 @@
 package org.luaj.vm2.lib.jse
 
 import org.luaj.vm2.LuaValue
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
+import java.lang.reflect.*
 
 /**
  * LuaValue that represents a Java class.
@@ -41,9 +40,9 @@ import java.lang.reflect.Modifier
  */
 class JavaClass internal constructor(c: Class<*>) : JavaInstance(c), CoerceJavaToLua.Coercion {
 
-    @JvmField internal var fields: Map<LuaValue, Field>? = null
-    @JvmField internal var methods: Map<LuaValue, LuaValue>? = null
-    @JvmField internal var innerclasses: Map<LuaValue, Class<*>>? = null
+    @kotlin.jvm.JvmField internal var fields: Map<LuaValue, Field>? = null
+    @kotlin.jvm.JvmField internal var methods: Map<LuaValue, LuaValue>? = null
+    @kotlin.jvm.JvmField internal var innerclasses: Map<LuaValue, Class<*>>? = null
 
     fun getConstructor(): LuaValue? = getMethod(NEW)
 
@@ -125,11 +124,11 @@ class JavaClass internal constructor(c: Class<*>) : JavaInstance(c), CoerceJavaT
 
     companion object {
 
-        @JvmField internal val classes: MutableMap<Class<*>, JavaClass> = HashMap()
+        @kotlin.jvm.JvmField internal val classes: MutableMap<Class<*>, JavaClass> = HashMap()
 
-        @JvmField internal val NEW: LuaValue = LuaValue.valueOf("new")
+        @kotlin.jvm.JvmField internal val NEW: LuaValue = LuaValue.valueOf("new")
 
-        @JvmStatic fun forClass(c: Class<*>): JavaClass {
+        @kotlin.jvm.JvmStatic fun forClass(c: Class<*>): JavaClass {
             return classes[c] ?: return JavaClass(c).also { classes[c] = it }
         }
     }

@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.lib.jse
 
-import java.lang.reflect.Array
-
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 
@@ -245,9 +243,9 @@ object CoerceLuaToJava {
             when (value.type()) {
                 LuaValue.TTABLE -> {
                     val n = value.length()
-                    val a = Array.newInstance(componentType, n)
+                    val a = java.lang.reflect.Array.newInstance(componentType, n)
                     for (i in 0 until n)
-                        Array.set(a, i, componentCoercion.coerce(value[i + 1]))
+                        java.lang.reflect.Array.set(a, i, componentCoercion.coerce(value[i + 1]))
                     return a
                 }
                 LuaValue.TUSERDATA -> return value.touserdata()
@@ -301,7 +299,7 @@ object CoerceLuaToJava {
                 LuaValue.TNUMBER -> return if (value.isint()) value.toint() else value.todouble()
                 LuaValue.TBOOLEAN -> return value.toboolean()
                 LuaValue.TSTRING -> return value.tojstring()
-                LuaValue.TUSERDATA -> return value.optuserdata(targetType, null)
+                LuaValue.TUSERDATA -> return value.optuserdata(targetType.kotlin, null)
                 LuaValue.TNIL -> return null
                 else -> return value
             }

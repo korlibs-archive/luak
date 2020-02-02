@@ -21,18 +21,12 @@
  */
 package org.luaj.vm2.script
 
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.PrintStream
-import java.io.Reader
-import java.io.Writer
-
 import javax.script.ScriptContext
 import javax.script.SimpleScriptContext
 
 import org.luaj.vm2.Globals
 import org.luaj.vm2.lib.jse.JsePlatform
+import java.io.*
 
 /**
  * Context for LuaScriptEngine execution which maintains its own Globals,
@@ -62,7 +56,7 @@ class LuajContext
     }
 
     /** Globals for this context instance.  */
-    @JvmField
+    @kotlin.jvm.JvmField
     val globals: Globals = if (createDebugGlobals) JsePlatform.debugGlobals() else JsePlatform.standardGlobals()
 
     /** The initial value of globals.STDIN  */

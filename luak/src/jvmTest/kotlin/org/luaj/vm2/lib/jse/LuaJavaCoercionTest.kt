@@ -1,11 +1,6 @@
 package org.luaj.vm2.lib.jse
 
-import org.luaj.vm2.LuaError
-import org.luaj.vm2.LuaInteger
-import org.luaj.vm2.LuaString
-import org.luaj.vm2.LuaTable
-import org.luaj.vm2.LuaValue
-import org.luaj.vm2.Varargs
+import org.luaj.vm2.*
 import org.luaj.vm2.lib.MathLib
 import kotlin.test.*
 

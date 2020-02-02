@@ -1,44 +1,5 @@
 apply plugin: com.soywiz.korlibs.KorlibsPlugin
 
 korlibs {
-    exposeVersion()
+
 }
-
-
-dependencies {
-    //jvmJavaMainApi "junit:junit:4.12"
-    //jvmJavaTestImplementation jvmJavaMainApi
-    commonTestImplementation "org.jetbrains.kotlin:kotlin-test"
-}
-
-jvmTest {
-    testLogging {
-        exceptionFormat = 'full'
-    }
-}
-
-/*
-apply plugin: "kotlin"
-
-kotlin {
-    def jvmJava = targetFromPreset(presets.jvmWithJava, 'jvmJava')
-}
-
-repositories {
-    mavenLocal()
-    maven { url "https://dl.bintray.com/soywiz/soywiz" }
-    jcenter()
-    //google()
-}
-
-dependencies {
-    testImplementation "junit:junit:4.12"
-    api "org.jetbrains.kotlin:kotlin-stdlib"
-}
-test {
-    testLogging {
-        exceptionFormat = 'full'
-    }
-}
-*/
-

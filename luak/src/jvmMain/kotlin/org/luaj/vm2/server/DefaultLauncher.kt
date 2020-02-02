@@ -21,8 +21,8 @@
  */
 package org.luaj.vm2.server
 
-import java.io.InputStream
-import java.io.Reader
+import com.soywiz.luak.compat.java.io.InputStream
+import com.soywiz.luak.compat.java.io.Reader
 
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LuaValue

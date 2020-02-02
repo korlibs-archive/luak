@@ -21,14 +21,9 @@
  */
 package org.luaj.vm2.lib.jse
 
-import java.io.File
-import java.io.IOException
-
-import org.luaj.vm2.Globals
-import org.luaj.vm2.LuaValue
-import org.luaj.vm2.Varargs
-import org.luaj.vm2.lib.LibFunction
-import org.luaj.vm2.lib.OsLib
+import org.luaj.vm2.*
+import org.luaj.vm2.lib.*
+import java.io.*
 
 /**
  * Subclass of [LibFunction] which implements the standard lua `os` library.
@@ -105,7 +100,7 @@ class JseOsLib : OsLib() {
         ) else LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf("signal"), LuaValue.valueOf(exitValue))
     }
 
-    @Throws(IOException::class)
+    @com.soywiz.luak.compat.java.Throws(IOException::class)
     override fun remove(filename: String?) {
         val f = File(filename!!)
         if (!f.exists())
@@ -114,7 +109,7 @@ class JseOsLib : OsLib() {
             throw IOException("Failed to delete")
     }
 
-    @Throws(IOException::class)
+    @com.soywiz.luak.compat.java.Throws(IOException::class)
     override fun rename(oldname: String?, newname: String?) {
         val f = File(oldname!!)
         if (!f.exists())
@@ -136,13 +131,13 @@ class JseOsLib : OsLib() {
     companion object {
 
         /** return code indicating the execute() threw an I/O exception  */
-        @JvmField var EXEC_IOEXCEPTION = 1
+        @kotlin.jvm.JvmField var EXEC_IOEXCEPTION = 1
 
         /** return code indicating the execute() was interrupted  */
-        @JvmField var EXEC_INTERRUPTED = -2
+        @kotlin.jvm.JvmField var EXEC_INTERRUPTED = -2
 
         /** return code indicating the execute() threw an unknown exception  */
-        @JvmField var EXEC_ERROR = -3
+        @kotlin.jvm.JvmField var EXEC_ERROR = -3
     }
 
 }

@@ -21,8 +21,6 @@
  */
 package org.luaj.vm2.lib.jse
 
-import java.lang.reflect.Field
-
 import org.luaj.vm2.LuaError
 import org.luaj.vm2.LuaUserdata
 import org.luaj.vm2.LuaValue
@@ -43,7 +41,7 @@ import org.luaj.vm2.LuaValue
  */
 open class JavaInstance(instance: Any) : LuaUserdata(instance) {
 
-    @JvmField
+    @kotlin.jvm.JvmField
     var jclass: JavaClass? = null
 
     override fun get(key: LuaValue): LuaValue {

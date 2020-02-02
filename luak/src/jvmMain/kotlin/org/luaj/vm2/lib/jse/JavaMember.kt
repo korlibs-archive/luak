@@ -46,10 +46,10 @@ import org.luaj.vm2.lib.jse.CoerceLuaToJava.Coercion
 internal abstract class JavaMember protected constructor(params: Array<Class<*>>, modifiers: Int) : VarArgFunction() {
 
     private val isvarargs = modifiers and METHOD_MODIFIERS_VARARGS != 0
-    @JvmField
+    @kotlin.jvm.JvmField
     val fixedargs: Array<Coercion> =
         Array(if (isvarargs) params.size - 1 else params.size) { CoerceLuaToJava.getCoercion(params[it]) }
-    @JvmField
+    @kotlin.jvm.JvmField
     val varargs: Coercion? = if (isvarargs) CoerceLuaToJava.getCoercion(params[params.size - 1]) else null
 
     fun score(args: Varargs): Int {

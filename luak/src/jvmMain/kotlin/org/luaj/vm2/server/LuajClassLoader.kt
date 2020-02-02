@@ -21,8 +21,7 @@
  */
 package org.luaj.vm2.server
 
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
+import java.io.*
 
 /**
  * Class loader that can be used to launch a lua script in a Java VM that has a
@@ -64,14 +63,14 @@ class LuajClassLoader : ClassLoader() {
     /** Local cache of classes loaded by this loader.  */
     internal var classes: MutableMap<String, Class<*>> = HashMap()
 
-    @Throws(ClassNotFoundException::class)
+    @com.soywiz.luak.compat.java.Throws(ClassNotFoundException::class)
     override fun loadClass(classname: String): Class<*> {
         if (classes.containsKey(classname))
             return classes[classname]!!
         return if (!isUserClass(classname)) super.findSystemClass(classname) else loadAsUserClass(classname)
     }
 
-    @Throws(ClassNotFoundException::class)
+    @com.soywiz.luak.compat.java.Throws(ClassNotFoundException::class)
     private fun loadAsUserClass(classname: String): Class<*> {
         val path = classname.replace('.', '/') + ".class"
         val `is` = getResourceAsStream(path)
@@ -85,7 +84,7 @@ class LuajClassLoader : ClassLoader() {
                 val result = super.defineClass(classname, bytes, 0, bytes.size)
                 classes[classname] = result
                 return result
-            } catch (e: java.io.IOException) {
+            } catch (e: com.soywiz.luak.compat.java.io.IOException) {
                 throw ClassNotFoundException("Read failed: $classname: $e")
             }
 
@@ -112,11 +111,11 @@ class LuajClassLoader : ClassLoader() {
          * variables from other Launcher instances.
          *
          * @return instance of type 'launcher_class' that can be used to launch scripts.
-         * @throws InstantiationException
-         * @throws IllegalAccessException
-         * @throws ClassNotFoundException
+         * @com.soywiz.luak.compat.java.Throws InstantiationException
+         * @com.soywiz.luak.compat.java.Throws IllegalAccessException
+         * @com.soywiz.luak.compat.java.Throws ClassNotFoundException
         </P> */
-        @Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
+        @com.soywiz.luak.compat.java.Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
         @JvmOverloads
         fun NewLauncher(launcher_class: Class<out Launcher> = DefaultLauncher::class.java): Launcher =
             LuajClassLoader().loadAsUserClass(launcher_class.name).newInstance() as Launcher
@@ -127,7 +126,7 @@ class LuajClassLoader : ClassLoader() {
          * @param classname Class name to test.
          * @return true if this should be loaded into this class loader.
          */
-        @JvmStatic
+        @kotlin.jvm.JvmStatic
         fun isUserClass(classname: String): Boolean =
             classname.startsWith(luajPackageRoot) && !classname.startsWith(launcherInterfaceRoot)
     }
@@ -143,7 +142,7 @@ class LuajClassLoader : ClassLoader() {
  * variables from other Launcher instances.
  *
  * @return [Launcher] instance that can be used to launch scripts.
- * @throws InstantiationException
- * @throws IllegalAccessException
- * @throws ClassNotFoundException
+ * @com.soywiz.luak.compat.java.Throws InstantiationException
+ * @com.soywiz.luak.compat.java.Throws IllegalAccessException
+ * @com.soywiz.luak.compat.java.Throws ClassNotFoundException
 </P> */

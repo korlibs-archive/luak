@@ -21,8 +21,8 @@
  */
 package org.luaj.vm2.server
 
-import java.io.InputStream
-import java.io.Reader
+import com.soywiz.luak.compat.java.io.InputStream
+import com.soywiz.luak.compat.java.io.Reader
 
 /** Interface to launch lua scripts using the [LuajClassLoader].
  * <P>

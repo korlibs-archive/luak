@@ -21,14 +21,13 @@
  */
 package org.luaj.vm2.script
 
-import java.io.*
-
 import javax.script.*
 
 import org.luaj.vm2.*
 import org.luaj.vm2.lib.ThreeArgFunction
 import org.luaj.vm2.lib.TwoArgFunction
 import org.luaj.vm2.lib.jse.CoerceJavaToLua
+import java.io.*
 
 /**
  * Implementation of the ScriptEngine interface which can compile and execute
@@ -62,7 +61,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
 
     override fun compile(script: String): CompiledScript = compile(StringReader(script))
 
-    @Throws(ScriptException::class)
+    @com.soywiz.luak.compat.java.Throws(ScriptException::class)
     override fun compile(script: Reader): CompiledScript {
         try {
             val `is` = Utf8Encoder(script)
@@ -118,7 +117,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
         private val buf = IntArray(2)
         private var n: Int = 0
 
-        @Throws(IOException::class)
+        @com.soywiz.luak.compat.java.Throws(IOException::class)
         override fun read(): Int {
             if (n > 0) return buf[--n]
             val c = r.read()
@@ -178,7 +177,7 @@ class LuaScriptEngine : AbstractScriptEngine(), ScriptEngine, Compilable {
         private fun toJava(luajValue: LuaValue): Any? = when (luajValue.type()) {
             LuaValue.TNIL -> null
             LuaValue.TSTRING -> luajValue.tojstring()
-            LuaValue.TUSERDATA -> luajValue.checkuserdata(Any::class.java)
+            LuaValue.TUSERDATA -> luajValue.checkuserdata(Any::class)
             LuaValue.TNUMBER -> if (luajValue.isinttype()) luajValue.toint() else luajValue.todouble()
             else -> luajValue
         }

@@ -96,13 +96,13 @@ internal class JavaConstructor private constructor(val constructor: Constructor<
 
     companion object {
 
-        @JvmField val constructors: MutableMap<Constructor<*>, JavaConstructor> = HashMap()
+        @kotlin.jvm.JvmField val constructors: MutableMap<Constructor<*>, JavaConstructor> = HashMap()
 
-        @JvmStatic fun forConstructor(c: Constructor<*>): JavaConstructor {
+        @kotlin.jvm.JvmStatic fun forConstructor(c: Constructor<*>): JavaConstructor {
             return constructors[c] ?: return JavaConstructor(c).also { constructors[c] = it }
         }
 
-        @JvmStatic fun forConstructors(array: Array<JavaConstructor>): LuaValue {
+        @kotlin.jvm.JvmStatic fun forConstructors(array: Array<JavaConstructor>): LuaValue {
             return Overload(array)
         }
     }
