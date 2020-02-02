@@ -551,7 +551,7 @@ class DebugLib : TwoArgFunction() {
                     sb.append("main chunk")
                 else if (ar.name != null) {
                     sb.append("function '")
-                    sb.append(ar.name)
+                    sb.append(ar.name!!)
                     sb.append('\'')
                 } else {
                     sb.append("function <" + c.shortsource() + ":" + c.linedefined() + ">")
