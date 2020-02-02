@@ -11,15 +11,15 @@ class LuaParserTests : CompilerUnitTests() {
     }
 
     override fun doTest(file: String) {
-        try {
+        //try {
             val `is` = inputStreamOfFile(file)
             val r = InputStreamReader(`is`, "ISO-8859-1")
             val parser = LuaParser(r)
             parser.Chunk()
-        } catch (e: Exception) {
-            fail(e.message)
-            e.printStackTrace()
-        }
+        //} catch (e: Exception) {
+        //    fail(e.message)
+        //    e.printStackTrace()
+        //}
 
     }
 }

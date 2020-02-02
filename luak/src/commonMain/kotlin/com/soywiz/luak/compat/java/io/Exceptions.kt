@@ -1,5 +1,16 @@
 package com.soywiz.luak.compat.java.io
 
-open class IOException(message: String = "IOException") : Exception(message)
-open class EOFException(message: String = "EOFException") : IOException(message)
-open class UnsupportedEncodingException(message: String = "UnsupportedEncodingException") : IOException(message)
+expect open class IOException : Exception {
+    constructor()
+    constructor(message: String)
+}
+
+expect open class EOFException : IOException {
+    constructor()
+    constructor(message: String)
+}
+
+expect open class UnsupportedEncodingException : IOException {
+    constructor()
+    constructor(message: String)
+}
