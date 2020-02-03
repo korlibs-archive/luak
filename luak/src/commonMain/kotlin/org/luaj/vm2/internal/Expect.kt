@@ -20,6 +20,7 @@ internal expect object JSystem {
     fun Class_portableName(clazz: KClass<*>): String
     fun Class_isInstancePortable(clazz: KClass<*>, ins: Any): Boolean
     fun Class_getResourceAsStreamPortable(clazz: KClass<*>, res: String): LuaBinInput?
+    val supportStatic: Boolean
 }
 
 expect open class IOException : Exception {

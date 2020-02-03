@@ -553,7 +553,7 @@ private constructor(
          */
         @JvmName("valueOf2")
 
-        fun valueOf(bytes: ByteArray, off: Int, len: Int, runtime: LuaRuntime? = null): LuaString {
+        fun valueOf(bytes: ByteArray, off: Int, len: Int, runtime: LuaRuntime? = LuaRuntime.default): LuaString {
             if (len > RECENT_STRINGS_MAX_LENGTH)
                 return valueFromCopy(bytes, off, len)
             val hash = hashCode(bytes, off, len)
@@ -587,7 +587,7 @@ private constructor(
          */
         @JvmOverloads
 
-        fun valueUsing(bytes: ByteArray, off: Int = 0, len: Int = bytes.size, runtime: LuaRuntime? = null): LuaString {
+        fun valueUsing(bytes: ByteArray, off: Int = 0, len: Int = bytes.size, runtime: LuaRuntime? = LuaRuntime.default): LuaString {
             if (bytes.size > RECENT_STRINGS_MAX_LENGTH)
                 return LuaString(bytes, off, len)
             val hash = hashCode(bytes, off, len)

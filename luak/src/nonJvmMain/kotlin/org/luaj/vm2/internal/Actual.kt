@@ -53,6 +53,8 @@ internal actual object JSystem {
     actual fun Class_portableName(clazz: KClass<*>): String = clazz.simpleName ?: "Unknown"
     actual fun Class_isInstancePortable(clazz: KClass<*>, ins: Any): Boolean = clazz.isInstance(ins)
     actual fun Class_getResourceAsStreamPortable(clazz: KClass<*>, res: String): LuaBinInput? = TODO("getResourceAsStream")
+
+    actual val supportStatic: Boolean = false
 }
 
 actual open class IOException : Exception {
