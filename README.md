@@ -2,4 +2,6 @@
 
 Kotlin LuaJ port (LUA interpreter)
 
-<https://sourceforge.net/projects/luaj/>
+* LuaJ Java Implementation: <https://sourceforge.net/projects/luaj/> (released under MIT)
+* LUA Language: <https://www.lua.org/>
+
