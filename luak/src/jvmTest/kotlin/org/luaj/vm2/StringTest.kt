@@ -1,12 +1,12 @@
 package org.luaj.vm2
 
-import org.luaj.vm2.lib.jse.*
+import org.luaj.vm2.lib.common.*
 import kotlin.test.*
 
 class StringTest {
 
     init {
-        JsePlatform.standardGlobals()
+        CommonPlatform.standardGlobals()
     }
 
     @Test
