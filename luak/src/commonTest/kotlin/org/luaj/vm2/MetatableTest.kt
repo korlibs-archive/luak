@@ -25,7 +25,7 @@ class MetatableTest {
 
     init {
         // needed for metatable ops to work on strings
-        //StringLib()
+        StringLib()
     }
 
     @Throws(Exception::class)
@@ -44,7 +44,7 @@ class MetatableTest {
         assertEquals(null, LuaValue.NIL.getmetatable())
         assertEquals(null, LuaValue.TRUE.getmetatable())
         assertEquals(null, LuaValue.ONE.getmetatable())
-        assertEquals( null, string.getmetatable() );
+        //assertEquals( null, string.getmetatable() );
         assertEquals(null, table.getmetatable())
         assertEquals(null, function.getmetatable())
         assertEquals(null, thread.getmetatable())
