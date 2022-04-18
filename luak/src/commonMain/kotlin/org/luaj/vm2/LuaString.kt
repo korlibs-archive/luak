@@ -532,7 +532,7 @@ private constructor(
          * @param string Java String containing characters to encode as UTF8
          * @return [LuaString] with UTF8 bytes corresponding to the supplied String
          */
-        @UseExperimental(ExperimentalStdlibApi::class)
+        @OptIn(ExperimentalStdlibApi::class)
         @JvmName("valueOf2")
         fun valueOf(string: String): LuaString {
             val c = string.toCharArray()

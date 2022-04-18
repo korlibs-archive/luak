@@ -218,7 +218,7 @@ class LexState(internal var L: LuaC.CompileState, internal var z: LuaBinInput  /
                 p[n] = to
     }
 
-    @UseExperimental(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class)
     internal fun strx2number(str: String, seminfo: SemInfo): LuaValue {
         val c = str.toCharArray()
         var s = 0

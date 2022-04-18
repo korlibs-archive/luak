@@ -178,7 +178,7 @@ open class OsLib : TwoArgFunction() {
      * the program.  For luaj this simple returns the elapsed time since the
      * OsLib class was loaded.
      */
-    @UseExperimental(ExperimentalTime::class)
+    @OptIn(ExperimentalTime::class)
     protected fun clock(): Double {
         return TimeSource.Monotonic.markNow().elapsedNow().inSeconds
         //return (JSystem.currentTimeMillis() - t0) / 1000.0
@@ -213,7 +213,7 @@ open class OsLib : TwoArgFunction() {
      * @return a LString or a LTable containing date and time,
      * formatted according to the given string format.
      */
-    @UseExperimental(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class)
     fun date(format: String, time: Double): String {
         var format = format
         var time = time

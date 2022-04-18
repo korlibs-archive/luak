@@ -159,7 +159,7 @@ class Buffer {
      * @return `this` to allow call chaining
      * @see LuaString.encodeToUtf8
      */
-    @UseExperimental(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class)
     fun append(str: String): Buffer {
         val c = str.toCharArray()
         val n = LuaString.lengthAsUtf8(c)

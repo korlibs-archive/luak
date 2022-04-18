@@ -58,7 +58,7 @@ object Str {
         return baos.toByteArray()
     }
 
-    @UseExperimental(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class)
 
     fun unquote(s: String): ByteArray {
         val baos = ByteArrayLuaBinOutput()

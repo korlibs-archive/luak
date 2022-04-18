@@ -15,7 +15,7 @@ open class LuaWriterBinOutput(val out: LuaBinOutput, val charset: String? = null
     override fun writeInt(v: Int) = out.writeInt(v)
     override fun writeLong(v: Long) = out.writeLong(v)
 
-    @UseExperimental(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class)
     override fun print(v: String) = out.write(v.encodeToByteArray())
     override fun flush() = out.flush()
     override fun close() = out.close()
