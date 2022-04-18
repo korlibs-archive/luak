@@ -20,12 +20,14 @@
  * THE SOFTWARE.
  */
 
+package org.luaj.vm2.cli
+
 import org.luaj.vm2.*
 import org.luaj.vm2.io.*
-import org.luaj.vm2.lib.jse.JsePlatform
+import org.luaj.vm2.lib.jse.*
 import java.io.*
 import java.util.*
-import kotlin.jvm.*
+import kotlin.jvm.Throws
 
 /**
  * lua command for use in JSE environments.

@@ -20,14 +20,13 @@
  * THE SOFTWARE.
  */
 
-import org.luaj.vm2.Globals
-import org.luaj.vm2.Lua
-import org.luaj.vm2.Print
-import org.luaj.vm2.compiler.DumpState
-import org.luaj.vm2.io.*
-import org.luaj.vm2.lib.jse.JsePlatform
-import java.io.*
+package org.luaj.vm2.cli
 
+import org.luaj.vm2.*
+import org.luaj.vm2.compiler.*
+import org.luaj.vm2.io.*
+import org.luaj.vm2.lib.jse.*
+import java.io.*
 
 /**
  * Compiler for lua files to lua bytecode.
